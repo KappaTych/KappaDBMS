@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     
@@ -6,7 +7,7 @@
     <div id="input_area">
     	<p><label for="input_text_area">Input query:</label></p>
     	<textarea id="input_text_area" name="input_text_area" placeholder="Enter query" v-model='input'></textarea>
-        <p><button onclick="console.log('The query was sent')">Send query</button></p>
+        <p><button @click="send_query">Send query</button></p>
 	</div>
 
 	<div id="output_area">
@@ -14,7 +15,7 @@
     	<textarea id="output_text_area" name="output_text_area" placeholder="Awaiting" v-model='output'></textarea>
 	</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/0.11.10/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="index.js"></script>
     
   </body>
