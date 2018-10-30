@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 project(KappaDBMS VERSION 0.0.1)
 
-find_library(PTHREAD_LIBRARY pthread)
-
-include_directories(src/backend/include)
-
 set(EXECUTABLE kappa)
 
 set(CMAKE_CURRENT_SOURCE_DIR ${CMAKE_BINARY_DIR}/src/backend)
@@ -25,10 +21,12 @@ set(CMAKE_C_COMPILER gcc)
 set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -Wall -Wextra -Werror")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -mthreads -Wall -Wextra -Werror")
 
 file(GLOB_RECURSE SOURCES . src/backend/*.cpp)
 
 add_executable(${EXECUTABLE} ${SOURCES})
-
-target_link_libraries(${EXECUTABLE} ${PTHREAD_LIBRARY})
+target_include_directories(${EXECUTABLE} PRIVATE ${dir}/include
+    ${dir}/lib/asio/asio/include
+)
+# target_link_libraries(${EXECUTABLE} ${PTHREAD_LIBRARY})

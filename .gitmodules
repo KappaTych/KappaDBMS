@@ -1,0 +1,3 @@
+[submodule "src/backend/lib/asio"]
+	path = src/backend/lib/asio
+	url = https://github.com/chriskohlhoff/asio.git
