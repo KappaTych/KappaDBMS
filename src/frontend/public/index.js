@@ -1,21 +1,14 @@
 var input_vm = new Vue({
-    el: '#input_area',
+    el: '#app',
     data: {
       input: "",
+      output: ""
     },
     methods: {
         send_query: function() {
-            //$.post('/remote-url', {xml: yourXMLString });
-            output_vm.output = this.input
+            axios.post('http://httpbin.org/post', {query: this.input}).then((response) => {
+              this.output = JSON.stringify(response.data);
+            })
         }
     }
-  });
-
-var output_string = ""
-
-var output_vm = new Vue({
-    el: '#output_area',
-    data: {
-      output: output_string,
-    },
   });

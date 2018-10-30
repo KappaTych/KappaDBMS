@@ -4,19 +4,18 @@
     
   </head>
   <body>
-    <div id="input_area">
+    <div id="app">
     	<p><label for="input_text_area">Input query:</label></p>
     	<textarea id="input_text_area" name="input_text_area" placeholder="Enter query" v-model='input'></textarea>
         <p><button @click="send_query">Send query</button></p>
-	</div>
-
-	<div id="output_area">
+	
     	<p><label for="output_text_area">Output result:</label></p>
     	<textarea id="output_text_area" name="output_text_area" placeholder="Awaiting" v-model='output'></textarea>
 	</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="index.js"></script>
     
   </body>
 </html>
