@@ -1,0 +1,3 @@
+[submodule "src/backend/lib/clsocket"]
+	path = src/backend/lib/clsocket
+	url = https://github.com/DFHack/clsocket.git

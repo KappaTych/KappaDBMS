@@ -10,28 +10,65 @@
 
 #pragma once
 
-// #define ASIO_STANDALONE
-// #define __USE_W32_SOCKETS
-
-// #define NTDDI_VERSION NTDDI_WIN7
-// #define _WIN32_WINNT _WIN32_WINNT_WIN7
-
-// #ifndef _WIN32_WINNT
-// #define _WIN32_WINNT 0x0501 // windows stuff, not sure what this does
-// #endif
-
-#include <asio.hpp>
+#include <string>
+#include <PassiveSocket.h>
 
 
-namespace packet
+namespace kappa
 {
 
-const char CLOSE    = 0x00;
-const char CONNECT  = 0x01;
-const char EXECUTE  = 0x02;
-const char COMMIT   = 0x03;
-const char ROLLBACK = 0x04;
-const char PREPARE  = 0x05;
-const char BIND     = 0x06;
+class Server
+{
+public:
+  Server();
 
-} // namespace server
+
+private:
+  int port_ = 12564;
+
+  // pthread_t          threadId;
+  // struct thread_data thData;
+  // CActiveSocket      client;
+  // char result[1024];
+
+  // thData.pszServerAddr = "127.0.0.1";
+  // thData.nPort = 6789;
+  // thData.nNumBytesToReceive = 1;
+  // thData.nTotalPayloadSize = (int)strlen(TEST_PACKET);
+
+  // pthread_create(&threadId, 0, CreateTCPEchoServer, &thData);
+  // sleep(1); // allow a second for the thread to create and listen
+
+  // client.Initialize();
+  // client.SetNonblocking();
+
+  // if (client.Open("127.0.0.1", 6789))
+  // {
+  //     if (client.Send((uint8 *)TEST_PACKET, strlen(TEST_PACKET)))
+  //     {
+  //         int numBytes = -1;
+  //         int bytesReceived = 0;
+
+  //         client.Select();
+
+  //         while (bytesReceived != strlen(TEST_PACKET))
+  //         {
+  //             numBytes = client.Receive(MAX_PACKET);
+
+  //             if (numBytes > 0)
+  //             {
+  //                 bytesReceived += numBytes;
+  //                 memset(result, 0, 1024);
+  //                 memcpy(result, client.GetData(), numBytes);
+  //                 printf("received %d bytes: '%s'\n", numBytes, result);
+  //             }
+  //             else
+  //             {
+  //                 printf("Received %d bytes\n", numBytes);
+  //             }
+  //         }
+  //     }
+  // }
+}
+
+} // namespace kappa
