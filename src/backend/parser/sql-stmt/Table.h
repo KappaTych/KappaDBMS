@@ -8,7 +8,7 @@ namespace sql {
 class TableName {
 public:
 	TableName() = default;
-	TableName(const TableName &t);
+	TableName(const std::string&, const std::string&);
 
 	std::string schema;
 	std::string name;

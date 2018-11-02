@@ -2,7 +2,7 @@
 
 namespace sql {
 
-TableName::TableName(const TableName &t) : schema(t.schema), name(t.name) {};
+TableName::TableName(const std::string & s, const std::string & n) : schema(s), name(n) {};
 
 ColumnDefinition::ColumnDefinition(const std::string &name, DataType type) :
   name(name),
