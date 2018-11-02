@@ -6,7 +6,7 @@
 
 namespace sql {
 
-void sqlParser(const std::string &sql) {
+void sqliteParse(const std::string &sql) {
   yyscan_t scanner;
   YY_BUFFER_STATE state;
 
@@ -27,4 +27,4 @@ void sqlParser(const std::string &sql) {
   yylex_destroy(scanner);
 }
 
-} // namespace sql-stmt
+} // namespace sql
