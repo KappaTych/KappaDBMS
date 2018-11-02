@@ -4,17 +4,16 @@
 
 %}
 
-%option c++
 %option header-file="flex_sql.h"
 %option outfile="flex_sql.cpp"
 
+%option reentrant
+%option bison-bridge
+
 %option noyywrap
 %option case-insensitive
-%option ecs
-%option nodefault
-%option stack
-%option warn
-%option yylineno
+%option bison-locations
+
 
 %s COMMENT
 
@@ -25,27 +24,27 @@
 
 [ \t\n]+    ;
 
-CREATE      return yy::parser::token::CREATE;
-DROP        return yy::parser::token::DROP;
-SHOW		return yy::parser::token::SHOW;
-TABLE       return yy::parser::token::TABLE;
+CREATE      return CREATE;
+DROP        return DROP;
+SHOW		return SHOW;
+TABLE       return TABLE;
 
-INTEGER     return yy::parser::token::INTEGER;
-DOUBLE      return yy::parser::token::DOUBLE;
-TEXT        return yy::parser::token::TEXT;
+INTEGER     return INTEGER;
+DOUBLE      return DOUBLE;
+TEXT        return TEXT;
 
-[-+(),;]    { return yytext[0]; }
+[(),;]    { return yytext[0]; }
 
 
 -?[0-9]+    {
     yylval->ival = atol(yytext);
-    return yy::parser::token::INT;
+    return INT;
 }
 
 
 [A-Za-z][A-Za-z0-9_]* {
-    yylval->sval = strdup(yytext);
-    return yy::parser::token::IDENTIFIER;
+    yylval->sval = new std::string(yytext);
+    return IDENTIFIER;
 }
 
 . { fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); return 0; }

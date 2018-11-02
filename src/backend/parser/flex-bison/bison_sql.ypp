@@ -4,6 +4,11 @@
 
     #include <stdio.h>
     #include <string>
+
+
+    int yyerror(YYLTYPE* llocp, yyscan_t scanner, const char *msg) {
+        return 1;
+    }
 %}
 
 // Specify code that is included in the generated .h and .c files
@@ -12,24 +17,31 @@
 #include "../sql-stmt/Table.h"
 #include "../dbStub.h"
 
+
+#ifndef YYtypeDEF_YY_SCANNER_T
+#define YYtypeDEF_YY_SCANNER_T
+typedef void* yyscan_t;
+#endif
+
 }
 
 %output  "bison_sql.cpp"
 %defines "bison_sql.h"
 
-%skeleton "lalr1.cc"
+// Tell bison to create a reentrant parser
+%define api.pure full
 
 %locations
 
 // For Pure Calling
-%lex-param   { void* scanner }
-%parse-param { void* scanner }
+%lex-param   { yyscan_t scanner }
+%parse-param { yyscan_t scanner }
 
 
 // Define all data-types
 %union {
     int64_t ival;
-    char* sval;
+    std::string* sval;
     
     sql::TableName* table_name;
     sql::ColumnDefinition* column;
@@ -39,8 +51,7 @@
 
 //  Destructor
 %destructor { } <ival> <column_type_t>
-%destructor{ free($$); }  <sval>
-%destructor{ delete(($$)); } <table_name> <column> <column_vec>
+%destructor{ delete(($$)); } <table_name> <column> <column_vec>  <sval>
 
 
 // Token definition
@@ -115,16 +126,12 @@ column_def_commalist:
 
 column_def:
         IDENTIFIER column_type {
-            $$ = new sql::ColumnDefinition();
-            $$->name = *$1;
-            $$->type = $2;
+            $$ = new sql::ColumnDefinition(*($1), $2);
         }
     ;
 column_type:
-        INTEGER {
-           $<column_type_t>$ = sql::DataType::INT;
-        }
-        DOUBLE { $$ = sql::DataType::DOUBLE; }
+        INTEGER { $<column_type_t>$ = sql::DataType::INT; }
+    |   DOUBLE { $$ = sql::DataType::DOUBLE; }
     |   TEXT { $$ = sql::DataType::TEXT; }
     ;
 
@@ -139,14 +146,10 @@ drop_statement:
 
 table_name:
 		IDENTIFIER                {
-		$$ = new sql::TableName();
-		$$->schema = "";
-		$$->name = *$1;
+		$$ = new sql::TableName("", *($1));
 		}
 	|	IDENTIFIER '.' IDENTIFIER {
-	    $$ = new sql::TableName();
-	    $$->schema = *$1;
-	    $$->name = *$3;
+	        $$ = new sql::TableName(*($1), *($3));
 	    }
 	;
 

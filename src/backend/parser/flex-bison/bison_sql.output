@@ -25,9 +25,8 @@ Grammar
 
    11 column_def: IDENTIFIER column_type
 
-   12 @1: %empty
-
-   13 column_type: INTEGER @1 DOUBLE
+   12 column_type: INTEGER
+   13            | DOUBLE
    14            | TEXT
 
    15 drop_statement: DROP TABLE table_name
@@ -52,7 +51,7 @@ IDENTIFIER (258) 11 16 17
 INT (259)
 DOUBLE (260) 13
 TEXT (261) 14
-INTEGER (262) 13
+INTEGER (262) 12
 CREATE (263) 8
 TABLE (264) 7 8 15
 DROP (265) 15
@@ -78,14 +77,12 @@ column_def_commalist (23)
 column_def (24)
     on left: 11, on right: 9 10
 column_type (25)
-    on left: 13 14, on right: 11
-@1 (26)
-    on left: 12, on right: 13
-drop_statement (27)
+    on left: 12 13 14, on right: 11
+drop_statement (26)
     on left: 15, on right: 5
-table_name (28)
+table_name (27)
     on left: 16 17, on right: 7 8 15
-opt_semicolon (29)
+opt_semicolon (28)
     on left: 18 19, on right: 1
 
 
@@ -297,10 +294,11 @@ State 24
 
    11 column_def: IDENTIFIER . column_type
 
-    TEXT     shift, and go to state 27
-    INTEGER  shift, and go to state 28
+    DOUBLE   shift, and go to state 27
+    TEXT     shift, and go to state 28
+    INTEGER  shift, and go to state 29
 
-    column_type  go to state 29
+    column_type  go to state 30
 
 
 State 25
@@ -308,8 +306,8 @@ State 25
     8 create_statement: CREATE TABLE table_name '(' column_def_commalist . ')'
    10 column_def_commalist: column_def_commalist . ',' column_def
 
-    ')'  shift, and go to state 30
-    ','  shift, and go to state 31
+    ')'  shift, and go to state 31
+    ','  shift, and go to state 32
 
 
 State 26
@@ -321,35 +319,40 @@ State 26
 
 State 27
 
+   13 column_type: DOUBLE .
+
+    $default  reduce using rule 13 (column_type)
+
+
+State 28
+
    14 column_type: TEXT .
 
     $default  reduce using rule 14 (column_type)
 
 
-State 28
-
-   13 column_type: INTEGER . @1 DOUBLE
-
-    $default  reduce using rule 12 (@1)
-
-    @1  go to state 32
-
-
 State 29
+
+   12 column_type: INTEGER .
+
+    $default  reduce using rule 12 (column_type)
+
+
+State 30
 
    11 column_def: IDENTIFIER column_type .
 
     $default  reduce using rule 11 (column_def)
 
 
-State 30
+State 31
 
     8 create_statement: CREATE TABLE table_name '(' column_def_commalist ')' .
 
     $default  reduce using rule 8 (create_statement)
 
 
-State 31
+State 32
 
    10 column_def_commalist: column_def_commalist ',' . column_def
 
@@ -358,22 +361,8 @@ State 31
     column_def  go to state 33
 
 
-State 32
-
-   13 column_type: INTEGER @1 . DOUBLE
-
-    DOUBLE  shift, and go to state 34
-
-
 State 33
 
    10 column_def_commalist: column_def_commalist ',' column_def .
 
     $default  reduce using rule 10 (column_def_commalist)
-
-
-State 34
-
-   13 column_type: INTEGER @1 DOUBLE .
-
-    $default  reduce using rule 13 (column_type)
