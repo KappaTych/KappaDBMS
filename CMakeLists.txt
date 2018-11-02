@@ -49,5 +49,6 @@ target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
 target_include_directories(${EXECUTABLE} PUBLIC
 	${src}/include
 	${lib}/clsocket/src
+	${lib}/ctpl
 )
 # target_link_libraries(${EXECUTABLE} ws2_32 wsock32)

@@ -11,6 +11,10 @@
 #pragma once
 
 #include <string>
+#include <thread>
+
+#include <ctpl_stl.h>
+#include <ActiveSocket.h>
 #include <PassiveSocket.h>
 
 
@@ -20,11 +24,21 @@ namespace kappa
 class Server
 {
 public:
-  Server();
+  Server(int = 12564, int = 4096);
+  ~Server();
 
+  void ProcessClient(CActiveSocket&);
+  void Run();
+
+  int const& bufferSize() const;
+  void bufferSize(int const&);
 
 private:
-  int port_ = 12564;
+  bool isRunning = true;
+  int port_;
+  int bufferSize_;
+  ctpl::thread_pool pool_; 
+  CPassiveSocket socket_;
 
   // pthread_t          threadId;
   // struct thread_data thData;
