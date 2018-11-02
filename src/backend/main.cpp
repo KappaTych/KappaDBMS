@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     options.add_options()
       ("h,help", "Show help")
-      ("p,port", "Set server port", cxxopts::value<int>(), "PORT");
+      ("p,port", "Set server port", cxxopts::value<int>()->default_value("12564"), "PORT");
 
     auto result = options.parse(argc, argv);
 
@@ -32,6 +32,11 @@ int main(int argc, char *argv[])
       std::cout << options.help() << std::endl;
       exit(0);
     }
+
+    kappa::Server server(result["p"].as<int>());
+
+    std::cout << "Starting server..." << std::endl;
+    server.Run();
 
   } catch (const cxxopts::OptionException& e) {
     std::cout << "error parsing options: " << e.what() << std::endl;

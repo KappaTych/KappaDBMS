@@ -8,7 +8,7 @@
 // file LICENSE or copy at http://www.apache.org/licenses/LICENSE-2.0.txt)
 //
 
-#include "include/server.hpp"
+#include "../include/server.hpp"
 
 namespace kappa {
 
@@ -38,71 +38,73 @@ void Server::bufferSize(int const& size)
 }
 
 void Server::Run()
-{  
+{
+  std::cout << "Server is running, port: " << port_ << std::endl;
+
   CActiveSocket* client = NULL;
   while (isRunning) {
-    if ( (client = socket.Accept()) == NULL ) {
+    if ( (client = socket_.Accept()) == NULL ) {
       continue;
-    }    
-    pool_.push(ProcessClient, std::ref(*this), client);
+    }
+    pool_.push(ProcessRequest, std::ref(*this), client);
   }
 }
 
 
-static void Server::ProcessClient(int id, Server& srv, CActiveSocket* client)
+void Server::ProcessRequest(int id, Server& srv, CActiveSocket* client)
 {
   if (client->Receive(1) < 1) {
     client->Close();
     return;
   }
 
+  int bytesRecv = 0;
+  std::string payload;
+
   switch (client->GetData()[0]) {
 
-    case CONNECT:
+    case cmd::CONNECT:
 
       break;
 
-    case CLOSE:
+    case cmd::CLOSE:
 
       break;
 
-    case EXECUTE:
-      std::string payload;
-      int bytesRecv = 0;
+    case cmd::EXECUTE:
       do {
-        bytesRecv = client->Receive(bufferSize_);
+        bytesRecv = client->Receive(srv.bufferSize());
         if (bytesRecv > 0) {
-          std::string temp(client->GetData());
+          std::string temp( (char*)(client->GetData()) );
           payload.append(temp.begin(), temp.end());
         }
-      } while (bytesRecv == bufferSize_);
+      } while (bytesRecv == srv.bufferSize());
+
+      std::cout << "Received: " << payload << std::endl;
 
       // send payload to parser
       // return result <---- client.Send
+      break;
+
+    case cmd::COMMIT:
 
       break;
 
-    case COMMIT:
+    case cmd::ROLLBACK:
 
       break;
 
-    case ROLLBACK:
+    case cmd::PREPARE:
 
       break;
 
-    case PREPARE:
+    case cmd::BIND:
 
       break;
 
-    case BIND:
-
-      break;
-
-    default:
   }
 
   client->Close();
-
 }
 
 } // namespace kappa
