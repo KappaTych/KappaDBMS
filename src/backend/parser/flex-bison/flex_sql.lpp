@@ -1,0 +1,57 @@
+%{
+    #include "bison_sql.h"
+    #include <stdio.h>
+
+%}
+
+%option header-file="flex_sql.h"
+%option outfile="flex_sql.cpp"
+
+%option reentrant
+%option bison-bridge
+
+%option noyywrap
+%option case-insensitive
+%option bison-locations
+
+
+%s COMMENT
+
+%%
+--              BEGIN(COMMENT);
+<COMMENT>[^\n]* ;
+<COMMENT>\n     BEGIN(INITIAL);
+
+[ \t\n]+    ;
+
+CREATE      return CREATE;
+DROP        return DROP;
+SHOW		return SHOW;
+TABLE       return TABLE;
+
+INTEGER     return INTEGER;
+DOUBLE      return DOUBLE;
+TEXT        return TEXT;
+
+[(),;]    { return yytext[0]; }
+
+
+-?[0-9]+    {
+    yylval->ival = atol(yytext);
+    return INT;
+}
+
+
+[A-Za-z][A-Za-z0-9_]* {
+    yylval->sval = new std::string(yytext);
+    return IDENTIFIER;
+}
+
+. { fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); return 0; }
+
+%%
+
+
+int yyerror(const char *msg) {
+    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg); return 0;
+}
