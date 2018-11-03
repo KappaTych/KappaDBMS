@@ -8,7 +8,7 @@
 // file LICENSE or copy at http://www.apache.org/licenses/LICENSE-2.0.txt)
 //
 
-#include "../include/server.hpp"
+#include "server.hpp"
 
 namespace kappa {
 
@@ -39,19 +39,19 @@ void Server::bufferSize(int const& size)
 
 void Server::Run()
 {
-  std::cout << "Server is running, port: " << port_ << std::endl;
+  std::cout << "Server is running. Port: " << port_ << std::endl;
 
   CActiveSocket* client = NULL;
   while (isRunning) {
     if ( (client = socket_.Accept()) == NULL ) {
       continue;
     }
-    pool_.push(ProcessRequest, std::ref(*this), client);
+    pool_.push([&, this](int id){ ProcessRequest(client); });
   }
 }
 
 
-void Server::ProcessRequest(int id, Server& srv, CActiveSocket* client)
+void Server::ProcessRequest(CActiveSocket* client)
 {
   if (client->Receive(1) < 1) {
     client->Close();
@@ -73,14 +73,15 @@ void Server::ProcessRequest(int id, Server& srv, CActiveSocket* client)
 
     case cmd::EXECUTE:
       do {
-        bytesRecv = client->Receive(srv.bufferSize());
+        bytesRecv = client->Receive(bufferSize_);
         if (bytesRecv > 0) {
           std::string temp( (char*)(client->GetData()) );
+          std::cout << "Received: " << temp << std::endl << std::endl;
           payload.append(temp.begin(), temp.end());
         }
-      } while (bytesRecv == srv.bufferSize());
+      } while (bytesRecv == bufferSize_);
 
-      std::cout << "Received: " << payload << std::endl;
+      // std::cout << "Received: " << payload << std::endl;
 
       // send payload to parser
       // return result <---- client.Send

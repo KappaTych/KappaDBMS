@@ -3,71 +3,87 @@ from django.conf import settings
 
 __db = settings.KAPPA_DB['default']
 
-def connect(dbname=__db['DB'], host=__db['HOST'], port=__db['PORT'], user=__db['USER'], passwd=__['PASS']):
+def connect(dbname=__db['DB'], host=__db['HOST'], port=__db['PORT'], \
+			user=__db['USER'], passwd=__db['PASS']):
 	return Connection(dbname, host, port, user, passwd)
 
 
 class Connection(object):
-	def __init__(self, host, port, user, passwd):
+	def __init__(self, dbname, host, port, user, passwd):
 		self.host = host
 		self.port = port
-		# char[] = [0x01, 0xFF, 0xFF, 0xFF, 0xFF, ''....'\0',  ''....'\0']
-		# chr(1) + chr(int) x 4 + string + '\0' + string + '\0'
-		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.socket.bind((host, port))
-		self.listen(1)
-		self.connection, self.addr = self.socket.accept()
 		self.closed = False
-		self.request_id = 0
-		ip_addres_parts = [chr(int(x)) for x in host.split('.')]
+		try:
+			self.socket = socket.socket()
+		except OSError as msg:
+			print('1', msg)
+			self.close()
+			return
+
+		try:
+			self.socket.connect((host, port))
+		except OSError as msg:
+			print('2', msg)
+			self.close()
+			return
+
+		# ip_address_parts = [chr(int(x)) for x in host.split('.')]
 		#0x01
-		self.connection.sendall(
-				'{}{}{}\x00{}\x00'.format(
-						chr(0x01),
-						''.join(ip_addres_parts),
-						user,
-						passwd
-					)
-			)
+		# self.connection.sendall(
+		# 		'{}{}{}\x00{}\x00'.format(
+		# 				chr(0x01),
+		# 				''.join(ip_address_parts),
+		# 				user,
+		# 				passwd
+		# 			)
+		# 	)
 
 	def __del__(self):
 		self.close()
 
 	def cursor(self):
+		if self.closed:
+			return Cursor()
 		return Cursor(self)
 
-	def close():
-		self.connection.close()
+	def close(self):
+		if self.socket:
+			self.socket.close()
+		self.socket = None
 		self.closed = True
 		#0x00
 
-	def commit():
+	def commit(self):
 		#0x03
-		self.connection.sendall(chr(0x03))
+		self.socket.sendall(chr(0x03))
 
-	def rollback():
+	def rollback(self):
 		#0x04
-		self.connection.sendall(chr(0x04))
+		self.socket.sendall(chr(0x04))
 
 
 class Cursor:
-	def __init__(self, connection):
-		self.connection = connection
+	def __init__(self, connection=None):
+		self.conn = connection
 
 	def execute(self, query):
 		#0x02
-		self.connection.sendall(chr(0x02) + query + '\x00')
-		self.connection.rec
+		if self.conn == None:
+			return 'Couldn\'t connect to Kappa'
+
+		self.conn.socket.sendall( b'%s%s\x00' % (b'\x02', query) )
 		result = ''
-		while True:
-			data = self.connection.recv(1024)
-			if (data):
-				result += data
-			else:
-				break
+		# while True:
+		# 	data = self.conn.socket.recv(1024)
+		# 	print(data)
+		# 	if (data):
+		# 		result += data
+		# 	else:
+		# 		break
 		return result
 
-	# def prepare():
+	def prepare(self):
+		pass
 
 	def fetch(self):
 		pass

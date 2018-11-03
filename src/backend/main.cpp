@@ -11,7 +11,7 @@
 #include <iostream>
 
 #include "include/cxxopts.hpp"
-#include "include/server.hpp"
+#include "server/server.hpp"
 
 
 int main(int argc, char *argv[])
@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
 
     options.add_options()
       ("h,help", "Show help")
+      ("s,size", "Set size of buffer per client", cxxopts::value<int>()->default_value("4096"), "INT")
       ("p,port", "Set server port", cxxopts::value<int>()->default_value("12564"), "PORT");
 
     auto result = options.parse(argc, argv);
@@ -33,7 +34,7 @@ int main(int argc, char *argv[])
       exit(0);
     }
 
-    kappa::Server server(result["p"].as<int>());
+    kappa::Server server(result["p"].as<int>(), result["s"].as<int>());
 
     std::cout << "Starting server..." << std::endl;
     server.Run();

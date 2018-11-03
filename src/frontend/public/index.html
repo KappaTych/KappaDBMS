@@ -3,35 +3,43 @@
 
 <head>
   <title>KappaDBMS</title>
-  <link rel="shortcut icon" href="kappaDBMS.ico" type="image/x-icon">
-  <link rel="stylesheet" type="text/css" href="adminer.css">
+  {% load static %}
+  <link rel="shortcut icon" href="{% static "kappaDBMS.ico" %}" type="image/x-icon" />
+  <link rel="stylesheet" href="{% static "adminer.css" %}" type="text/css" />
 
   <script type="text/x-template" id="kappa-table-template">
-      <table v-bind:name='name'>
-        <thead>
-          <tr>
-            <th v-for="key in columns"
-              @click="sortBy(key)"
-              :class="{ active: sortKey == key }">
+    <table v-bind:name='name'>
+      <thead>
+        <tr>
+          <th v-for="key in columns"
+            @click="sortBy(key)"
+            :class="{ active: sortKey == key }">
+            {% verbatim %}
               {{ key | capitalize }}
-              <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="entry in filteredData">
-            <td v-for="key in columns">
-              {{entry[key]}}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </script>
-
+            {% endverbatim %}
+            <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="entry in filteredData">
+          <td v-for="key in columns">
+            {% verbatim %}
+              {{ entry[key] }}
+            {% endverbatim %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
 </head>
 
 <body>
+  <noscript>
+    <strong>We're sorry but to continue you have to enable JavaScript support.</strong>
+  </noscript>
+
   <div class="grid-container">
 
     <div class="grid-item" id="app">
@@ -52,7 +60,7 @@
     </div>
 
     <div class="grid-item" id="table">
-      <p>{{ name }}</p>
+      <p>[[ name ]]</p>
       <kappa-table :data="gridData" :columns="gridColumns" :filter-key="searchQuery">
       </kappa-table>
     </div>
@@ -61,7 +69,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="index.js"></script>
+  <script src="{% static "index.js" %}"></script>
 
 </body>
 

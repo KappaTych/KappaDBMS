@@ -30,7 +30,7 @@ public:
   Server(int = 12564, int = 4096);
   ~Server();
 
-  static void ProcessRequest(int, Server&, CActiveSocket*);
+  void ProcessRequest(CActiveSocket*);
   void Run();
 
   int const& bufferSize() const;

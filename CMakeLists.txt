@@ -31,7 +31,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -s") # -Wall -Wextra -Werror
 
-
 # set(CMAKE_PREFIX_PATH src/backend/include)
 add_subdirectory(${lib}/clsocket)
 
@@ -41,8 +40,16 @@ set(LINK_LIBS clsocket)
 # endif()
 
 
-file(GLOB_RECURSE SRC_PARSER . src/backend/parser/*.cpp)
-file(GLOB_RECURSE SRC_SERVER . src/backend/server/*.cpp)
+option(BUILD_PARSER "Build PARSER" ON)
+option(BUILD_SERVER "Build SERVER" ON)
+
+if (BUILD_PARSER)
+	file(GLOB_RECURSE SRC_PARSER . src/backend/parser/*.cpp)
+endif()
+
+if (BUILD_SERVER)
+	file(GLOB_RECURSE SRC_SERVER . src/backend/server/*.cpp)
+endif()
 
 add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_PARSER} ${SRC_SERVER})
 target_link_libraries(${EXECUTABLE} ${LINK_LIBS})

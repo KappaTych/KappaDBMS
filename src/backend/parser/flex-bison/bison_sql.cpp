@@ -109,7 +109,7 @@ extern int yydebug;
 
 
 #include "../sql-stmt/Table.h"
-#include "../dbStub.h"
+#include "../dbStub.hpp"
 
 
 #ifndef YYtypeDEF_YY_SCANNER_T

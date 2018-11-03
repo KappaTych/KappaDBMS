@@ -19,5 +19,6 @@ from backend import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('query/', views.ActionQuery.index),
+    path('query', views.QueryView.as_view()),
+    path('', views.AppView.as_view()),
 ]

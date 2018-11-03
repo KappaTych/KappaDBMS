@@ -1,5 +1,7 @@
 const OK = 1
 
+Vue.config.delimiters = ['[[', ']]']
+
 var inputVm = new Vue({
   el: '#app',
   data: {
@@ -8,29 +10,31 @@ var inputVm = new Vue({
   },
   methods: {
     sendQuery: function () {
-      axios.post('http://httpbin.org/post',
-        {
-          name: 'test-table',
-          columns: ['id', 'year'],
-          code: 1,
-          rows: [{ id: 1, year: 1 }]
-        })
+      var data = this.input;
+      axios.post('http://localhost:8000/query', data) //http://httpbin.org/post
         .then((response) => {
-          json = JSON.parse(response.data.data)
-          table.name = json.name
-          table.gridColumns = json.columns
-          table.gridData = json.rows
-          code = json.code
-          dispatchResponse(code)
+          // data = JSON.parse(response.data.data);
+          // table.name = data.name;
+          // table.gridColumns = data.columns;
+          // table.gridData = data.rows;
+          // handleResponse(data.code);
+          this.output = response.data;
         })
     }
   }
-});
+})
+// {
+//   name: 'test-table',
+//   columns: ['id', 'year'],
+//   code: 1,
+//   rows: [{ id: 1, year: 1 }]
+// }
 
-function dispatchResponse(code) {
+function handleResponse(code) {
   if (code === OK)
-    return
-  alert("An error iccured ;-(")
+    return false;
+  alert("An error iccured -(");
+  return true;
 }
 
 Vue.component('kappa-table', {
@@ -86,6 +90,8 @@ Vue.component('kappa-table', {
     }
   }
 })
+
+Vue.config.delimiters = ['[[', ']]']
 
 var table = new Vue({
   el: '#table',

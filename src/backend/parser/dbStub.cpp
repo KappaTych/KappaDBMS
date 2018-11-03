@@ -1,6 +1,6 @@
-#include "dbStub.h"
-
 #include <iostream>
+
+#include "dbStub.hpp"
 
 void create_table(sql::TableName t, std::vector<sql::ColumnDefinition> v) {
 	std::cout << "Success::CREATE" << t.schema << " " << t.name << std::endl;
