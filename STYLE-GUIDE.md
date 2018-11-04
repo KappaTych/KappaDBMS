@@ -71,8 +71,10 @@ Please don't use things like "vc_t" for complex (structures, pointers) things, b
 You can use only if it helps you to improve readability by making some things (ex., a bunch of namespaces) shorter.
 Also, we recommend you to use new typedef syntax:
 ```
-using some_cool_t = boost::library::complex::some::cool;
+using some_cool_t = boost::library::complex::some<cool>;
 ```
+For 
+<br />
 <br />
 
 
@@ -129,6 +131,12 @@ You know you're brilliant, but maybe you'd like to understand what you did 2 wee
 ##### ALLOCATING MEMORY
 Always use smart pointers, such as std::shared_ptr, to simplify memory management.
 <br />
+It's normal to use typedef's to make pointers shorter:
+```
+using std::shared_ptr<Foo> = Foo_S;
+using std::weak_ptr<Foo>   = Foo_W;
+using std::unique_ptr<Foo> = Foo_U;
+```
 <br />
 
 
