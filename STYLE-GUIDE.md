@@ -53,7 +53,7 @@ Make use of vertical spaces to separate different steps of a function.
 
 ##### FORWARD DECLARATIONS
 Use forward declaration in `.h` and `.hpp` files as much as possible.
-Instead, include the required files only in the `.cpp` files.
+Instead, include the required files only in the `.c` or `.cpp` files.
 This will significantly reduce coupling and compilation times after minor changes.
 <br />
 <br />
@@ -95,7 +95,7 @@ void someFunction(int value, int expected)
 
 
 ##### VARIABLE AND FUNCTION NAMES
-First of all, use kamelCase (functions, regular and classes' variables) and KamelCase (class'es names and methods) naming-style for everything, except typedef's / using's.
+First of all, use kamelCase (functions, regular and classes' variables / properties) and KamelCase (class'es names and methods) naming-style for everything, except typedef's / using's.
 Secondly, use descriptive names.
 Don't put multiple assignments on a single line, start all declarations with new line. Ex.:
 ```
@@ -134,7 +134,7 @@ Always use smart pointers, such as std::shared_ptr, to simplify memory managemen
 
 ##### INCLUDE GUARDS
 DON'T use include guards for your code.
-Use `pragma once` instead.
+Use `#pragma once` instead.
 <br />
 <br />
 
