@@ -77,6 +77,21 @@ For
 <br />
 <br />
 
+##### NAMESPACES
+Write namespaces' names in one short word (less than 12) with lower-case latin letters.
+Don't indent first-level lines inside namespace.
+<br />
+After closing `}` always keep a comment like this:
+```
+namespace megatpl
+{
+
+/* some code here */
+
+} // namespace megatpl
+```
+<br />
+
 
 ##### BRACKETS
 Write left-curly bracket on new line for functions, methods and classes and on same line otherwise.
