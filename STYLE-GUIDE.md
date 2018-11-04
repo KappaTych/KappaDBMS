@@ -148,9 +148,9 @@ Always use smart pointers, such as std::shared_ptr, to simplify memory managemen
 <br />
 It's normal to use typedef's to make pointers shorter:
 ```
-using std::shared_ptr<Foo> = Foo_S;
-using std::weak_ptr<Foo>   = Foo_W;
-using std::unique_ptr<Foo> = Foo_U;
+using Foo_S = std::shared_ptr<Foo>;
+using Foo_W = std::weak_ptr<Foo>;
+using Foo_U = std::unique_ptr<Foo>;
 ```
 <br />
 
