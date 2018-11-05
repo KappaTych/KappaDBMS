@@ -41,17 +41,27 @@ void Server::Run()
 {
   std::cout << "Server is running. Port: " << port_ << std::endl;
 
-  CActiveSocket* client = NULL;
+  client_s client = NULL;
   while (isRunning) {
-    if ( (client = socket_.Accept()) == NULL ) {
+    if ( (client = client_s(socket_.Accept())) == NULL ) {
       continue;
     }
-    pool_.push([&, this](int id){ ProcessRequest(client); });
+    pool_.push([&, this](int id){ ProcessClient(client); });
   }
 }
 
+void Server::RegisterClient(client_s client)
+{
+  clients_.emplace( std::make_pair(std::move(client), 0) );
+  // TODO: make ping / pulse-request for checkin user is online.
+}
 
-void Server::ProcessRequest(CActiveSocket* client)
+void Server::RemoveClient(client_s client)
+{
+  clients_.erase( std::move(client) );
+}
+
+void Server::ProcessClient(client_s client)
 {
   if (client->Receive(1) < 1) {
     client->Close();
@@ -60,31 +70,39 @@ void Server::ProcessRequest(CActiveSocket* client)
 
   int bytesRecv = 0;
   std::string payload;
+  std::string result;
+  payload.reserve(bufferSize_ << 2);
 
   switch (client->GetData()[0]) {
 
     case cmd::CONNECT:
-
-      break;
+      RegisterClient(client);
+      return;
 
     case cmd::CLOSE:
-
-      break;
+      RemoveClient(client);
+      return;
 
     case cmd::EXECUTE:
       do {
         bytesRecv = client->Receive(bufferSize_);
         if (bytesRecv > 0) {
           std::string temp( (char*)(client->GetData()) );
-          std::cout << "Received: " << temp << std::endl << std::endl;
+          // std::cout << "Received: " << temp << std::endl << std::endl;
           payload.append(temp.begin(), temp.end());
         }
       } while (bytesRecv == bufferSize_);
+      std::cout << "Received: " << payload << std::endl;
 
-      // std::cout << "Received: " << payload << std::endl;
-
-      // send payload to parser
-      // return result <---- client.Send
+      try {
+        sql::sqliteParse(payload);
+        result = "Okay, SQL accepted";
+      } catch (std::string ex) {
+        result = ex;
+      } catch (...) {
+        result = "Unexpected error";
+      }
+      client->Send((const uint8*) result.c_str(), result.length());
       break;
 
     case cmd::COMMIT:
@@ -105,7 +123,7 @@ void Server::ProcessRequest(CActiveSocket* client)
 
   }
 
-  client->Close();
+  client->Close(); // TODO: it must be done only if user isn't authenticated.
 }
 
 } // namespace kappa

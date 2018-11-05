@@ -20,5 +20,5 @@ class QueryView(View):
 	def post(self, request):
 		conn = kira.connect()
 		response = HttpResponse()
-		response.content = conn.cursor().execute(request.body)
+		response.content = conn.cursor().execute(request.body).fetch()
 		return response
