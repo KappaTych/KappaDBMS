@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django_celery_beat',
+    'django_celery_results',
     'backend',
 ]
 
@@ -92,6 +94,20 @@ KAPPA_DB = {
         'DB': 'default',
     }
 }
+
+
+# Celery
+
+# CELERY_RESULT_BACKEND = 'redis://127.0.0.1:8060'
+CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_RESULT_BACKEND = 'django-cache'
+CELERY_BROKER_URL = 'redis://127.0.0.1:8060//'
+# CELERY_BROKER_URL = 'django://'
+# INSTALLED_APPS = ('kombu.transport.django', )
+
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_ACCEPT_CONTENT = ['pickle']
+CELERY_TASK_SERIALIZER = 'pickle'
 
 
 # Password validation
