@@ -4,8 +4,8 @@ import os
 from celery import Celery
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kappaweb.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-TaskQueue = Celery('kappaweb')
+TaskQueue = Celery('backend.api')
 TaskQueue.config_from_object('django.conf:settings', namespace='CELERY')
 TaskQueue.autodiscover_tasks()

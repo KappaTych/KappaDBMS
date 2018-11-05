@@ -1,5 +1,0 @@
-## Celery configuration file
-
-# broker_url = 'redis://127.0.0.1:8060//'
-# task_serializer = 'pickle'
-CELERY_RESULT_BACKEND = 'redis'

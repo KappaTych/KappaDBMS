@@ -1,7 +1,7 @@
 import socket
 
 from queue import Queue
-from backend.tasks import wait_response
+from backend.api.tasks import wait_response
 from django.conf import settings
 
 from base64 import b64encode
