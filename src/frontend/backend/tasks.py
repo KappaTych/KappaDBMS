@@ -6,13 +6,10 @@ import multiprocessing as mp
 from celery import shared_task
 from base64 import b64decode
 
-# mp.allow_connection_pickling()
-
 
 @shared_task
 def wait_response(bsock, auth):
 	result = ''
-	return 'Done'
 	mp.current_process().authkey = b64decode(auth)
 	sock = pickle.loads(bsock)
 	while True:
@@ -22,9 +19,11 @@ def wait_response(bsock, auth):
 			if data:
 				result += data.decode()
 			else:
-				result += '\n\nOoops! Unexpected error. Data isn\'t completed.'
 				break
-		except:
+		except socket.timeout:
 			result += '\n\nKappa\'s timeout exceeded'
+			break
+		except:
+			result += '\n\nOoops! Unexpected error. Data isn\'t completed.'
 			break
 	return result

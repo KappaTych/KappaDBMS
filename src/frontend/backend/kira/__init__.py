@@ -10,6 +10,8 @@ from multiprocessing.reduction import ForkingPickler
 from io import BytesIO
 
 
+# TODO: make second mode without using Celery (e.g., ProcessPoolExecutor)
+
 __db = settings.KAPPA_DB['default']
 
 def connect(dbname=__db['DB'], host=__db['HOST'], port=__db['PORT'], \
@@ -22,6 +24,7 @@ class Connection(object):
 		self.host = host
 		self.port = port
 		self.closed = False
+
 		try:
 			self.socket = socket.socket()
 		except OSError as msg:
@@ -81,9 +84,7 @@ class Cursor:
 		if self.conn == None:
 			self.records.put('Couldn\'t connect to Kappa')
 			return self
-
 		self.conn.socket.sendall( b'%s%s\x00' % (b'\x02', query) )
-
 		buf = BytesIO()
 		ForkingPickler(buf).dump(self.conn.socket)
 		self.records.put(
@@ -103,32 +104,13 @@ class Cursor:
 		record = self.records.get()
 		if type(record) == str:
 			return record
-		result = record.get(timeout=10)
-		# except:
-		# 	result = 'WTF'
-		# finally:
-		# 	record.forget()
+		try:
+			result = record.get(timeout=20)
+		except:
+			result = 'WTF'
+		finally:
+			record.forget()
 		return result
-		# ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20))
 
 	def fetch_all(self):
 		return [self.fetch() for _ in range(len(self.records))]
-
-# from celery.result import AsyncResult
-# def get_result(job):
-# 	work = AsyncResult(job.id)
-# 	i = 0
-# 	while not work.ready():
-# 		i += 1
-# 		if i > 100000:
-# 			return "Please waiting result."
-	
-# 	try:
-# 		result = work.get(timeout=1) 
-# 		return result
-# 	except:
-# 		return 'WTF'
-
-
-# class Query:
-# 	def bind()
