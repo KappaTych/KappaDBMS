@@ -7,6 +7,8 @@ from celery import shared_task
 from base64 import b64decode
 
 
+# TODO: transfer it to kira
+
 @shared_task
 def wait_response(bsock, auth):
 	result = ''

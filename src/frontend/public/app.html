@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>KappaDBMS</title>
+    <meta charset="utf-8" />
+
+    {% load static %}
+    <link rel="shortcut icon" href="{% static "favicon.ico" %}" type="image/x-icon" />
+
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <noscript>
+        <strong>We're sorry but to continue you have to enable JavaScript support.</strong>
+    </noscript>
+
+    {% block content %}{% endblock %}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

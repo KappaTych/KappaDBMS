@@ -1,76 +1,46 @@
-<!DOCTYPE html>
-<html>
+{% extends 'app.html' %}
+{% load static %}
 
-<head>
-  <title>KappaDBMS</title>
-  {% load static %}
-  <link rel="shortcut icon" href="{% static "favicon.ico" %}" type="image/x-icon" />
-  <link rel="stylesheet" href="{% static "css/adminer.css" %}" type="text/css" />
 
-  <script type="text/x-template" id="kappa-table-template">
-    <table v-bind:name='name'>
-      <thead>
-        <tr>
-          <th v-for="key in columns"
-            @click="sortBy(key)"
-            :class="{ active: sortKey == key }">
-            {% verbatim %}
-              {{ key | capitalize }}
-            {% endverbatim %}
-            <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-            </span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="entry in filteredData">
-          <td v-for="key in columns">
-            {% verbatim %}
-              {{ entry[key] }}
-            {% endverbatim %}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </script>
-</head>
+{% block head %}
+    {% include 'components/sqltable.html' %}
 
-<body>
-  <noscript>
-    <strong>We're sorry but to continue you have to enable JavaScript support.</strong>
-  </noscript>
+    <link rel="stylesheet" href="{% static "css/app.css" %}" type="text/css" />
+{% endblock %}
 
-  <div class="grid-container">
 
-    <div class="grid-item" id="app">
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="{% static "js/components.js" %}"></script>
+    <script src="{% static "js/main.js" %}"></script>
+{% endblock %}
 
-      <p>
-        <label for="input_text_area">Input query:</label>
-      </p>
-      <textarea rows="10" cols="50" id="input_text_area" name="input_text_area" placeholder="Enter query" v-model='input'></textarea>
-      <p>
-        <button @click="sendQuery">Send query</button>
-      </p>
 
-      <p>
-        <label for="output_text_area">Output result:</label>
-      </p>
-      <textarea rows="10" cols="50" id="output_text_area" name="output_text_area" placeholder="Awaiting" readonly v-model='output'></textarea>
+{% block content %}
+    <div id="app">
+
+        <div id="table">
+            <h3>[[ table.name ]]</h3>
+            <sqltable :data="table.data" :columns="table.columns" :filter-key="table.query"></sqltable>
+        </div>
+
+        <div class="grid-container">
+            <div class="grid-item">
+                <p>
+                    <label for="input_text_area">Input query:</label>
+                </p>
+                <textarea class="sqlarea jush-sql jush" rows="20" cols="100" id="input_text_area" name="input_text_area" placeholder="Enter query" v-model='input'></textarea>
+            </div>
+            <div class="grid-item">
+                <p>
+                    <label for="output_text_area">Output result:</label>
+                </p>
+                <textarea class="sqlarea jush-sql jush" rows="20" cols="100" id="output_text_area" name="output_text_area" placeholder="Awaiting" readonly v-model='output'></textarea>
+            </div>
+        </div>
+
+        <input style="margin: 24px" type="submit" @click="sendQuery" value="Execute query"></input>
 
     </div>
-
-    <div class="grid-item" id="table">
-      <p>[[ name ]]</p>
-      <kappa-table :data="gridData" :columns="gridColumns" :filter-key="searchQuery">
-      </kappa-table>
-    </div>
-
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="{% static "js/index.js" %}"></script>
-
-</body>
-
-</html>
+{% endblock %}

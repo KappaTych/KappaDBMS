@@ -1,0 +1,25 @@
+<script type="text/x-template" id="sqltable-template">
+    <table v-bind:name='name'>
+        <thead>
+            <tr>
+                <th v-for="key in columns"
+                    @click="sortBy(key)"
+                    :class="{ active: sortKey == key }">
+                        {% verbatim %}
+                        {{ key | capitalize }}
+                        {% endverbatim %}
+                        <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="entry in filteredData">
+                <td v-for="key in columns">
+                    {% verbatim %}
+                    {{ entry[key] }}
+                    {% endverbatim %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>

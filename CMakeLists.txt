@@ -36,7 +36,7 @@ add_subdirectory(${lib}/clsocket)
 
 option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_SERVER "Build SERVER" ON)
-option(PARSER_SHARED "Make parser shared library" OFF)
+option(PARSER_SHARED "Make parser as shared library" OFF)
 
 if (BUILD_PARSER)
 	file(GLOB_RECURSE SRC_PARSER . src/backend/parser/*.cpp)
@@ -47,9 +47,9 @@ if (BUILD_SERVER)
 endif()
 
 if(PARSER_SHARED)
-    add_library(parser SHARED EXCLUDE_FROM_ALL ${CLSOCKET_SOURCES})
+    add_library(parser SHARED EXCLUDE_FROM_ALL ${SRC_PARSER})
 else()
-    add_library(parser STATIC EXCLUDE_FROM_ALL ${CLSOCKET_SOURCES})
+    add_library(parser STATIC EXCLUDE_FROM_ALL ${SRC_PARSER})
 endif()
 
 set(LINK_LIBS clsocket parser)
@@ -57,7 +57,7 @@ set(LINK_LIBS clsocket parser)
 # 	# set(LINK_LIBS "${LINK_LIBS} ws2_32")
 # endif()
 
-add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_PARSER} ${SRC_SERVER})
+add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
 target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
 target_include_directories(${EXECUTABLE} PUBLIC
 	${src}/include
