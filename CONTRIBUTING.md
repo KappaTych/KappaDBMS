@@ -16,7 +16,7 @@ When you file a bug, please try to follow these simple rules if applicable:
 * Testing framework isn't announced yet.
 Pull requests are very welcome! Please try to follow these simple rules if applicable:
 
-* Make sure you follow the coding-style guidance for KappaDBMS (TBD).
+* Make sure you follow the [coding-style guidance](https://github.com/abelidze/KappaDBMS/blob/master/STYLE-GUIDE.md) for KappaDBMS.
 * Please create a topic branch for every separate change you make.
 * We suggest you to use '[git-flow](https://danielkummer.github.io/git-flow-cheatsheet/index.html)' extension / technique.
 * Make sure you use git rebase instead of git merge while updating your branch with the master.

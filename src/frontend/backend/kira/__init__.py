@@ -1,5 +1,16 @@
 import socket
+
+from queue import Queue
+from backend.tasks import wait_response
 from django.conf import settings
+
+from base64 import b64encode
+from multiprocessing import current_process
+from multiprocessing.reduction import ForkingPickler
+from io import BytesIO
+
+
+# TODO: make second mode without using Celery (e.g., ProcessPoolExecutor)
 
 __db = settings.KAPPA_DB['default']
 
@@ -13,6 +24,7 @@ class Connection(object):
 		self.host = host
 		self.port = port
 		self.closed = False
+
 		try:
 			self.socket = socket.socket()
 		except OSError as msg:
@@ -65,32 +77,40 @@ class Connection(object):
 class Cursor:
 	def __init__(self, connection=None):
 		self.conn = connection
+		self.records = Queue()
 
 	def execute(self, query):
 		#0x02
 		if self.conn == None:
-			return 'Couldn\'t connect to Kappa'
-
+			self.records.put('Couldn\'t connect to Kappa')
+			return self
 		self.conn.socket.sendall( b'%s%s\x00' % (b'\x02', query) )
-		result = ''
-		# while True:
-		# 	data = self.conn.socket.recv(1024)
-		# 	print(data)
-		# 	if (data):
-		# 		result += data
-		# 	else:
-		# 		break
-		return result
+		buf = BytesIO()
+		ForkingPickler(buf).dump(self.conn.socket)
+		self.records.put(
+				wait_response.delay(
+					buf.getvalue(),
+					b64encode(current_process().authkey)
+				)
+			)
+		return self
 
 	def prepare(self):
 		pass
 
 	def fetch(self):
-		pass
+		if self.records.empty():
+			return 'None'
+		record = self.records.get()
+		if type(record) == str:
+			return record
+		try:
+			result = record.get(timeout=20)
+		except:
+			result = 'WTF'
+		finally:
+			record.forget()
+		return result
 
 	def fetch_all(self):
-		pass
-
-
-# class Query:
-# 	def bind()
+		return [self.fetch() for _ in range(len(self.records))]
