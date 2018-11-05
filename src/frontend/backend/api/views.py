@@ -1,4 +1,4 @@
-import backend.kira as kira
+import backend.api.kira as kira
 
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render

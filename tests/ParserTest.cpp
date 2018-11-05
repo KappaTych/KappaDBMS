@@ -2,7 +2,9 @@
 #include "src/backend/parser/parser.hpp"
 
 int main(int argc, char *argv[]) {
-  std::string s = "Drop table t";
+  std::string s;
+
+  s = "Drop table t";
   sql::sqliteParse(s);
 
   s = "show table stud";

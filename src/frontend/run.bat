@@ -2,14 +2,13 @@
 chcp 1251
 title KappaDBMS
 
-cd ..
 cls
 echo Starting KappaDBMS Services...
 sleep 1
-start "Redis" cmd /k "title Redis && redis-server .\run\redis.conf"
+start "Redis" cmd /k "title Redis && redis-server redis.conf"
 sleep 2
 echo Redis started!
-start "Celery" cmd /k "title Celery && celery worker -A backend --loglevel=info"
+start "Celery" cmd /k "title Celery && celery worker -A backend.api --loglevel=info"
 sleep 2
 echo Celery started!
 sleep 1
