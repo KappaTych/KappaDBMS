@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "Record.h"
+#include "../../include/json.hpp"
 
 namespace tables {
 
@@ -21,10 +22,15 @@ namespace tables {
 
         explicit Table(std::string name, std::vector<Column> columns);
 
-
+      const std::vector<Column>& getColumns() {return _columns;}
 
     private:
         std::vector<Column> _columns;
     };
 } //namespace tables
 
+namespace tables
+{
+void to_json(nlohmann::json& j, const Column& r);
+void from_json(const nlohmann::json& j, Column& r);
+}

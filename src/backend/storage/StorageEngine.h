@@ -11,9 +11,23 @@
 namespace se {
     class StorageEngine {
     public:
+        static StorageEngine& getInstance()
+        {
+          static se::StorageEngine instance;
+          return instance;
+        }
+
         bool create(std::string name, std::vector<tables::Column> columns);
         tables::Table show_create();
+
+        bool flush();
+
+        StorageEngine(StorageEngine const&) = delete;
+        void operator=(StorageEngine const&)  = delete;
     private:
+        StorageEngine() {};
+        ~StorageEngine() = default;
+
         std::map<std::string, tables::Table> _tables;
     };
 } // namespace se
