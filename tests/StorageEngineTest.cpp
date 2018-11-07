@@ -9,6 +9,6 @@ int main()
   se::StorageEngine::getInstance().create("test_problem", {{"id", dt::DataType::INTEGER},
                                                            {"id", dt::DataType::DOUBLE}});
 
-  std::cout << se::StorageEngine::getInstance().show_create("test") << std::endl;
-  std::cout << se::StorageEngine::getInstance().show_create("test_problem") << std::endl;
+//  std::cout << se::StorageEngine::getInstance().show_create("test") << std::endl;
+//  std::cout << se::StorageEngine::getInstance().show_create("test_problem") << std::endl;
 }

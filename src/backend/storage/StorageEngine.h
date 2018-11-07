@@ -28,6 +28,7 @@ public:
 
   bool create(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
+  bool insert(std::vector<const char*> input);
   std::string show_create(std::string name);
 
   bool flush();

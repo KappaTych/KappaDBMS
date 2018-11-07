@@ -20,14 +20,18 @@ using json = nlohmann::json;
 bool se::StorageEngine::flush()
 {
   my_json j;
+  std::ofstream fout;
   for (auto &table : _tables) {
     j[table.first] = table.second.getColumns();
+    fout.open("../database/" + table.first + ".kp", std::ios_base::binary);
+    fout.write(table.second.records.get(), sizeof(table.second.records));
+    fout.close();
   }
 
   std::string result = j.dump();
-  std::ofstream fout("../database/tables.json");
+  fout.open("../database/tables.json");
+//  std::ofstream fout("../database/tables.json");
   fout << result;
-  fout.flush();
   fout.close();
 }
 
@@ -38,4 +42,9 @@ std::string se::StorageEngine::show_create(std::string name)
   fin >> j;
   tables::Table t = tables::Table(name, j[name]);
   return "CREATE TABLE " + t.ToString();
+}
+
+bool se::StorageEngine::insert(std::vector<const char *> input)
+{
+  return true;
 }
