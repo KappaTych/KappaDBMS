@@ -7,7 +7,7 @@
 #include "StorageEngine.h"
 #include "../include/json.hpp"
 
-bool se::StorageEngine::create(std::string name, std::vector<std::pair<std::string, dt::DataType>> columns)
+bool se::StorageEngine::create(std::string name, std::map<std::string, dt::DataType> columns)
 {
   _tables.insert(std::pair<std::string, tables::Table>(name, tables::Table(name, columns)));
   //TODO: remove columns with some stream of pare values - column name and column type
@@ -27,9 +27,17 @@ bool se::StorageEngine::flush()
 
   std::string result = j.dump();
   std::ofstream fout("../database/tables.json");
-  //Debug
-//    std::cout << result;
   fout << result;
   fout.flush();
   fout.close();
+}
+
+std::string se::StorageEngine::show_create(std::string name)
+{
+  std::ifstream fin("../database/tables.json");
+  std::string result;
+  json j;
+  fin >> j;
+  tables::Table t = tables::Table(name, j[name]);
+  return "CREATE TABLE " + t.ToString();
 }

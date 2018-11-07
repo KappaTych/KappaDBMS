@@ -8,23 +8,32 @@
 #include "Record.h"
 #include "../../include/json.hpp"
 
-namespace tables {
+using json = nlohmann::json;
 
-    struct Column {
-        std::string name;
-        dt::DataType dataType;
-    };
+namespace tables
+{
 
-    class Table {
-    public:
-        std::string name;
-        std::vector<Record> records;
+struct Column
+{
+  std::string name;
+  dt::DataType dataType;
+};
 
-        explicit Table(std::string name, std::vector<std::pair<std::string, dt::DataType>> columns);
+class Table
+{
+public:
+  std::string name;
+  std::vector<Record> records;
 
-      const std::map<std::string, dt::DataType>& getColumns() {return _columns;}
+  explicit Table(std::string name, std::map<std::string, dt::DataType> columns);
 
-    private:
-        std::map<std::string, dt::DataType> _columns;
-    };
+  const std::map<std::string, dt::DataType> &getColumns()
+  { return _columns; }
+
+  std::string ToString();
+
+private:
+  std::map<std::string, dt::DataType> _columns;
+};
+
 } //namespace tables

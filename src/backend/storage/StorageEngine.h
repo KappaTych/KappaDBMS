@@ -20,9 +20,9 @@ public:
     return instance;
   }
 
-  bool create(std::string name, std::vector<std::pair<std::string, dt::DataType>> columns);
+  bool create(std::string name, std::map<std::string, dt::DataType> columns);
 
-  tables::Table show_create();
+  std::string show_create(std::string name);
 
   bool flush();
 
