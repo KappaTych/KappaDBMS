@@ -20,17 +20,11 @@ namespace tables {
         std::string name;
         std::vector<Record> records;
 
-        explicit Table(std::string name, std::vector<Column> columns);
+        explicit Table(std::string name, std::vector<std::pair<std::string, dt::DataType>> columns);
 
-      const std::vector<Column>& getColumns() {return _columns;}
+      const std::map<std::string, dt::DataType>& getColumns() {return _columns;}
 
     private:
-        std::vector<Column> _columns;
+        std::map<std::string, dt::DataType> _columns;
     };
 } //namespace tables
-
-namespace tables
-{
-void to_json(nlohmann::json& j, const Column& r);
-void from_json(const nlohmann::json& j, Column& r);
-}

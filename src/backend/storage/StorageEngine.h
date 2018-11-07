@@ -7,29 +7,37 @@
 #include <map>
 #include <string>
 #include "tables/Table.h"
+#include "datatypes/object.h"
 
-namespace se {
-    class StorageEngine {
-    public:
-        static StorageEngine& getInstance()
-        {
-          static se::StorageEngine instance;
-          return instance;
-        }
+namespace se
+{
+class StorageEngine
+{
+public:
+  static StorageEngine &getInstance()
+  {
+    static se::StorageEngine instance;
+    return instance;
+  }
 
-        bool create(std::string name, std::vector<tables::Column> columns);
-        tables::Table show_create();
+  bool create(std::string name, std::vector<std::pair<std::string, dt::DataType>> columns);
 
-        bool flush();
+  tables::Table show_create();
 
-        StorageEngine(StorageEngine const&) = delete;
-        void operator=(StorageEngine const&)  = delete;
-    private:
-        StorageEngine() {};
-        ~StorageEngine() = default;
+  bool flush();
 
-        std::map<std::string, tables::Table> _tables;
-    };
+  StorageEngine(StorageEngine const &) = delete;
+
+  void operator=(StorageEngine const &)  = delete;
+
+private:
+  StorageEngine()
+  {};
+
+  ~StorageEngine() = default;
+
+  std::map<std::string, tables::Table> _tables;
+};
 } // namespace se
 
 

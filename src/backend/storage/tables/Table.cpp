@@ -5,25 +5,7 @@
 
 #include "Table.h"
 
-tables::Table::Table(std::string name, std::vector<tables::Column> columns)
-:name(std::move(name)), _columns(std::move(columns)){
-}
-
-namespace tables
+tables::Table::Table(std::string name, std::vector<std::pair<std::string, dt::DataType>> columns) : name(
+    std::move(name)), _columns(columns.begin(), columns.end())
 {
-
-void to_json(nlohmann::json& j, const Column& r)
-{
-  j = nlohmann::json{
-      {"name", r.name},
-      {"dataType", r.dataType}
-  };
-}
-
-void from_json(const nlohmann::json& j, Column& r)
-{
-  r.name = j.at( "name" ).get <std::string>();
-  r.dataType = j.at("dataType").get<dt::DataType>();
-}
-
 }
