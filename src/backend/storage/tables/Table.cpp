@@ -5,8 +5,8 @@
 
 #include "Table.h"
 
-tables::Table::Table(std::string name, std::map<std::string, dt::DataType> columns) : name(
-    std::move(name)), _columns(columns.begin(), columns.end())
+tables::Table::Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns) : name(
+    std::move(name)), _columns(columns)
 {
 }
 
@@ -35,10 +35,12 @@ std::string tables::Table::ToString()
 {
   std::string result;
   result += name + " (";
-  for (auto col = _columns.begin(); col != _columns.end(); ++col) {
-    result += col->first + " " + std::to_string(col->second) + (std::next(col) == _columns.end() ? "" : ", ");
+  for (auto& col : _columns) {
+    result += col.first + " " + std::to_string(col.second) + ", ";
   }
 
+  result.pop_back();
+  result.pop_back();
   result += ");";
   return result;
 }

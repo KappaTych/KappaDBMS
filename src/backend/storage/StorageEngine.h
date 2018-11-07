@@ -8,6 +8,12 @@
 #include <string>
 #include "tables/Table.h"
 #include "datatypes/object.h"
+#include "../include/json.hpp"
+#include "../include/fifo_map.hpp"
+
+template<class K, class V, class dummy_compare, class A>
+using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
+using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
 
 namespace se
 {
@@ -20,7 +26,7 @@ public:
     return instance;
   }
 
-  bool create(std::string name, std::map<std::string, dt::DataType> columns);
+  bool create(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
   std::string show_create(std::string name);
 

@@ -5,9 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include "StorageEngine.h"
-#include "../include/json.hpp"
 
-bool se::StorageEngine::create(std::string name, std::map<std::string, dt::DataType> columns)
+bool se::StorageEngine::create(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns)
 {
   _tables.insert(std::pair<std::string, tables::Table>(name, tables::Table(name, columns)));
   //TODO: remove columns with some stream of pare values - column name and column type
@@ -20,7 +19,7 @@ using json = nlohmann::json;
 
 bool se::StorageEngine::flush()
 {
-  json j;
+  my_json j;
   for (auto &table : _tables) {
     j[table.first] = table.second.getColumns();
   }
@@ -35,8 +34,7 @@ bool se::StorageEngine::flush()
 std::string se::StorageEngine::show_create(std::string name)
 {
   std::ifstream fin("../database/tables.json");
-  std::string result;
-  json j;
+  my_json j;
   fin >> j;
   tables::Table t = tables::Table(name, j[name]);
   return "CREATE TABLE " + t.ToString();

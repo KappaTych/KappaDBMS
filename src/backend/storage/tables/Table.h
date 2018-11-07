@@ -7,6 +7,7 @@
 #include <vector>
 #include "Record.h"
 #include "../../include/json.hpp"
+#include "../../include/fifo_map.hpp"
 
 using json = nlohmann::json;
 
@@ -25,15 +26,15 @@ public:
   std::string name;
   std::vector<Record> records;
 
-  explicit Table(std::string name, std::map<std::string, dt::DataType> columns);
+  explicit Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
-  const std::map<std::string, dt::DataType> &getColumns()
+  const nlohmann::fifo_map<std::string, dt::DataType> &getColumns()
   { return _columns; }
 
   std::string ToString();
 
 private:
-  std::map<std::string, dt::DataType> _columns;
+  nlohmann::fifo_map<std::string, dt::DataType> _columns;
 };
 
 } //namespace tables
