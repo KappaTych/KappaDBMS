@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
-
 project(KappaDBMS)
 
 set(BUILD_MAJOR "0")
@@ -54,37 +53,42 @@ elseif(WIN32)
 	endif()
 endif()
 
-# set(CMAKE_PREFIX_PATH src/backend/include)
+# set(CMAKE_PREFIX_PATH ${src}/include)
+
+option(BUILD_PARSER "Build PARSER" ON)
+option(BUILD_STORAGE "Build STORAGE" ON)
+option(PARSER_SHARED "Make parser shared library" OFF)
+
+
 set(CLSOCKET_DEP_ONLY ON)
 add_subdirectory(${lib}/clsocket)
 
-option(BUILD_PARSER "Build PARSER" ON)
-option(BUILD_SERVER "Build SERVER" ON)
-option(PARSER_SHARED "Make parser shared library" OFF)
+set(LINK_LIBS clsocket pthread)
 
 if (BUILD_PARSER)
-	file(GLOB_RECURSE SRC_PARSER . src/backend/parser/*.cpp)
+	add_subdirectory(${src}/parser)
+	list(APPEND LINK_LIBS parser)
 endif()
 
-if (BUILD_SERVER)
-	file(GLOB_RECURSE SRC_SERVER . src/backend/server/*.cpp)
+if (BUILD_STORAGE)
+	add_subdirectory(${src}/storage)
+	list(APPEND LINK_LIBS storage)
 endif()
 
-if(PARSER_SHARED)
+if (PARSER_SHARED)
     add_library(parser SHARED EXCLUDE_FROM_ALL ${SRC_PARSER})
 else()
     add_library(parser STATIC EXCLUDE_FROM_ALL ${SRC_PARSER})
 endif()
 
-set(LINK_LIBS clsocket pthread parser)
-# if (WIN32)
-# 	# set(LINK_LIBS "${LINK_LIBS} ws2_32")
-# endif()
+file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
 
-add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_PARSER} ${SRC_SERVER})
+add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
 target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
 target_include_directories(${EXECUTABLE} PUBLIC
 	${src}/include
 	${lib}/clsocket/src
 	${lib}/ctpl
 )
+
+set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
