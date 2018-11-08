@@ -112,7 +112,7 @@ void someFunction(int value, int expected)
 
 
 ##### VARIABLE AND FUNCTION NAMES
-First of all, use kamelCase (functions, regular and classes' variables / properties) and KamelCase (class'es names and methods) naming-style for everything, except typedef's / using's.
+First of all, use kamelCase (functions, regular and classes' variables / properties) and PascalCase (class'es names and methods) naming-style for everything, except typedef's / using's.
 Secondly, use descriptive names.
 Don't put multiple assignments on a single line, start all declarations with new line. Ex.:
 ```
