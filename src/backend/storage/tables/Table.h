@@ -24,7 +24,7 @@ class Table
 {
 public:
   std::string name;
-  std::shared_ptr<char> records;
+  std::vector<std::shared_ptr<char>> records;
 
   explicit Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 

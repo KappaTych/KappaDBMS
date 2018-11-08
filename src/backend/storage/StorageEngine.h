@@ -28,7 +28,7 @@ public:
 
   bool create(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
-  bool insert(std::vector<const char*> input);
+  bool insert(std::string tableName, std::string input);
   std::string show_create(std::string name);
 
   bool flush();
@@ -38,8 +38,7 @@ public:
   void operator=(StorageEngine const &)  = delete;
 
 private:
-  StorageEngine()
-  {};
+  StorageEngine();
 
   ~StorageEngine() = default;
 
