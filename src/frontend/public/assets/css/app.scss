@@ -488,7 +488,18 @@ input[type=number] {
 
 #table {
   padding: 0 24px;
+
+  table {
+    width: 100%;
+  }
 }
+
+textarea {
+  resize: vertical;
+  max-height: 640px;
+  min-height: 306px;
+}
+
 
 table {
   margin-top     : 20px;
