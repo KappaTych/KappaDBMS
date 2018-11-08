@@ -75,12 +75,6 @@ if (BUILD_STORAGE)
 	list(APPEND LINK_LIBS storage)
 endif()
 
-if (PARSER_SHARED)
-    add_library(parser SHARED EXCLUDE_FROM_ALL ${SRC_PARSER})
-else()
-    add_library(parser STATIC EXCLUDE_FROM_ALL ${SRC_PARSER})
-endif()
-
 file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
 
 add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
