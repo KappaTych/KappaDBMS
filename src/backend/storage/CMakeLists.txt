@@ -9,7 +9,7 @@ set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 option(STORAGE_SHARED "Make storage shared library" OFF)
 option(STORAGE_TEST "Build storage with tests" OFF)
 
-file(GLOB_RECURSE SRC_STORAGE . src/backend/storage/*.cpp)
+file(GLOB_RECURSE SRC_STORAGE . *.cpp)
 
 set(SRC_TESTS
 ../../../tests/StorageEngineTest.cpp

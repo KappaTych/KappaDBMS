@@ -9,7 +9,7 @@ set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 option(PARSER_SHARED "Make parser shared library" OFF)
 option(PARSER_TEST "Build parser with tests" OFF)
 
-file(GLOB_RECURSE SRC_PARSER . src/backend/parser/*.cpp)
+file(GLOB_RECURSE SRC_PARSER . *.cpp)
 
 set(SRC_TESTS
 ../../../tests/ParserTest.cpp
