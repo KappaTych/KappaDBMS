@@ -2,9 +2,9 @@
 // Created by truefinch on 02.11.18.
 //
 
-#include "../../include/json.hpp"
-
 #pragma once
+
+#include "../../include/json.hpp"
 
 namespace dt
 {

@@ -11,8 +11,14 @@
 
 using json = nlohmann::json;
 
+template<class K, class V, class dummy_compare, class A>
+using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
+using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
+
 namespace tables
 {
+
+const char DIVIDOR = '~';
 
 struct Column
 {
@@ -28,7 +34,7 @@ public:
 
   explicit Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
-  const nlohmann::fifo_map<std::string, dt::DataType> &getColumns()
+  const nlohmann::fifo_map<std::string, dt::DataType> &getColumns() const
   { return _columns; }
 
   std::string ToString();
@@ -36,5 +42,7 @@ public:
 private:
   nlohmann::fifo_map<std::string, dt::DataType> _columns;
 };
+
+void to_json(my_json& j, const Table& t);
 
 } //namespace tables

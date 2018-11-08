@@ -29,7 +29,10 @@ public:
   bool create(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
   bool insert(std::string tableName, std::string input);
+
   std::string show_create(std::string name);
+
+  my_json select(std::string tableName);
 
   bool flush();
 
