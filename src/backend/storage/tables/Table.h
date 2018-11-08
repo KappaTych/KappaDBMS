@@ -6,25 +6,35 @@
 #include <string>
 #include <vector>
 #include "Record.h"
+#include "../../include/json.hpp"
+#include "../../include/fifo_map.hpp"
 
-namespace tables {
+using json = nlohmann::json;
 
-    struct Column {
-        std::string name;
-        dt::DataType dataType;
-    };
+namespace tables
+{
 
-    class Table {
-    public:
-        std::string name;
-        std::vector<Record> records;
+struct Column
+{
+  std::string name;
+  dt::DataType dataType;
+};
 
-        explicit Table(std::string name, std::vector<Column> columns);
+class Table
+{
+public:
+  std::string name;
+  std::vector<std::shared_ptr<char>> records;
 
+  explicit Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
 
+  const nlohmann::fifo_map<std::string, dt::DataType> &getColumns()
+  { return _columns; }
 
-    private:
-        std::vector<Column> _columns;
-    };
+  std::string ToString();
+
+private:
+  nlohmann::fifo_map<std::string, dt::DataType> _columns;
+};
+
 } //namespace tables
-
