@@ -1,5 +1,4 @@
 main.cpp
-CMakeLists.txt
 cmake-build-debug/
 database/*
 
