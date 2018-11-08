@@ -12,8 +12,25 @@ se::StorageEngine::StorageEngine() : _tables()
   if (fin.is_open()) {
     my_json j;
     fin >> j;
+    fin.close();
     for (auto it = j.begin(); it != j.end(); ++it) {
       _tables.insert(std::pair<std::string, tables::Table>(it.key(), tables::Table(it.key(), it.value())));
+
+      fin.open("../database/" + it.key() + ".kp", std::ios_base::binary);
+      if (!fin.is_open())
+        continue;
+      char ch;
+      while (fin >> ch) {
+        std::string s = "";
+        while (ch != 0) {
+          s += ch;
+          fin >> ch;
+        }
+        auto size = s.size() + 1;
+        _tables.at(it.key()).records.push_back(std::make_shared<char>(size));
+        std::memcpy(_tables.at(it.key()).records.back().get(), s.c_str(), size);
+      }
+      fin.close();
     };
   }
 }
@@ -70,4 +87,16 @@ bool se::StorageEngine::insert(const std::string tableName, std::string input)
   std::memcpy(t.records.back().get(), input.c_str(), size);
   flush();
   return true;
+}
+
+my_json se::StorageEngine::select(std::string tableName)
+{
+  if (_tables.find(tableName) == _tables.end()) {
+    return my_json();
+  }
+
+  tables::Table &t = _tables.at(tableName);
+  my_json j;
+  tables::to_json(j, t);
+  return j;
 }
