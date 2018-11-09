@@ -6,7 +6,7 @@ set(BUILD_MINOR "0")
 set(BUILD_VERSION "1")
 set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 
-option(PARSER_SHARED "Make parser shared library" OFF)
+option(PARSER_SHARED "Make parser shared library" ON)
 option(PARSER_TEST "Build parser with tests" OFF)
 
 file(GLOB_RECURSE SRC_PARSER . *.cpp)
