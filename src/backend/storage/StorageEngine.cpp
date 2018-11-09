@@ -50,7 +50,7 @@ bool se::StorageEngine::flush()
   my_json j;
   std::ofstream fout;
 
-  for (auto &table : tables_) {
+  for (auto& table : tables_) {
     j[table.first] = table.second.getColumns();
     fout.open("./database/" + table.first + ".kp", std::ios_base::binary);
     for (auto record : table.second.records)

@@ -21,12 +21,15 @@ else()
     add_library(parser STATIC EXCLUDE_FROM_ALL ${SRC_PARSER})
 endif()
 
+target_include_directories(parser PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include
+)
 set_target_properties(parser PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
 
 if (PARSER_TEST OR BUILD_TESTS)
     add_executable(parser_test ${SRC_TESTS})
     target_link_libraries(parser_test parser)
     target_include_directories(parser_test PUBLIC
-        ../include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
     )
 endif()

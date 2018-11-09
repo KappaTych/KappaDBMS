@@ -35,7 +35,7 @@ CREATE      return CREATE;
 DROP        return DROP;
 SHOW		return SHOW;
 TABLE       return TABLE;
-NUL 		return NUL;
+NULL 		return NULL;
 SELECT 		return SELECT;
 VALUES 		return VALUES;
 INTO 		return INTO;

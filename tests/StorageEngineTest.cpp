@@ -8,14 +8,14 @@
 int main(int argc, char *argv[])
 {
   auto& storage = se::StorageEngine::Instance();
-  storage.create("test", {
-      {"z", sql::DataType::INTEGER},
-      {"name", sql::DataType::TEXT}
-    });
-  storage.create("test_problem", {
-      {"id", sql::DataType::INTEGER},
-      {"id", sql::DataType::DOUBLE}
-    });
+  // storage.create("test", {
+  //     {"z", sql::DataType::INTEGER},
+  //     {"name", sql::DataType::TEXT}
+  //   });
+  // storage.create("test_problem", {
+  //     {"id", sql::DataType::INTEGER},
+  //     {"id", sql::DataType::DOUBLE}
+  //   });
 
   storage.insert("test", "5~hello");
   storage.insert("test", "6~lolik");

@@ -1,11 +1,13 @@
-#include "parser.hpp"
-#include "flex-bison/bison_sql.h"
-#include "flex-bison/flex_sql.h"
 #include <string>
+
+#include "parser.hpp"
+#include "flex-bison/flex_sql.h"
+#include "flex-bison/bison_sql.h"
 
 namespace sql {
 
-void sqliteParse(const std::string &sql) {
+void sqliteParse(const std::string& sql)
+{
   yyscan_t scanner;
   YY_BUFFER_STATE state;
 
@@ -14,7 +16,7 @@ void sqliteParse(const std::string &sql) {
     throw "SQLParser: Error when initializing lexer!\n";
   }
 
-  const char *text = sql.c_str();
+  const char* text = sql.c_str();
   state = yy_scan_string(text, scanner);
 
   int ret = yyparse(scanner);

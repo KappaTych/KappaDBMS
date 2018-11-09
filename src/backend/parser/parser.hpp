@@ -8,5 +8,3 @@ namespace sql {
 void sqliteParse(const std::string &sql);
 
 } // namespace sql
-
-

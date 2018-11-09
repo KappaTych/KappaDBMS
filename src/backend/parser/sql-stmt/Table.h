@@ -16,13 +16,13 @@ public:
 	std::string name;
 };
 
-enum class DataType {
-  INT,
-  DOUBLE,
-  TEXT
-};
+// enum class DataType {
+//   INT,
+//   DOUBLE,
+//   TEXT
+// };
 
-dt::DataType convertDbType(sql::DataType);
+sql::DataType convertDbType(sql::DataType);
 
 std::ostream& operator<<(std::ostream&, DataType);
 

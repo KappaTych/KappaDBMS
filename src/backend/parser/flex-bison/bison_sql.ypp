@@ -72,7 +72,7 @@ typedef void* yyscan_t;
 
 
 %token DOUBLE TEXT INTEGER
-%token CREATE TABLE DROP SHOW NUL SELECT VALUES INTO INSERT FROM
+%token CREATE TABLE DROP SHOW NULL SELECT VALUES INTO INSERT FROM
 
 // Non-terminal types
 
@@ -118,7 +118,7 @@ statement:
 // Show Statement
 show_statement:
         SHOW TABLE table_name {
-        	se::StorageEngine& storage = se::StorageEngine::getInstance();
+        	se::StorageEngine& storage = se::StorageEngine::Instance();
         	auto s = storage.show_create($3->name);
 
         	std::cout << s << std::endl;
@@ -128,7 +128,7 @@ show_statement:
 // Create Statement
 create_statement:
 	CREATE TABLE table_name '(' column_def_commalist ')' {
-			se::StorageEngine& storage = se::StorageEngine::getInstance();
+			se::StorageEngine& storage = se::StorageEngine::Instance();
 			nlohmann::fifo_map<std::string, dt::DataType> columns;
 			
 			for (auto &e : *$5) {
@@ -201,7 +201,7 @@ literal_value:
 	|	DOUBLE_CONST { $$ = sql::Expression::makeLiteral($1); }
 	|	STRING { $$ = sql::Expression::makeLiteral(*($1)); }
 	|	BLOB_STRING	{ $$ = sql::Expression::makeLiteral(*($1)); }
-	|	NUL { $$ = sql::Expression::makeNullLiteral(); }
+	|	NULL { $$ = sql::Expression::makeNullLiteral(); }
 	|	TRUE { $$ = sql::Expression::makeLiteral($1); }
 	|	FALSE { $$ = sql::Expression::makeLiteral($1); }
 
