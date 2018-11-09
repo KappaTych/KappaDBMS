@@ -6,11 +6,16 @@
 #include <memory>
 #include "../datatypes/object.h"
 
+namespace sql
+{
+
 class Field {
 public:
-    explicit Field(dt::DataType type, std::shared_ptr<dt::object> value = nullptr)
-    : _type(type), _value(value) {};
+  explicit Field(DataType type, std::shared_ptr<object> value = nullptr) : type_(type), value_(value) { }
+
 private:
-    dt::DataType _type;
-    std::shared_ptr<dt::object> _value;
+  DataType type_;
+  std::shared_ptr<object> value_;
 };
+
+} // namespace sql

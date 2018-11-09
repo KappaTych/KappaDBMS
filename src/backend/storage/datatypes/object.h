@@ -4,22 +4,24 @@
 
 #pragma once
 
-#include "../../include/json.hpp"
+#include <json.hpp>
 
-namespace dt
+namespace sql
 {
 
 enum DataType
 {
-  INTEGER, DOUBLE, TEXT
+  INTEGER,
+  DOUBLE,
+  TEXT
 };
 
 NLOHMANN_JSON_SERIALIZE_ENUM(DataType, {
-  { DataType::INTEGER, "INTEGER" }, { DataType::DOUBLE, "DOUBLE" }, { DataType::TEXT, "TEXT" }
+  { DataType::INTEGER, "INTEGER" },
+  { DataType::DOUBLE,  "DOUBLE" },
+  { DataType::TEXT,    "TEXT" }
 });
 
-class object
-{
+class object {};
 
-};
-} // namespace dt close
+} // namespace sql
