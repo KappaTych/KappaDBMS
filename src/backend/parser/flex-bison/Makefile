@@ -11,6 +11,3 @@ flex_sql.cpp: flex_sql.lpp
 
 clean:
 	rm *.cpp *.h* *.o*
-
-
-
