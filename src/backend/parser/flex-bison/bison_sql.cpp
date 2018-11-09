@@ -109,8 +109,11 @@ extern int yydebug;
 
 
 #include "../sql-stmt/Table.h"
-#include "../dbStub.hpp"
+#include "../sql-stmt/Expression.h"
 
+
+#include "../../storage/datatypes/object.h"
+#include "../../storage/StorageEngine.h"
 
 #ifndef YYtypeDEF_YY_SCANNER_T
 #define YYtypeDEF_YY_SCANNER_T
@@ -118,7 +121,7 @@ typedef void* yyscan_t;
 #endif
 
 
-#line 122 "bison_sql.cpp" /* yacc.c:355  */
+#line 125 "bison_sql.cpp" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -126,14 +129,25 @@ typedef void* yyscan_t;
   enum yytokentype
   {
     IDENTIFIER = 258,
-    INT = 259,
-    DOUBLE = 260,
-    TEXT = 261,
-    INTEGER = 262,
-    CREATE = 263,
-    TABLE = 264,
-    DROP = 265,
-    SHOW = 266
+    STRING = 259,
+    BLOB_STRING = 260,
+    INT_CONST = 261,
+    TRUE = 262,
+    FALSE = 263,
+    DOUBLE_CONST = 264,
+    DOUBLE = 265,
+    TEXT = 266,
+    INTEGER = 267,
+    CREATE = 268,
+    TABLE = 269,
+    DROP = 270,
+    SHOW = 271,
+    NUL = 272,
+    SELECT = 273,
+    VALUES = 274,
+    INTO = 275,
+    INSERT = 276,
+    FROM = 277
   };
 #endif
 
@@ -142,17 +156,23 @@ typedef void* yyscan_t;
 
 union YYSTYPE
 {
-#line 42 "bison_sql.ypp" /* yacc.c:355  */
+#line 45 "bison_sql.ypp" /* yacc.c:355  */
 
     int64_t ival;
-    std::string* sval;
+    double fval;
+    bool bval;
+    std::string* strval;
     
     sql::TableName* table_name;
     sql::ColumnDefinition* column;
-    sql::DataType column_type_t;   
-    std::vector<sql::ColumnDefinition>* column_vec;
+    sql::DataType column_type_t;
+    sql::Expression* expr_t;
 
-#line 156 "bison_sql.cpp" /* yacc.c:355  */
+    std::vector<sql::ColumnDefinition>* column_vec;
+    std::vector<std::string>* id_vec;
+    std::vector<sql::Expression>* expr_vec;
+
+#line 176 "bison_sql.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -182,7 +202,7 @@ int yyparse (yyscan_t scanner);
 
 /* Copy the second part of user declarations.  */
 
-#line 186 "bison_sql.cpp" /* yacc.c:358  */
+#line 206 "bison_sql.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -424,23 +444,23 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  13
+#define YYFINAL  19
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   21
+#define YYLAST   45
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  17
+#define YYNTOKENS  29
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  12
+#define YYNNTS  18
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  20
+#define YYNRULES  36
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  34
+#define YYNSTATES  64
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   266
+#define YYMAXUTOK   277
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -453,8 +473,8 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      12,    13,     2,     2,    15,     2,    16,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    14,
+      23,    24,    27,     2,    26,     2,    28,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    25,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -475,16 +495,18 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    87,    87,    91,    92,    96,    97,    98,   104,   111,
-     117,   121,   128,   133,   134,   135,   140,   148,   151,   159,
-     160
+       0,   101,   101,   105,   106,   110,   111,   112,   113,   114,
+     120,   130,   143,   147,   154,   159,   160,   161,   166,   173,
+     177,   184,   188,   195,   200,   201,   202,   203,   204,   205,
+     206,   211,   214,   222,   223,   227,   231
 };
 #endif
 
@@ -493,12 +515,14 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "IDENTIFIER", "INT", "DOUBLE", "TEXT",
-  "INTEGER", "CREATE", "TABLE", "DROP", "SHOW", "'('", "')'", "';'", "','",
-  "'.'", "$accept", "input", "sql_stmt_list", "statement",
-  "show_statement", "create_statement", "column_def_commalist",
-  "column_def", "column_type", "drop_statement", "table_name",
-  "opt_semicolon", YY_NULLPTR
+  "$end", "error", "$undefined", "IDENTIFIER", "STRING", "BLOB_STRING",
+  "INT_CONST", "TRUE", "FALSE", "DOUBLE_CONST", "DOUBLE", "TEXT",
+  "INTEGER", "CREATE", "TABLE", "DROP", "SHOW", "NUL", "SELECT", "VALUES",
+  "INTO", "INSERT", "FROM", "'('", "')'", "';'", "','", "'*'", "'.'",
+  "$accept", "input", "sql_stmt_list", "statement", "show_statement",
+  "create_statement", "column_def_commalist", "column_def", "column_type",
+  "drop_statement", "select_statement", "insert_statement", "expr_list",
+  "expr", "literal_value", "table_name", "opt_semicolon", "id_comma_list", YY_NULLPTR
 };
 #endif
 
@@ -508,14 +532,15 @@ static const char *const yytname[] =
 static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
-     265,   266,    40,    41,    59,    44,    46
+     265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
+     275,   276,   277,    40,    41,    59,    44,    42,    46
 };
 # endif
 
-#define YYPACT_NINF -14
+#define YYPACT_NINF -21
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-14)))
+  (!!((Yystate) == (-21)))
 
 #define YYTABLE_NINF -1
 
@@ -526,10 +551,13 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -8,     1,     4,     5,     8,   -13,   -14,   -14,   -14,   -14,
-      12,    12,    12,   -14,    -8,   -14,     2,     7,   -14,   -14,
-     -14,    13,    14,   -14,    -1,    -6,   -14,   -14,   -14,   -14,
-     -14,   -14,    14,   -14
+      -7,     3,    12,    13,   -20,     8,    29,     5,   -21,   -21,
+     -21,   -21,   -21,   -21,    28,    28,    28,    10,    28,   -21,
+      -7,   -21,     6,    14,   -21,   -21,    30,    15,   -21,    32,
+      33,   -21,    36,   -21,     9,   -14,   -21,   -21,    -2,   -21,
+     -21,   -21,   -21,   -21,    33,    21,    38,   -21,    19,   -21,
+      -4,   -21,   -21,   -21,   -21,   -21,   -21,   -21,    -1,   -21,
+     -21,   -21,    -4,   -21
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -537,24 +565,27 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     0,     0,    20,     3,     7,     5,     6,
-       0,     0,     0,     1,    19,     2,    17,     0,    16,     8,
-       4,     0,     0,    18,     0,     0,    10,    14,    15,    13,
-      12,     9,     0,    11
+       0,     0,     0,     0,     0,     0,     0,    34,     3,     7,
+       5,     6,     8,     9,     0,     0,     0,     0,     0,     1,
+      33,     2,    31,     0,    18,    10,     0,     0,     4,     0,
+       0,    19,     0,    32,     0,     0,    12,    35,     0,    16,
+      17,    15,    14,    11,     0,     0,     0,    13,     0,    36,
+       0,    26,    27,    24,    29,    30,    25,    28,     0,    21,
+      23,    20,     0,    22
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -14,   -14,   -14,     6,   -14,   -14,   -14,   -11,   -14,   -14,
-       0,   -14
+     -21,   -21,   -21,    23,   -21,   -21,   -21,     1,   -21,   -21,
+     -21,   -21,   -21,   -18,   -21,     0,   -21,   -21
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     4,     5,     6,     7,     8,    25,    26,    30,     9,
-      17,    15
+      -1,     6,     7,     8,     9,    10,    35,    36,    42,    11,
+      12,    13,    58,    59,    60,    23,    21,    38
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -562,42 +593,51 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       1,    14,     2,     3,    27,    28,    29,    31,    13,    32,
-      10,    18,    19,    11,    12,    16,    23,    24,    21,    22,
-      20,    33
+      51,    52,    53,    54,    55,    56,     1,    17,     2,     3,
+      43,     4,    44,    57,     5,    24,    25,    14,    27,    39,
+      40,    41,    45,    61,    46,    62,    15,    16,    18,    19,
+      20,    22,    26,    31,    29,    33,    34,    30,    32,    37,
+      48,    49,    50,    28,    63,    47
 };
 
 static const yytype_uint8 yycheck[] =
 {
-       8,    14,    10,    11,     5,     6,     7,    13,     0,    15,
-       9,    11,    12,     9,     9,     3,     3,     3,    16,    12,
-      14,    32
+       4,     5,     6,     7,     8,     9,    13,    27,    15,    16,
+      24,    18,    26,    17,    21,    15,    16,    14,    18,    10,
+      11,    12,    24,    24,    26,    26,    14,    14,    20,     0,
+      25,     3,    22,     3,    28,     3,     3,    23,    23,     3,
+      19,     3,    23,    20,    62,    44
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     8,    10,    11,    18,    19,    20,    21,    22,    26,
-       9,     9,     9,     0,    14,    28,     3,    27,    27,    27,
-      20,    16,    12,     3,     3,    23,    24,     5,     6,     7,
-      25,    13,    15,    24
+       0,    13,    15,    16,    18,    21,    30,    31,    32,    33,
+      34,    38,    39,    40,    14,    14,    14,    27,    20,     0,
+      25,    45,     3,    44,    44,    44,    22,    44,    32,    28,
+      23,     3,    23,     3,     3,    35,    36,     3,    46,    10,
+      11,    12,    37,    24,    26,    24,    26,    36,    19,     3,
+      23,     4,     5,     6,     7,     8,     9,    17,    41,    42,
+      43,    24,    26,    42
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    17,    18,    19,    19,    20,    20,    20,    21,    22,
-      23,    23,    24,    25,    25,    25,    26,    27,    27,    28,
-      28
+       0,    29,    30,    31,    31,    32,    32,    32,    32,    32,
+      33,    34,    35,    35,    36,    37,    37,    37,    38,    39,
+      40,    41,    41,    42,    43,    43,    43,    43,    43,    43,
+      43,    44,    44,    45,    45,    46,    46
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     2,     1,     3,     1,     1,     1,     3,     6,
-       1,     3,     2,     1,     1,     1,     3,     1,     3,     1,
-       0
+       0,     2,     2,     1,     3,     1,     1,     1,     1,     1,
+       3,     6,     1,     3,     2,     1,     1,     1,     3,     4,
+      10,     1,     3,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     3,     1,     0,     1,     3
 };
 
 
@@ -1093,39 +1133,93 @@ yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocatio
   switch (yytype)
     {
           case 3: /* IDENTIFIER  */
-#line 54 "bison_sql.ypp" /* yacc.c:1258  */
-      { delete((((*yyvaluep).sval))); }
-#line 1099 "bison_sql.cpp" /* yacc.c:1258  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).strval))); }
+#line 1139 "bison_sql.cpp" /* yacc.c:1258  */
         break;
 
-    case 4: /* INT  */
-#line 53 "bison_sql.ypp" /* yacc.c:1258  */
+    case 4: /* STRING  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).strval))); }
+#line 1145 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 5: /* BLOB_STRING  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).strval))); }
+#line 1151 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 6: /* INT_CONST  */
+#line 62 "bison_sql.ypp" /* yacc.c:1258  */
       { }
-#line 1105 "bison_sql.cpp" /* yacc.c:1258  */
+#line 1157 "bison_sql.cpp" /* yacc.c:1258  */
         break;
 
-    case 23: /* column_def_commalist  */
-#line 54 "bison_sql.ypp" /* yacc.c:1258  */
+    case 7: /* TRUE  */
+#line 62 "bison_sql.ypp" /* yacc.c:1258  */
+      { }
+#line 1163 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 8: /* FALSE  */
+#line 62 "bison_sql.ypp" /* yacc.c:1258  */
+      { }
+#line 1169 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 9: /* DOUBLE_CONST  */
+#line 62 "bison_sql.ypp" /* yacc.c:1258  */
+      { }
+#line 1175 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 35: /* column_def_commalist  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
       { delete((((*yyvaluep).column_vec))); }
-#line 1111 "bison_sql.cpp" /* yacc.c:1258  */
+#line 1181 "bison_sql.cpp" /* yacc.c:1258  */
         break;
 
-    case 24: /* column_def  */
-#line 54 "bison_sql.ypp" /* yacc.c:1258  */
+    case 36: /* column_def  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
       { delete((((*yyvaluep).column))); }
-#line 1117 "bison_sql.cpp" /* yacc.c:1258  */
+#line 1187 "bison_sql.cpp" /* yacc.c:1258  */
         break;
 
-    case 25: /* column_type  */
-#line 53 "bison_sql.ypp" /* yacc.c:1258  */
+    case 37: /* column_type  */
+#line 62 "bison_sql.ypp" /* yacc.c:1258  */
       { }
-#line 1123 "bison_sql.cpp" /* yacc.c:1258  */
+#line 1193 "bison_sql.cpp" /* yacc.c:1258  */
         break;
 
-    case 27: /* table_name  */
-#line 54 "bison_sql.ypp" /* yacc.c:1258  */
+    case 41: /* expr_list  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).expr_vec))); }
+#line 1199 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 42: /* expr  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).expr_t))); }
+#line 1205 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 43: /* literal_value  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).expr_t))); }
+#line 1211 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 44: /* table_name  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
       { delete((((*yyvaluep).table_name))); }
-#line 1129 "bison_sql.cpp" /* yacc.c:1258  */
+#line 1217 "bison_sql.cpp" /* yacc.c:1258  */
+        break;
+
+    case 46: /* id_comma_list  */
+#line 63 "bison_sql.ypp" /* yacc.c:1258  */
+      { delete((((*yyvaluep).id_vec))); }
+#line 1223 "bison_sql.cpp" /* yacc.c:1258  */
         break;
 
 
@@ -1417,92 +1511,186 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 8:
-#line 104 "bison_sql.ypp" /* yacc.c:1648  */
+        case 10:
+#line 120 "bison_sql.ypp" /* yacc.c:1648  */
     {
-            show_table(*(yyvsp[0].table_name));
+        	se::StorageEngine& storage = se::StorageEngine::getInstance();
+        	auto s = storage.show_create((yyvsp[0].table_name)->name);
+
+        	std::cout << s << std::endl;
         }
-#line 1426 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1523 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
-  case 9:
-#line 111 "bison_sql.ypp" /* yacc.c:1648  */
+  case 11:
+#line 130 "bison_sql.ypp" /* yacc.c:1648  */
     {
-            create_table(*(yyvsp[-3].table_name), *(yyvsp[-1].column_vec));
+			se::StorageEngine& storage = se::StorageEngine::getInstance();
+			nlohmann::fifo_map<std::string, dt::DataType> columns;
+			
+			for (auto &e : *(yyvsp[-1].column_vec)) {
+				columns[e.name] = sql::convertDbType(e.type);
+			}
+
+			storage.create((yyvsp[-3].table_name)->name, columns);
         }
-#line 1434 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1538 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
-  case 10:
-#line 117 "bison_sql.ypp" /* yacc.c:1648  */
+  case 12:
+#line 143 "bison_sql.ypp" /* yacc.c:1648  */
     { 
             (yyval.column_vec) = new std::vector<sql::ColumnDefinition>();
             (yyval.column_vec)->push_back(*(yyvsp[0].column));
         }
-#line 1443 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1547 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
-  case 11:
-#line 121 "bison_sql.ypp" /* yacc.c:1648  */
+  case 13:
+#line 147 "bison_sql.ypp" /* yacc.c:1648  */
     { 
             (yyvsp[-2].column_vec)->push_back(*(yyvsp[0].column));
             (yyval.column_vec) = (yyvsp[-2].column_vec); 
         }
-#line 1452 "bison_sql.cpp" /* yacc.c:1648  */
-    break;
-
-  case 12:
-#line 128 "bison_sql.ypp" /* yacc.c:1648  */
-    {
-            (yyval.column) = new sql::ColumnDefinition(*((yyvsp[-1].sval)), (yyvsp[0].column_type_t));
-        }
-#line 1460 "bison_sql.cpp" /* yacc.c:1648  */
-    break;
-
-  case 13:
-#line 133 "bison_sql.ypp" /* yacc.c:1648  */
-    { (yyval.column_type_t) = sql::DataType::INT; }
-#line 1466 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1556 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
   case 14:
-#line 134 "bison_sql.ypp" /* yacc.c:1648  */
-    { (yyval.column_type_t) = sql::DataType::DOUBLE; }
-#line 1472 "bison_sql.cpp" /* yacc.c:1648  */
+#line 154 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+            (yyval.column) = new sql::ColumnDefinition(*((yyvsp[-1].strval)), (yyvsp[0].column_type_t));
+        }
+#line 1564 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
   case 15:
-#line 135 "bison_sql.ypp" /* yacc.c:1648  */
-    { (yyval.column_type_t) = sql::DataType::TEXT; }
-#line 1478 "bison_sql.cpp" /* yacc.c:1648  */
+#line 159 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.column_type_t) = sql::DataType::INT; }
+#line 1570 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
   case 16:
-#line 140 "bison_sql.ypp" /* yacc.c:1648  */
-    {
-            drop_table(*(yyvsp[0].table_name));
-        }
-#line 1486 "bison_sql.cpp" /* yacc.c:1648  */
+#line 160 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.column_type_t) = sql::DataType::DOUBLE; }
+#line 1576 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
   case 17:
-#line 148 "bison_sql.ypp" /* yacc.c:1648  */
-    {
-		(yyval.table_name) = new sql::TableName("", *((yyvsp[0].sval)));
-		}
-#line 1494 "bison_sql.cpp" /* yacc.c:1648  */
+#line 161 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.column_type_t) = sql::DataType::TEXT; }
+#line 1582 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
   case 18:
-#line 151 "bison_sql.ypp" /* yacc.c:1648  */
+#line 166 "bison_sql.ypp" /* yacc.c:1648  */
     {
-	        (yyval.table_name) = new sql::TableName(*((yyvsp[-2].sval)), *((yyvsp[0].sval)));
+        	// drop 
+        }
+#line 1590 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 19:
+#line 173 "bison_sql.ypp" /* yacc.c:1648  */
+    {}
+#line 1596 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 21:
+#line 184 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+            (yyval.expr_vec) = new std::vector<sql::Expression>();
+            (yyval.expr_vec)->push_back(*(yyvsp[0].expr_t));
+        }
+#line 1605 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 22:
+#line 188 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+            (yyvsp[-2].expr_vec)->push_back(*(yyvsp[0].expr_t));
+            (yyval.expr_vec) = (yyvsp[-2].expr_vec);
+        }
+#line 1614 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 24:
+#line 200 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeLiteral((yyvsp[0].ival)); }
+#line 1620 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 25:
+#line 201 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeLiteral((yyvsp[0].fval)); }
+#line 1626 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 26:
+#line 202 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeLiteral(*((yyvsp[0].strval))); }
+#line 1632 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 27:
+#line 203 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeLiteral(*((yyvsp[0].strval))); }
+#line 1638 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 28:
+#line 204 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeNullLiteral(); }
+#line 1644 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 29:
+#line 205 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeLiteral((yyvsp[0].bval)); }
+#line 1650 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 30:
+#line 206 "bison_sql.ypp" /* yacc.c:1648  */
+    { (yyval.expr_t) = sql::Expression::makeLiteral((yyvsp[0].bval)); }
+#line 1656 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 31:
+#line 211 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+		(yyval.table_name) = new sql::TableName("", *((yyvsp[0].strval)));
+		}
+#line 1664 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 32:
+#line 214 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+	        (yyval.table_name) = new sql::TableName(*((yyvsp[-2].strval)), *((yyvsp[0].strval)));
 	    }
-#line 1502 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1672 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 35:
+#line 227 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+             (yyval.id_vec) = new std::vector<std::string>();
+             (yyval.id_vec)->push_back(*(yyvsp[0].strval));
+         }
+#line 1681 "bison_sql.cpp" /* yacc.c:1648  */
+    break;
+
+  case 36:
+#line 231 "bison_sql.ypp" /* yacc.c:1648  */
+    {
+             (yyvsp[-2].id_vec)->push_back(*(yyvsp[0].strval));
+             (yyval.id_vec) = (yyvsp[-2].id_vec);
+         }
+#line 1690 "bison_sql.cpp" /* yacc.c:1648  */
     break;
 
 
-#line 1506 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1694 "bison_sql.cpp" /* yacc.c:1648  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

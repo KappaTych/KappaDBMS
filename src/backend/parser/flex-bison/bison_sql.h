@@ -44,8 +44,11 @@ extern int yydebug;
 
 
 #include "../sql-stmt/Table.h"
-#include "../dbStub.hpp"
+#include "../sql-stmt/Expression.h"
 
+
+#include "../../storage/datatypes/object.h"
+#include "../../storage/StorageEngine.h"
 
 #ifndef YYtypeDEF_YY_SCANNER_T
 #define YYtypeDEF_YY_SCANNER_T
@@ -53,7 +56,7 @@ typedef void* yyscan_t;
 #endif
 
 
-#line 57 "bison_sql.h" /* yacc.c:1910  */
+#line 60 "bison_sql.h" /* yacc.c:1910  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -61,14 +64,25 @@ typedef void* yyscan_t;
   enum yytokentype
   {
     IDENTIFIER = 258,
-    INT = 259,
-    DOUBLE = 260,
-    TEXT = 261,
-    INTEGER = 262,
-    CREATE = 263,
-    TABLE = 264,
-    DROP = 265,
-    SHOW = 266
+    STRING = 259,
+    BLOB_STRING = 260,
+    INT_CONST = 261,
+    TRUE = 262,
+    FALSE = 263,
+    DOUBLE_CONST = 264,
+    DOUBLE = 265,
+    TEXT = 266,
+    INTEGER = 267,
+    CREATE = 268,
+    TABLE = 269,
+    DROP = 270,
+    SHOW = 271,
+    NUL = 272,
+    SELECT = 273,
+    VALUES = 274,
+    INTO = 275,
+    INSERT = 276,
+    FROM = 277
   };
 #endif
 
@@ -77,17 +91,23 @@ typedef void* yyscan_t;
 
 union YYSTYPE
 {
-#line 42 "bison_sql.ypp" /* yacc.c:1910  */
+#line 45 "bison_sql.ypp" /* yacc.c:1910  */
 
     int64_t ival;
-    std::string* sval;
+    double fval;
+    bool bval;
+    std::string* strval;
     
     sql::TableName* table_name;
     sql::ColumnDefinition* column;
-    sql::DataType column_type_t;   
-    std::vector<sql::ColumnDefinition>* column_vec;
+    sql::DataType column_type_t;
+    sql::Expression* expr_t;
 
-#line 91 "bison_sql.h" /* yacc.c:1910  */
+    std::vector<sql::ColumnDefinition>* column_vec;
+    std::vector<std::string>* id_vec;
+    std::vector<sql::Expression>* expr_vec;
+
+#line 111 "bison_sql.h" /* yacc.c:1910  */
 };
 
 typedef union YYSTYPE YYSTYPE;

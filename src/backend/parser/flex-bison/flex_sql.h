@@ -519,7 +519,7 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 52 "flex_sql.lpp"
+#line 78 "flex_sql.lpp"
 
 
 #line 525 "flex_sql.h"
