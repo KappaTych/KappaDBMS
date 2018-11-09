@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "../../storage/datatypes/object.h"
+
 namespace sql {
 
 class TableName {

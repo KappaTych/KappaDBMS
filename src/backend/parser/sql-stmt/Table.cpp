@@ -1,5 +1,7 @@
 #include "Table.h"
 
+#include "../../storage/datatypes/object.h"
+
 namespace sql {
 
 TableName::TableName(const std::string & s, const std::string & n) : schema(s), name(n) {};
