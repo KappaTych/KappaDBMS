@@ -55,9 +55,15 @@ endif()
 
 # set(CMAKE_PREFIX_PATH ${src}/include)
 
+# include_directories(
+# 	${src}/include
+# 	${lib}/clsocket/src
+# 	${lib}/ctpl
+# )
+
 option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
-option(PARSER_SHARED "Make parser shared library" OFF)
+option(BUILD_TESTS "Build TESTS" OFF)
 
 
 set(CLSOCKET_DEP_ONLY ON)

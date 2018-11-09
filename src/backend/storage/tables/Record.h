@@ -7,9 +7,16 @@
 
 #include "Field.h"
 
-class Record {
-public:
-    std::vector<Field> _fields;
+namespace sql
+{
 
-    explicit Record(std::vector<Field> fields) : _fields(fields) {};
+class Record
+{
+public:
+  explicit Record(std::vector<Field> fields) : fields_(fields) { }
+
+private:
+  std::vector<Field> fields_;
 };
+
+} // namespace sql

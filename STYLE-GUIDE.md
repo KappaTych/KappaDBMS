@@ -53,7 +53,7 @@ Make use of vertical spaces to separate different steps of a function.
 
 ##### FORWARD DECLARATIONS
 Use forward declaration in `.h` and `.hpp` files as much as possible.
-Instead, include the required files only in the `.c` or `.cpp` files.
+Include the required files only in the `.c` or `.cpp` files.
 This will significantly reduce coupling and compilation times after minor changes.
 <br />
 <br />
@@ -73,9 +73,23 @@ Also, we recommend you to use new typedef syntax:
 ```
 using some_cool_t = boost::library::complex::some<cool>;
 ```
-For 
 <br />
 <br />
+
+
+##### REFERENCES AND POINTERS
+First of all, if you can use reference instead of pointer - use it!
+It's recommended hard to prefer references to pointers.
+Secondly, write `&` and `*` modificators near type, NOT IDENT! (as it's related to type, not var itself) <br/>
+Example:
+```
+int a = 123;
+int& b = a;  // Good
+int &c = a;  // Bad
+int & c = a; // Very bad!!!
+```
+<br />
+
 
 ##### NAMESPACES
 Write namespaces' names in one short word (less than 12) with lower-case latin letters.
@@ -165,7 +179,7 @@ Use `#pragma once` instead.
 ##### MACROS, ENUMS AND CONSTANTS
 Names of constants are always capitalized SNAKE_CASE.
 NEVER use `#define CONSTANT 0x12345` for constants!
-Use `const int CONTS_NAME = 12564` instead.
+Use `const int CONST_NAME = 12564` instead.
 Enums are preferred when defining several related constants.
 Also, inline functions are preferable to macros resembling functions.
 <br />
@@ -223,7 +237,7 @@ So, don't produce garbage too and clean up all code that wouldn't be used in fut
 
 ##### THE INLINE DISEASE
 Don't use inline unless you know what you are doing.
-Overuse use of inline can lead to larger binaries, can cause I-cache thrashing, and can negatively
+Overuse of inline can lead to larger binaries, can cause I-cache thrashing, and can negatively
 impact D-cache behaviour if the inlined function accesses large amounts of data and appears in a hot loop.
 The decision to inline is usually best left up to the compiler.
 The only reason you should use the inline function is to adhere to the one-definition-rule,

@@ -1,41 +1,48 @@
 //
 // Created by truefinch on 29.10.18.
 //
-#include <utility>
 
 #include "Table.h"
 
-tables::Table::Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns) : name(std::move(name)),
-                                                                                                _columns(columns)
-{
-}
+using json = nlohmann::json;
 
 namespace std
 {
-std::string to_string(dt::DataType dataType)
+
+string to_string(sql::DataType dataType)
 {
   switch (dataType) {
-    case dt::DataType::INTEGER : {
+    case sql::DataType::INTEGER : {
       return "INTEGER";
     }
-    case dt::DataType::DOUBLE : {
+    case sql::DataType::DOUBLE : {
       return "DOUBLE";
     }
-    case dt::DataType::TEXT : {
+    case sql::DataType::TEXT : {
       return "TEXT";
     }
-    default: {
+    default : {
       return "";
     }
   }
 }
-};
 
-std::string tables::Table::ToString()
+} // namespace std
+
+
+namespace sql
+{
+
+Table::Table(std::string name, nlohmann::fifo_map<std::string, DataType> columns)
+  : name(std::move(name)),
+    columns_(columns)
+{ }
+
+std::string Table::ToString()
 {
   std::string result;
   result += name + " (";
-  for (auto &col : _columns) {
+  for (auto& col : columns_) {
     result += col.first + " " + std::to_string(col.second) + ", ";
   }
 
@@ -45,13 +52,9 @@ std::string tables::Table::ToString()
   return result;
 }
 
-namespace tables
-{
-void to_json(my_json &j, const Table &t)
+void to_json(my_json& j, const Table& t)
 {
   std::string result = "{\"name\":\"" + t.name + "\",\"columns\": [";
-
-//  std::vector<std::pair<std::string, dt::DataType>> col;
 
   std::string prefix = "\"";
   for (auto &column : t.getColumns()) {
@@ -62,9 +65,9 @@ void to_json(my_json &j, const Table &t)
 
   int index = 0;
   prefix = "";
-  for (auto &record : t.records) {
+  for (auto& record : t.records) {
     result += prefix + "\"" + std::to_string(index) + "\":" + "[";
-    index++;
+    ++index;
     std::string str = record.get();
     std::string buffer = "";
     prefix = "\"";
@@ -72,7 +75,7 @@ void to_json(my_json &j, const Table &t)
     char ch;
     for (int i = 0; i < str.length(); ++i) {
       ch = str[i];
-      if (ch == tables::DIVIDOR || i + 1 == str.length()) {
+      if (ch == sql::DIVIDER || i + 1 == str.length()) {
         if (i + 1 == str.length())
           buffer += ch;
         result += prefix + buffer + suffix;
@@ -87,6 +90,7 @@ void to_json(my_json &j, const Table &t)
   }
   result += "}}";
 
-  j = json::parse(result.begin(), result.end());
+  j = json::parse(result.begin(), result.end()); // <--- WTF IS THIS? :D
 }
-} //namespace tables
+
+} //namespace sql

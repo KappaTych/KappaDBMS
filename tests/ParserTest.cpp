@@ -1,7 +1,8 @@
 #include <string>
 #include "src/backend/parser/parser.hpp"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   std::string s;
 
   s = "Drop table t";

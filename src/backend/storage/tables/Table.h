@@ -1,48 +1,47 @@
 //
 // Created by truefinch on 29.10.18.
 //
+
 #pragma once
 
 #include <string>
 #include <vector>
-#include "Record.h"
-#include "../../include/json.hpp"
-#include "../../include/fifo_map.hpp"
+#include <json.hpp>
+#include <fifo_map.hpp>
 
-using json = nlohmann::json;
+#include "Record.h"
 
 template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
 using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
 
-namespace tables
+namespace sql
 {
 
-const char DIVIDOR = '~';
+const char DIVIDER = '~';
 
 struct Column
 {
   std::string name;
-  dt::DataType dataType;
+  DataType dataType;
 };
 
 class Table
 {
 public:
   std::string name;
-  std::vector<std::shared_ptr<char>> records;
+  std::vector< std::shared_ptr<char> > records;
 
-  explicit Table(std::string name, nlohmann::fifo_map<std::string, dt::DataType> columns);
+  explicit Table(std::string name, nlohmann::fifo_map<std::string, DataType> columns);
 
-  const nlohmann::fifo_map<std::string, dt::DataType> &getColumns() const
-  { return _columns; }
+  const nlohmann::fifo_map<std::string, DataType>& getColumns() const { return columns_; }
 
   std::string ToString();
 
 private:
-  nlohmann::fifo_map<std::string, dt::DataType> _columns;
+  nlohmann::fifo_map<std::string, DataType> columns_;
 };
 
 void to_json(my_json& j, const Table& t);
 
-} //namespace tables
+} //namespace sql
