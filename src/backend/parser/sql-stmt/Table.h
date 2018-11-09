@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 
+#include "../../storage/datatypes/object.h"
+
 namespace sql {
 
 class TableName {
@@ -19,6 +21,8 @@ enum class DataType {
   DOUBLE,
   TEXT
 };
+
+dt::DataType convertDbType(sql::DataType);
 
 std::ostream& operator<<(std::ostream&, DataType);
 

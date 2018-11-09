@@ -1,5 +1,7 @@
 #include "Table.h"
 
+#include "../../storage/datatypes/object.h"
+
 namespace sql {
 
 TableName::TableName(const std::string & s, const std::string & n) : schema(s), name(n) {};
@@ -22,5 +24,21 @@ std::ostream& operator<<(std::ostream &st, DataType type) {
   }
   return st;
 }
+
+dt::DataType convertDbType(sql::DataType t) {
+  switch (t) {
+    case DataType::INT: {
+      return dt::INTEGER;
+    }
+    case DataType::TEXT: {
+      return dt::TEXT;
+    }
+    case DataType::DOUBLE: {
+      return dt::DOUBLE;
+    }
+
+  }
+}
+
 
 } // namespace sql
