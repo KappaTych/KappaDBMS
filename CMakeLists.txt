@@ -63,6 +63,7 @@ endif()
 
 option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
+option(BUILD_TESTS "Build TESTS" OFF)
 
 
 set(CLSOCKET_DEP_ONLY ON)

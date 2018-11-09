@@ -23,7 +23,7 @@ endif()
 
 set_target_properties(parser PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
 
-if (PARSER_TEST)
+if (PARSER_TEST OR BUILD_TESTS)
     add_executable(parser_test ${SRC_TESTS})
     target_link_libraries(parser_test parser)
     target_include_directories(parser_test PUBLIC

@@ -40,7 +40,7 @@ bool se::StorageEngine::create(std::string name, nlohmann::fifo_map<std::string,
   // TODO: remove columns with some stream of pare values - column name and column type
   if (flush())
     return true;
-  else false;
+  return false;
 }
 
 using json = nlohmann::json;

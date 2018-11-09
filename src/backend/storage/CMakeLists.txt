@@ -26,7 +26,7 @@ target_include_directories(storage PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
 )
 
-if (STORAGE_TEST)
+if (STORAGE_TEST OR BUILD_TESTS)
     add_executable(storage_test ${SRC_TESTS})
     target_link_libraries(storage_test storage)
     target_include_directories(storage_test PUBLIC
