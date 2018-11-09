@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.0.5.  */
+/* A Bison parser, made by GNU Bison 3.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -40,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 15 "bison_sql.ypp" /* yacc.c:1910  */
+#line 15 "bison_sql.ypp" /* yacc.c:1913  */
 
 
 #include "../sql-stmt/Table.h"
@@ -53,7 +53,7 @@ typedef void* yyscan_t;
 #endif
 
 
-#line 57 "bison_sql.h" /* yacc.c:1910  */
+#line 57 "bison_sql.h" /* yacc.c:1913  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -77,7 +77,7 @@ typedef void* yyscan_t;
 
 union YYSTYPE
 {
-#line 42 "bison_sql.ypp" /* yacc.c:1910  */
+#line 42 "bison_sql.ypp" /* yacc.c:1913  */
 
     int64_t ival;
     std::string* sval;
@@ -87,7 +87,7 @@ union YYSTYPE
     sql::DataType column_type_t;   
     std::vector<sql::ColumnDefinition>* column_vec;
 
-#line 91 "bison_sql.h" /* yacc.c:1910  */
+#line 91 "bison_sql.h" /* yacc.c:1913  */
 };
 
 typedef union YYSTYPE YYSTYPE;

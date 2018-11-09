@@ -1,5 +1,6 @@
 #include <string>
-#include "src/backend/parser/parser.hpp"
+
+#include "../src/backend/parser/parser.hpp"
 
 int main(int argc, char *argv[])
 {

@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.0.5.  */
+/* A Bison parser, made by GNU Bison 3.1.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.5"
+#define YYBISON_VERSION "3.1"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -203,13 +203,13 @@ typedef signed char yytype_int8;
 #ifdef YYTYPE_UINT16
 typedef YYTYPE_UINT16 yytype_uint16;
 #else
-typedef unsigned short int yytype_uint16;
+typedef unsigned short yytype_uint16;
 #endif
 
 #ifdef YYTYPE_INT16
 typedef YYTYPE_INT16 yytype_int16;
 #else
-typedef short int yytype_int16;
+typedef short yytype_int16;
 #endif
 
 #ifndef YYSIZE_T
@@ -221,7 +221,7 @@ typedef short int yytype_int16;
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
-#  define YYSIZE_T unsigned int
+#  define YYSIZE_T unsigned
 # endif
 #endif
 
@@ -273,7 +273,7 @@ typedef short int yytype_int16;
 # define YYUSE(E) /* empty */
 #endif
 
-#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+#if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
 # define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
     _Pragma ("GCC diagnostic push") \
@@ -443,7 +443,7 @@ union yyalloc
 #define YYMAXUTOK   266
 
 #define YYTRANSLATE(YYX)                                                \
-  ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
+  ((unsigned) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
 /* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
    as returned by yylex, without out-of-bounds checking.  */
@@ -801,7 +801,7 @@ do {                                                            \
 static void
 yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, yyscan_t scanner)
 {
-  unsigned long int yylno = yyrline[yyrule];
+  unsigned long yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
@@ -1305,7 +1305,7 @@ YYLTYPE yylloc = yyloc_default;
       yylsp = yyls + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-                  (unsigned long int) yystacksize));
+                  (unsigned long) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
@@ -1418,91 +1418,91 @@ yyreduce:
   switch (yyn)
     {
         case 8:
-#line 104 "bison_sql.ypp" /* yacc.c:1648  */
+#line 104 "bison_sql.ypp" /* yacc.c:1651  */
     {
             show_table(*(yyvsp[0].table_name));
         }
-#line 1426 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1426 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 9:
-#line 111 "bison_sql.ypp" /* yacc.c:1648  */
+#line 111 "bison_sql.ypp" /* yacc.c:1651  */
     {
             create_table(*(yyvsp[-3].table_name), *(yyvsp[-1].column_vec));
         }
-#line 1434 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1434 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 10:
-#line 117 "bison_sql.ypp" /* yacc.c:1648  */
+#line 117 "bison_sql.ypp" /* yacc.c:1651  */
     { 
             (yyval.column_vec) = new std::vector<sql::ColumnDefinition>();
             (yyval.column_vec)->push_back(*(yyvsp[0].column));
         }
-#line 1443 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1443 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 11:
-#line 121 "bison_sql.ypp" /* yacc.c:1648  */
+#line 121 "bison_sql.ypp" /* yacc.c:1651  */
     { 
             (yyvsp[-2].column_vec)->push_back(*(yyvsp[0].column));
             (yyval.column_vec) = (yyvsp[-2].column_vec); 
         }
-#line 1452 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1452 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 12:
-#line 128 "bison_sql.ypp" /* yacc.c:1648  */
+#line 128 "bison_sql.ypp" /* yacc.c:1651  */
     {
             (yyval.column) = new sql::ColumnDefinition(*((yyvsp[-1].sval)), (yyvsp[0].column_type_t));
         }
-#line 1460 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1460 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 13:
-#line 133 "bison_sql.ypp" /* yacc.c:1648  */
+#line 133 "bison_sql.ypp" /* yacc.c:1651  */
     { (yyval.column_type_t) = sql::DataType::INT; }
-#line 1466 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1466 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 14:
-#line 134 "bison_sql.ypp" /* yacc.c:1648  */
+#line 134 "bison_sql.ypp" /* yacc.c:1651  */
     { (yyval.column_type_t) = sql::DataType::DOUBLE; }
-#line 1472 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1472 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 15:
-#line 135 "bison_sql.ypp" /* yacc.c:1648  */
+#line 135 "bison_sql.ypp" /* yacc.c:1651  */
     { (yyval.column_type_t) = sql::DataType::TEXT; }
-#line 1478 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1478 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 16:
-#line 140 "bison_sql.ypp" /* yacc.c:1648  */
+#line 140 "bison_sql.ypp" /* yacc.c:1651  */
     {
             drop_table(*(yyvsp[0].table_name));
         }
-#line 1486 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1486 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 17:
-#line 148 "bison_sql.ypp" /* yacc.c:1648  */
+#line 148 "bison_sql.ypp" /* yacc.c:1651  */
     {
 		(yyval.table_name) = new sql::TableName("", *((yyvsp[0].sval)));
 		}
-#line 1494 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1494 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
   case 18:
-#line 151 "bison_sql.ypp" /* yacc.c:1648  */
+#line 151 "bison_sql.ypp" /* yacc.c:1651  */
     {
 	        (yyval.table_name) = new sql::TableName(*((yyvsp[-2].sval)), *((yyvsp[0].sval)));
 	    }
-#line 1502 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1502 "bison_sql.cpp" /* yacc.c:1651  */
     break;
 
 
-#line 1506 "bison_sql.cpp" /* yacc.c:1648  */
+#line 1506 "bison_sql.cpp" /* yacc.c:1651  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

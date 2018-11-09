@@ -6,6 +6,8 @@
 
 using json = nlohmann::json;
 
+
+// TODO: Make a better solution
 namespace std
 {
 
