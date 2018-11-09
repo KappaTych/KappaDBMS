@@ -82,13 +82,13 @@ typedef void* yyscan_t;
 // %type       drop_statement
 // %type       show_statement
 
-%type<table_name>      table_name
-%type<column_type_t>   column_type
+%type<table_name>    table_name
+%type<column_type_t> column_type
 %type<column>        column_def
-%type<column_vec>  column_def_commalist
-%type<id_vec>	id_comma_list
-%type<expr_vec>	expr_list
-%type<expr_t> expr literal_value
+%type<column_vec>    column_def_commalist
+%type<id_vec>        id_comma_list
+%type<expr_vec>      expr_list
+%type<expr_t> expr   literal_value
 
 // Token Precedence and Associativity
 
@@ -107,35 +107,35 @@ sql_stmt_list:
     ;
 
 statement:
-       create_statement
+        create_statement
     |   drop_statement
-    | 	show_statement
+    |   show_statement
     |   select_statement
-    | 	insert_statement
+    |   insert_statement
     ;
 
 
 // Show Statement
 show_statement:
         SHOW TABLE table_name {
-        	se::StorageEngine& storage = se::StorageEngine::Instance();
-        	auto s = storage.show_create($3->name);
+            se::StorageEngine& storage = se::StorageEngine::Instance();
+            auto s = storage.show_create($3->name);
 
-        	std::cout << s << std::endl;
+            std::cout << s << std::endl;
         }
     ;
 
 // Create Statement
 create_statement:
-	CREATE TABLE table_name '(' column_def_commalist ')' {
-			se::StorageEngine& storage = se::StorageEngine::Instance();
-			nlohmann::fifo_map<std::string, dt::DataType> columns;
-			
-			for (auto &e : *$5) {
-				columns[e.name] = sql::convertDbType(e.type);
-			}
+    CREATE TABLE table_name '(' column_def_commalist ')' {
+            se::StorageEngine& storage = se::StorageEngine::Instance();
+            nlohmann::fifo_map<std::string, dt::DataType> columns;
+            
+            for (auto &e : *$5) {
+                columns[e.name] = sql::convertDbType(e.type);
+            }
 
-			storage.create($3->name, columns);
+            storage.create($3->name, columns);
         }
     ;
 
@@ -164,13 +164,13 @@ column_type:
 // Drop Statement
 drop_statement:
         DROP TABLE table_name {
-        	// drop 
+            // drop 
         }
     ;
 
 // Select Statement
 select_statement:
-	SELECT '*' FROM IDENTIFIER {}
+    SELECT '*' FROM IDENTIFIER {}
 
 // Inser Statement
 insert_statement:
@@ -191,36 +191,36 @@ expr_list: // TODO: base_list
         }
     ;
 
-expr:	
-		literal_value
-	;
+expr:   
+        literal_value
+    ;
 
 
 literal_value:
-		INT_CONST { $$ = sql::Expression::makeLiteral($1); }
-	|	DOUBLE_CONST { $$ = sql::Expression::makeLiteral($1); }
-	|	STRING { $$ = sql::Expression::makeLiteral(*($1)); }
-	|	BLOB_STRING	{ $$ = sql::Expression::makeLiteral(*($1)); }
-	|	NULL { $$ = sql::Expression::makeNullLiteral(); }
-	|	TRUE { $$ = sql::Expression::makeLiteral($1); }
-	|	FALSE { $$ = sql::Expression::makeLiteral($1); }
+        INT_CONST { $$ = sql::Expression::makeLiteral($1); }
+    |   DOUBLE_CONST { $$ = sql::Expression::makeLiteral($1); }
+    |   STRING { $$ = sql::Expression::makeLiteral(*($1)); }
+    |   BLOB_STRING { $$ = sql::Expression::makeLiteral(*($1)); }
+    |   NULL { $$ = sql::Expression::makeNullLiteral(); }
+    |   TRUE { $$ = sql::Expression::makeLiteral($1); }
+    |   FALSE { $$ = sql::Expression::makeLiteral($1); }
 
 // Table
 
 table_name:
-		IDENTIFIER                {
-		$$ = new sql::TableName("", *($1));
-		}
-	|	IDENTIFIER '.' IDENTIFIER {
-	        $$ = new sql::TableName(*($1), *($3));
-	    }
-	;
+        IDENTIFIER                {
+        $$ = new sql::TableName("", *($1));
+        }
+    |   IDENTIFIER '.' IDENTIFIER {
+            $$ = new sql::TableName(*($1), *($3));
+        }
+    ;
 
 // Misc
 
 opt_semicolon:
-	';'
-|	/* empty */
+    ';'
+|   /* empty */
 ;
 
 id_comma_list:

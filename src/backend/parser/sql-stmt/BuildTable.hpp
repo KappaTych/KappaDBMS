@@ -5,6 +5,7 @@
 
 #include "../../storage/datatypes/object.h"
 
+
 namespace sql {
 
 class TableName {
@@ -26,10 +27,11 @@ sql::DataType convertDbType(sql::DataType);
 
 std::ostream& operator<<(std::ostream&, DataType);
 
-class ColumnDefinition {
+class ColumnDefinition
+{
  public:
   ColumnDefinition() = default;
-  ColumnDefinition(const std::string &name, DataType type);
+  explicit ColumnDefinition(const std::string &name, DataType type);
 
   std::string name;
   DataType type;
