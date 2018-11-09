@@ -25,4 +25,20 @@ std::ostream& operator<<(std::ostream &st, DataType type) {
   return st;
 }
 
+dt::DataType convertDbType(sql::DataType t) {
+  switch (t) {
+    case DataType::INT: {
+      return dt::INTEGER;
+    }
+    case DataType::TEXT: {
+      return dt::TEXT;
+    }
+    case DataType::DOUBLE: {
+      return dt::DOUBLE;
+    }
+
+  }
+}
+
+
 } // namespace sql

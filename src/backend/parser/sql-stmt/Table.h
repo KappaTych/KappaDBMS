@@ -22,6 +22,8 @@ enum class DataType {
   TEXT
 };
 
+dt::DataType convertDbType(sql::DataType);
+
 std::ostream& operator<<(std::ostream&, DataType);
 
 class ColumnDefinition {
