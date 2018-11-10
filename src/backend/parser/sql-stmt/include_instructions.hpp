@@ -1,0 +1,6 @@
+#include "Instruction.hpp"
+#include "CreateTable.hpp"
+#include "DropTable.hpp"
+#include "Select.hpp"
+#include "Insert.hpp"
+#include "ShowCreateTable.hpp"

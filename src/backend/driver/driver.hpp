@@ -5,7 +5,7 @@
 #include <exception>
 #include "table.hpp"
 #include "parser.hpp"
-#include "../parser/sql-stmt/instruction.hpp"
+#include "../parser/sql-stmt/include_instructions.hpp"
 
 namespace sql {
 
@@ -20,6 +20,11 @@ public:
     std::string RunQuery(const std::string) {};
 
     Table Execute(const cmd::Instruction&);
+    Table Execute(const cmd::CreateTable&);
+    Table Execute(const cmd::DropTable&);
+    Table Execute(const cmd::Select&);
+    Table Execute(const cmd::Insert&);
+    Table Execute(const cmd::ShowCreateTable&);
 private:
     Driver() = default;
 };

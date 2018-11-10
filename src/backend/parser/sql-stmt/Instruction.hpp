@@ -47,7 +47,7 @@ public:
   explicit Instruction(InstructionType type) : type_(type) {}
   virtual ~Instruction() = default;
   const InstructionType type() const { return type_; }
-  virtual const Instruction& Dispatch() = 0;
+  virtual const Instruction& Dispatch() const = 0;
 
 private:
   const InstructionType type_;
