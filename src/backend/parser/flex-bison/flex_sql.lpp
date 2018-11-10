@@ -1,3 +1,10 @@
+
+Digit        [0-9]
+Letter       [a-zA-Z_]
+HexDigit     [a-fA-F0-9]
+Exp          [Ee][+-]?{Digit}+
+UNSIGN_INT 	 {Digit}+
+
 %{
     #include "bison_sql.h"
     #include <stdio.h>
@@ -28,6 +35,12 @@ CREATE      return CREATE;
 DROP        return DROP;
 SHOW		return SHOW;
 TABLE       return TABLE;
+NULL 		return NULL;
+SELECT 		return SELECT;
+VALUES 		return VALUES;
+INTO 		return INTO;
+INSERT 		return INSERT;
+FROM		return FROM;
 
 INTEGER     return INTEGER;
 DOUBLE      return DOUBLE;
@@ -36,18 +49,31 @@ TEXT        return TEXT;
 [(),;]    { return yytext[0]; }
 
 
--?[0-9]+    {
+UNSIGN_INT   {
     yylval->ival = atol(yytext);
-    return INT;
+    return INT_CONST;
 }
 
+({UNSIGN_INT}\.{UNSIGN_INT}?|{UNSIGN_INT}?\.{UNSIGN_INT}){Exp}? 	{
+	yylval->fval = std::stoll(yytext);
+	return DOUBLE_CONST;
+}
 
-[A-Za-z][A-Za-z0-9_]* {
-    yylval->sval = new std::string(yytext);
+{Letter}({Letter}|{Digit})* {
+    yylval->strval = new std::string(yytext);
     return IDENTIFIER;
 }
 
-. { fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); return 0; }
+\'([^'\n]|\'\')+\' {
+	yylval->strval = new std::string(yytext + 1, yyleng - 1);
+	return STRING;
+}
+
+
+. { 
+	fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); 
+	return 0; 
+}
 
 %%
 

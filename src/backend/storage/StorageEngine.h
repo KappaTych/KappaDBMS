@@ -43,16 +43,14 @@ public:
 
   bool flush();
 
-  StorageEngine(StorageEngine const &) = delete;
-
-  void operator=(StorageEngine const &) = delete;
 
 private:
-  StorageEngine();
-
-  ~StorageEngine() = default;
-
   std::map<std::string, sql::Table> tables_;
+
+  StorageEngine() = default;
+  ~StorageEngine() = default;
+  StorageEngine(StorageEngine const &) = delete;
+  void operator=(StorageEngine const &) = delete;
 };
 
 } // namespace se

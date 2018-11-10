@@ -10,7 +10,4 @@ flex_sql.cpp: flex_sql.lpp
 	flex $(FLEX_OPTIONS) flex_sql.lpp 
 
 clean:
-	rm *.tab.* *.yy.* *.o
-
-
-
+	rm *.cpp *.h* *.o*
