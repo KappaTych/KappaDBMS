@@ -19,14 +19,14 @@ enum InstructionType
   SHOW_CREATE_SCHEME,
   SHOW_CREATE_TABLE,
   SHOW_CREATE_VIEW,
-  SHOW_CREATE_USER
+  SHOW_CREATE_USER,
   SHOW_CREATE_TRIGGER,
   SHOW_CREATE_INDEX,
   DROP_DATABASE,
   DROP_SCHEME,
   DROP_TABLE,
   DROP_VIEW,
-  DROP_USER
+  DROP_USER,
   DROP_TRIGGER,
   DROP_INDEX,
   BEGIN,
@@ -50,6 +50,6 @@ public:
 
 private:
   const InstructionType type_;
-}
+};
 
 } // namespace cmd
