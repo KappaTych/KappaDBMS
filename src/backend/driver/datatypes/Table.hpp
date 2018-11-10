@@ -9,7 +9,7 @@
 #include <json.hpp>
 #include <fifo_map.hpp>
 
-#include "Record.h"
+#include "Record.hpp"
 
 template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;

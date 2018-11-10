@@ -17,5 +17,29 @@ Table Driver::Execute(const cmd::Instruction& instruction)
     throw (std::exception("invalid instruction"));
 }
 
+Table Driver::Execute(const cmd::CreateTable& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::DropTable& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::Select& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::Insert& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::ShowCreateTable& instruction)
+{
+    return Table();
+}
 
 }
