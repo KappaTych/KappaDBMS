@@ -31,33 +31,40 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -s -std=c++11") # -Wall -Wextra -W
 
 # OS and compiler checks.
 if(UNIX)
-	# linux / normal unix
-	add_definitions(-D_LINUX)
-	if(CYGWIN)
-		# Special Cygwin stuff here
-	elseif(APPLE)
-		# Special Apple stuff here
-		remove_definitions(-D_LINUX)
-		add_definitions(-D_DARWIN)
-	endif()
+    # linux / normal unix
+    add_definitions(-D_LINUX)
+    if(CYGWIN)
+        # Special Cygwin stuff here
+    elseif(APPLE)
+        # Special Apple stuff here
+        remove_definitions(-D_LINUX)
+        add_definitions(-D_DARWIN)
+    endif()
 elseif(WIN32)
-	add_definitions(-DWIN32)
-	if(MINGW)
-		# Special MINGW stuff here
-	elseif(MSVC)
-		# Special MSVC stuff here
-		add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
-	else()
-		# No idea what it is, but there's a good chance it's too weird.
-		MESSAGE( FATAL_ERROR "Using unknown WIN32 compiler... NOT. Please add to build system." )
-	endif()
+    add_definitions(-DWIN32)
+    if(MINGW)
+        # Special MINGW stuff here
+    elseif(MSVC)
+        # Special MSVC stuff here
+        add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
+    else()
+        # No idea what it is, but there's a good chance it's too weird.
+        MESSAGE( FATAL_ERROR "Using unknown WIN32 compiler... NOT. Please add to build system." )
+    endif()
 endif()
 
 # set(CMAKE_PREFIX_PATH ${src}/include)
 
+# include_directories(
+#   ${src}/include
+#   ${lib}/clsocket/src
+#   ${lib}/ctpl
+# )
+
 option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
-option(PARSER_SHARED "Make parser shared library" OFF)
+option(BUILD_SERVER "Build SERVER" ON)
+option(BUILD_TESTS "Build TESTS" OFF)
 
 
 set(CLSOCKET_DEP_ONLY ON)
@@ -66,23 +73,26 @@ add_subdirectory(${lib}/clsocket)
 set(LINK_LIBS clsocket pthread)
 
 if (BUILD_PARSER)
-	add_subdirectory(${src}/parser)
-	list(APPEND LINK_LIBS parser)
+    add_subdirectory(${src}/parser)
+    list(APPEND LINK_LIBS parser)
 endif()
 
 if (BUILD_STORAGE)
-	add_subdirectory(${src}/storage)
-	list(APPEND LINK_LIBS storage)
+    add_subdirectory(${src}/storage)
+    list(APPEND LINK_LIBS storage)
 endif()
 
-file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
+if (BUILD_SERVER)
+    file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
 
-add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
-target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
-target_include_directories(${EXECUTABLE} PUBLIC
-	${src}/include
-	${lib}/clsocket/src
-	${lib}/ctpl
-)
+    add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
+    set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
+    target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
+    target_include_directories(${EXECUTABLE} PUBLIC
+        ${src}/
+        ${src}/include
+        ${lib}/clsocket/src
+        ${lib}/ctpl
+    )
+endif()
 
-set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
