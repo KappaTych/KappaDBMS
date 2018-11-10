@@ -1,0 +1,5 @@
+class Table
+{
+public:
+    Table() {}
+};
