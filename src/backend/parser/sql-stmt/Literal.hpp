@@ -17,11 +17,11 @@ enum class LiteralType
 class Literal : public Instruction
 {
 public:
-  Literal();
-  explicit Literal(bool v);
-  explicit Literal(int64_t v);
-  explicit Literal(double v);
-  explicit Literal(std::string v);
+  Literal() : Instruction(LITERAL), valueType_(LiteralType::NULL) {}
+  explicit Literal(bool v) : Literal(), valueType_(LiteralType::BOOL), ival_(v) {}
+  explicit Literal(int64_t v) : Literal(), valueType_(LiteralType::INT), fval_(v) {}
+  explicit Literal(double v) : Literal(), valueType_(LiteralType::DOUBLE), bval_(v) {}
+  explicit Literal(std::string v) : Literal(), valueType_(LiteralType::STRING), strval_(v) {}
   virtual ~Literal() = default;
 
   const LiteralType valueType() const { return valueType_; }
