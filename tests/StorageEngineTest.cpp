@@ -26,5 +26,11 @@ int main(int argc, char *argv[])
   std::cout << storage.show_create("test_problem") << std::endl;
   std::cout << storage.select("test").dump() << std::endl;
   std::cout << storage.select("test_problem").dump() << std::endl;
+
+//  se::MemoryBlock memoryBlock();
+//  std::ifstream fin("./database/test.kp", std::ios_base::binary);
+//  fin >> memoryBlock;
+//  for (int i = 0; i < 5; ++i)
+//    std::cout << memoryBlock.data_[i] << " ";
   return 0;
 }

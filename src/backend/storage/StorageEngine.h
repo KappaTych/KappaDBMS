@@ -52,7 +52,9 @@ private:
 
   ~StorageEngine() = default;
 
+private:
   std::map<std::string, sql::Table> tables_;
+
 };
 
 } // namespace se

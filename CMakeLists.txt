@@ -61,9 +61,10 @@ endif()
 # 	${lib}/ctpl
 # )
 
-option(BUILD_PARSER "Build PARSER" ON)
+option(BUILD_PARSER "Build PARSER" OFF)
 option(BUILD_STORAGE "Build STORAGE" ON)
-option(BUILD_TESTS "Build TESTS" OFF)
+option(BUILD_STORAGE "Build SERVER" OFF)
+option(BUILD_TESTS "Build TESTS" ON)
 
 
 set(CLSOCKET_DEP_ONLY ON)
@@ -81,14 +82,16 @@ if (BUILD_STORAGE)
 	list(APPEND LINK_LIBS storage)
 endif()
 
-file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
+if (BUILD_SERVER)
+	file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
 
-add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
-target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
-target_include_directories(${EXECUTABLE} PUBLIC
-	${src}/include
-	${lib}/clsocket/src
-	${lib}/ctpl
-)
+	add_executable(${EXECUTABLE} ${src}/main.cpp ${SRC_SERVER})
+	target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
+	target_include_directories(${EXECUTABLE} PUBLIC
+		${src}/include
+		${lib}/clsocket/src
+		${lib}/ctpl
+	)
 
-set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
+	set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
+endif()

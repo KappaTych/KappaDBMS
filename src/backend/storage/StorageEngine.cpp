@@ -37,7 +37,6 @@ se::StorageEngine::StorageEngine() : tables_()
 bool se::StorageEngine::create(std::string name, nlohmann::fifo_map<std::string, sql::DataType> columns)
 {
   tables_.insert(std::pair<std::string, sql::Table>(name, sql::Table(name, columns)));
-  // TODO: remove columns with some stream of pare values - column name and column type
   if (flush())
     return true;
   return false;

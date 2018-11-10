@@ -11,8 +11,7 @@ option(STORAGE_TEST "Build storage with tests" OFF)
 
 file(GLOB_RECURSE SRC_STORAGE . *.cpp)
 
-set(SRC_TESTS
-../../../tests/StorageEngineTest.cpp
+set(SRC_TESTS ../../../tests/StorageEngineTest.cpp
 )
 
 if (STORAGE_SHARED)
