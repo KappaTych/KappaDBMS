@@ -41,8 +41,8 @@ private:
   int64_t ival_;
   std::string strval_;
 
-  Expression* left_;
-  Expression* right_;
+  Literal left_;
+  Literal right_;
 };
 
 } // namespace cmd
