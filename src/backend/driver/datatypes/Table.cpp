@@ -7,23 +7,23 @@ using json = nlohmann::json;
 namespace std
 {
 
-string to_string(sql::DataType dataType)
-{
-  switch (dataType) {
-    case sql::DataType::INTEGER : {
-      return "INTEGER";
-    }
-    case sql::DataType::DOUBLE : {
-      return "DOUBLE";
-    }
-    case sql::DataType::TEXT : {
-      return "TEXT";
-    }
-    default : {
-      return "";
-    }
-  }
-}
+// string to_string(sql::DataType dataType)
+// {
+//   switch (dataType) {
+//     case sql::DataType::INTEGER : {
+//       return "INTEGER";
+//     }
+//     case sql::DataType::DOUBLE : {
+//       return "DOUBLE";
+//     }
+//     case sql::DataType::TEXT : {
+//       return "TEXT";
+//     }
+//     default : {
+//       return "";
+//     }
+//   }
+// }
 
 } // namespace std
 
@@ -33,8 +33,7 @@ namespace sql
 
 Table::Table(std::string name, nlohmann::fifo_map<std::string, DataType> columns)
   : name(std::move(name)),
-    columns_(columns)
-{ }
+    columns_(columns) { }
 
 std::string Table::ToString()
 {

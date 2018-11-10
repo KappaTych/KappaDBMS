@@ -11,7 +11,7 @@ public:
   ColumnDefinition(const std::string s, cmd::LiteralType t)
       : Instruction(COLUMN_DEF),
         name_(s),
-        type_(t) {}
+        type_(t) { }
 
   const Instruction& Dispatch() const override { return *this; }
 

@@ -12,7 +12,7 @@ public:
       : Instruction(TABLE_DEF),
         database_(d),
         schema_(s),
-        name_(n) {}
+        name_(n) { }
 
   const Instruction& Dispatch() const override { return *this; }
 
