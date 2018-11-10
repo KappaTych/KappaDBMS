@@ -26,6 +26,7 @@ public:
   std::string name;
   std::vector< std::shared_ptr<char> > records;
 
+  explicit Table(std::_Vector_iterator<std::string> fields);
   explicit Table(std::string name, nlohmann::fifo_map<std::string, DataType> columns);
 
   const nlohmann::fifo_map<std::string, DataType>& getColumns() const { return columns_; }

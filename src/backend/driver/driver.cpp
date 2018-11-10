@@ -22,9 +22,9 @@ Table Driver::Execute(const cmd::Instruction& instruction)
 }
 
 // TODO: Think how to do it better
-Table Driver::Execute(const cmd::Literal& instruction)
+Table Driver::Execute(const cmd::Literal& literal)
 {
-    return Table( instruction.value(instruction.valueType()) );
+    return Table( {literal.value()} );
 }
 
 // TODO: refactor this ...
