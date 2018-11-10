@@ -5,10 +5,10 @@
 
 namespace cmd {
 
-class CreateTable : public Instruction
+class DropTrigger : public Instruction
 {
 public:
-  CreateTable() : Instruction(CREATE_TABLE) {}
+  DropTrigger() : Instruction(DROP_TRIGGER) {}
 };
 
 } // namespace cmd
