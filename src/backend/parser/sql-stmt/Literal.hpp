@@ -25,6 +25,7 @@ public:
   virtual ~Literal() = default;
 
   const LiteralType valueType() const { return valueType_; }
+  const Instruction& Dispatch() const override { return *this; };
 
 private:
   const LiteralType valueType_;
