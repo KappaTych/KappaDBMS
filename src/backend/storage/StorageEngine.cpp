@@ -6,7 +6,7 @@
 
 se::StorageEngine::StorageEngine() : tables_()
 {
-  auto dir = system("mkdir database"); // TODO: fix this workaround
+//  auto dir = system("mkdir database"); // TODO: fix this workaround
   std::ifstream fin("./database/tables.json");
   if (fin.is_open()) {
     my_json j;

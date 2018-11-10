@@ -8,8 +8,8 @@
 #include <memory>
 #include <fstream>
 
-namespace se
-{
+//namespace se
+//{
 
 class MemoryBlock
 {
@@ -17,24 +17,26 @@ public:
   static const uint32_t DEFAULT_CAPACITY = 128000;
   static const uint8_t DIVIDOR = 7;
 public:
-  uint32_t capacity_;
-  uint32_t size_;
+  uint32_t capacity_ = DEFAULT_CAPACITY;
+  uint32_t size_ = 0;
   std::shared_ptr<uint8_t> data_;
-  std::shared_ptr<se::MemoryBlock> next_;
+  std::shared_ptr<MemoryBlock> next_;
 public:
-  MemoryBlock() = default;
+  MemoryBlock() : data_(new uint8_t[DEFAULT_CAPACITY]) {};
 
-  explicit MemoryBlock(uint8_t* data, uint32_t capacity = DEFAULT_CAPACITY)
+  explicit MemoryBlock(uint8_t* data, uint32_t capacity)
       : data_(data), capacity_(capacity), size_(sizeof(data))
   {};
 
-  MemoryBlock(uint8_t* data, se::MemoryBlock* next, uint32_t capacity = DEFAULT_CAPACITY) : data_(data), next_(next),
+  MemoryBlock(uint8_t* data, MemoryBlock* next, uint32_t capacity) : data_(data), next_(next),
                                                                                             capacity_(capacity)
   {};
 
-  std::ofstream operator<<(std::ofstream& out);
+  friend std::ofstream operator<<(std::ofstream& out, const MemoryBlock& memoryBlock);
 
-  std::ifstream operator>>(std::ifstream& in);
+  friend std::ifstream operator>>(std::ifstream& in, MemoryBlock memoryBlock);
 };
 
-} //namespace se
+//} //namespace se
+
+

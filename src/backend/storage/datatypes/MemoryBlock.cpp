@@ -4,14 +4,13 @@
 
 #include "MemoryBlock.h"
 
-std::ofstream se::MemoryBlock::operator<<(std::ofstream& out)
+std::ofstream operator<<(std::ofstream& fout, const MemoryBlock& memoryBlock)
 {
-  out.write((char*) &data_, size_);
-//  return out;
+  fout.write((char*) &memoryBlock.data_, memoryBlock.size_);
 }
 
-std::ifstream se::MemoryBlock::operator>>(std::ifstream& in)
+std::ifstream operator>>(std::ifstream& fin, MemoryBlock memoryBlock)
 {
-  in.read((char*)data_.get(), MemoryBlock::DEFAULT_CAPACITY);
-//  return in;
+//  memoryBlock.data_.get(std::istreambuf_iterator<char>(fin));
+  fin.read(reinterpret_cast<char*>(memoryBlock.data_.get()), sizeof(memoryBlock.data_.get()));
 }
