@@ -1,13 +1,10 @@
-//
-// Created by truefinch on 29.10.18.
-//
-
 #pragma once
 
 #include <string>
 #include <vector>
 #include <json.hpp>
 #include <fifo_map.hpp>
+#include <parser/sql.hpp>
 
 #include "Record.hpp"
 
@@ -20,11 +17,8 @@ namespace sql
 
 const char DIVIDER = '~';
 
-struct Column
-{
-  std::string name;
-  DataType dataType;
-};
+void to_json(my_json& j, const Table& t);
+
 
 class Table
 {
@@ -42,6 +36,11 @@ private:
   nlohmann::fifo_map<std::string, DataType> columns_;
 };
 
-void to_json(my_json& j, const Table& t);
-
 } //namespace sql
+
+// NLOHMANN_JSON_SERIALIZE_ENUM(cmd::LiteralType, {
+//   { cmd::LiteralType::BOOL,    "BOOL" },
+//   { cmd::LiteralType::INTEGER, "INTEGER" },
+//   { cmd::LiteralType::DOUBLE,  "DOUBLE" },
+//   { cmd::LiteralType::TEXT,    "TEXT" }
+// });

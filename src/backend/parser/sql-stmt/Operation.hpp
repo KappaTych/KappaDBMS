@@ -22,6 +22,7 @@ enum class OperationType
   AND,
   OR,
   XOR,
+  FUNCTION,
 };
 
 class Operation : public Expression

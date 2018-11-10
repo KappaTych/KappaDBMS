@@ -21,30 +21,13 @@ Table Driver::Execute(const cmd::Instruction& instruction)
     return Execute(instRef);
 }
 
+// TODO: Think how to do it better
 Table Driver::Execute(const cmd::Literal& instruction)
 {
-    switch (instruction.valueType()) {
-        case cmd::LiteralType::NONE:
-            return Table();
-
-        case cmd::LiteralType::BOOL:
-            return Table();
-
-        case cmd::LiteralType::INT:
-            return Table();
-
-        case cmd::LiteralType::DOUBLE:
-            return Table();
-
-        case cmd::LiteralType::STRING:
-            return Table();
-
-        default:
-            throw std::exception("DriverError: Unknown LiteralType");
-    }
-    throw std::exception("DriverError: Nothing to return from literal");
+    return Table( instruction.value(instruction.valueType()) );
 }
 
+// TODO: refactor this ...
 Table Driver::Execute(const cmd::Operation& instruction)
 {
     auto& operandA = Execute(instruction.Dispatch());
@@ -97,6 +80,9 @@ Table Driver::Execute(const cmd::Operation& instruction)
         case cmd::OperationType::XOR:
             return Table(operandA ^ operandB);
 
+        case cmd::OperationType::FUNCTION:
+            throw std::exception("OperationError: Functions is not implemented yet");
+
         default:
             throw std::exception("DriverError: Unknown OperationType");
     }
@@ -128,4 +114,4 @@ Table Driver::Execute(const cmd::ShowCreateTable& instruction)
     return Table();
 }
 
-}
+} // namespace sql

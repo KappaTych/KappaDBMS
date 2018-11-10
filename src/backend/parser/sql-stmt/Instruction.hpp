@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>
+#include <memory>
 
 
 namespace cmd {
@@ -8,6 +9,8 @@ namespace cmd {
 enum InstructionType
 {
   INVALID,
+  COLUMN_DEF,
+  TABLE_DEF,
   CREATE_DATABASE,
   CREATE_SCHEME,
   CREATE_TABLE,

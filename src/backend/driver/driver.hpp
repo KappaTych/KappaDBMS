@@ -2,13 +2,12 @@
 
 #include <string>
 #include <list>
-#include <unordered_map>
 #include <exception>
 #include <type_traits>
+#include <parser/parser.hpp>
+#include <parser/sql.hpp>
 
-#include "table.hpp"
-#include "parser.hpp"
-#include "../parser/sql-stmt/ImportStatements.hpp"
+#include "datatypes/Table.hpp"
 
 
 namespace sql {
@@ -21,7 +20,7 @@ public:
         return instance;
     }
 
-    std::string RunQuery(const std::string) {};
+    std::string RunQuery(const std::string);
 
     Table Execute(const cmd::Instruction&);
     Table Execute(const cmd::Literal&);
@@ -31,8 +30,12 @@ public:
     Table Execute(const cmd::Select&);
     Table Execute(const cmd::Insert&);
     Table Execute(const cmd::ShowCreateTable&);
+
 private:
     Driver() = default;
+    ~Driver() = default;
+    Driver(Driver const &) = delete;
+    void operator=(Driver const &) = delete;
 };
 
-}
+} // namespace sql

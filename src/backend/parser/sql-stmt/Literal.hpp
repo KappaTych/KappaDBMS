@@ -3,6 +3,7 @@
 #include "Instruction.hpp"
 #include "Expression.hpp"
 
+// TODO: Make separate files for all compatible types
 
 namespace cmd {
 
@@ -29,6 +30,12 @@ public:
   const Literal& Dispatch() const override { return *this; }
 
   const LiteralType valueType() const { return valueType_; }
+
+  void value(LiteralType::NONE) const { }
+  bool value(LiteralType::BOOL) const { return bval_; }
+  double value(LiteralType::INT) const { return fval_; }
+  int64_t value(LiteralType::DOUBLE) const { return ival_; }
+  std::string value(LiteralType::STRING) const { return strval_; }
 
 private:
   const LiteralType valueType_;

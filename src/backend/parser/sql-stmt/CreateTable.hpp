@@ -8,12 +8,16 @@ namespace cmd {
 class CreateTable : public Instruction
 {
 public:
-  CreateTable() : Instruction(CREATE_TABLE) {}
+  CreateTable(TableDefinition& t)
+      : Instruction(CREATE_TABLE),
+        table_(t) {}
 
-  Instruction* tableName;
-  std::list<Instruction*> args;
 
   const Instruction& Dispatch() const override { return *this; }
+
+public: // It's not an error
+  TableDefinition& table_;
+  std::list<Instruction*> columns_;
 };
 
 } // namespace cmd
