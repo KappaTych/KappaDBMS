@@ -8,6 +8,7 @@ namespace cmd {
 
 enum class OperationType
 {
+  INVALID,
   PLUS,
   MINUS,
   MULTIPLY,
@@ -28,7 +29,7 @@ enum class OperationType
 class Operation : public Expression
 {
 public:
-  Operation() : Instruction(OPERATION), operation_(Null) {};
+  Operation() : Expression(OPERATION), operation_(OperationType::INVALID) {}
   explicit Operation(OperationType t, Expression a, Expression b)
     : Expression(),
       operation_(t),
@@ -40,8 +41,8 @@ public:
   const Operation& Dispatch() const override { return *this; }
 
   const OperationType operation() const { return operation_; }
-  const OperationType left() const { return left_; }
-  const OperationType right() const { return right_; }
+  const Expression& left() const { return left_; }
+  const Expression& right() const { return right_; }
 
 private:
   const OperationType operation_;
