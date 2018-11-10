@@ -5,13 +5,11 @@
 
 namespace cmd {
 
-class CreateTable : public Instruction
+class Commit : public Instruction
 {
 public:
-  CreateTable() : Instruction(CREATE_TABLE) {}
+  Commit() : Instruction(COMMIT) {}
 
-  tableName
-  std::list<Instruction>
-}
+};
 
 } // namespace cmd

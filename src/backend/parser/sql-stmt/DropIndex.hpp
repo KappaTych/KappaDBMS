@@ -5,13 +5,10 @@
 
 namespace cmd {
 
-class CreateTable : public Instruction
+class DropIndex : public Instruction
 {
 public:
-  CreateTable() : Instruction(CREATE_TABLE) {}
-
-  tableName
-  std::list<Instruction>
-}
+  DropIndex() : Instruction(DROP_INDEX) {}
+};
 
 } // namespace cmd

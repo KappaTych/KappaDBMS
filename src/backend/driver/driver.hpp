@@ -2,7 +2,8 @@
 
 class Driver {
 public:
-    static Driver& Instance() {
+    static Driver& Instance()
+    {
         static Driver instance;
         return instance;
     }

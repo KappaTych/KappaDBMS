@@ -12,6 +12,6 @@ public:
 
   Instruction* tableName;
   std::list<Instruction*> args;
-}
+};
 
 } // namespace cmd

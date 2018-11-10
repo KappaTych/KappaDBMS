@@ -1,44 +1,9 @@
-#include "Table.h"
+// #include "Table.h"
 
-#include "../../storage/datatypes/object.h"
+// #include "../../storage/datatypes/object.h"
 
-namespace sql {
+// TableName::TableName(const std::string & s, const std::string & n) : schema(s), name(n) {};
 
-TableName::TableName(const std::string & s, const std::string & n) : schema(s), name(n) {};
-
-ColumnDefinition::ColumnDefinition(const std::string &name, DataType type) :
-  name(name),
-  type(type) {};
-
-std::ostream& operator<<(std::ostream &st, DataType type) {
-  switch (type) {
-    case DataType::INT:
-      st << "INT";
-      break;
-    case DataType::DOUBLE:
-      st << "DOUBLE";
-      break;
-    case DataType::TEXT:
-      st << "TEXT";
-      break;
-  }
-  return st;
-}
-
-sql::DataType convertDbType(sql::DataType t) {
-  switch (t) {
-    case DataType::INT: {
-      return sql::INTEGER;
-    }
-    case DataType::TEXT: {
-      return sql::TEXT;
-    }
-    case DataType::DOUBLE: {
-      return sql::DOUBLE;
-    }
-
-  }
-}
-
-
-} // namespace sql
+// ColumnDefinition::ColumnDefinition(const std::string &name, DataType type) :
+//   name(name),
+//   type(type) {};

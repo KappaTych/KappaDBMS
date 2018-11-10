@@ -1,41 +1,41 @@
-#pragma once 
+// #pragma once 
 
-#include <string>
-#include <iostream>
+// #include <string>
+// #include <iostream>
 
-#include "../../storage/datatypes/object.h"
+// #include "../../storage/datatypes/object.h"
 
 
-namespace sql {
+// namespace sql {
 
-class TableName {
-public:
-	TableName() = default;
-	TableName(const std::string&, const std::string&);
+// class TableName {
+// public:
+// 	TableName() = default;
+// 	TableName(const std::string&, const std::string&);
 
-	std::string schema;
-	std::string name;
-};
-
-// enum class DataType {
-//   INT,
-//   DOUBLE,
-//   TEXT
+// 	std::string schema;
+// 	std::string name;
 // };
 
-sql::DataType convertDbType(sql::DataType);
+// // enum class DataType {
+// //   INT,
+// //   DOUBLE,
+// //   TEXT
+// // };
 
-std::ostream& operator<<(std::ostream&, DataType);
+// sql::DataType convertDbType(sql::DataType);
 
-class ColumnDefinition
-{
- public:
-  ColumnDefinition() = default;
-  explicit ColumnDefinition(const std::string &name, DataType type);
+// std::ostream& operator<<(std::ostream&, DataType);
 
-  std::string name;
-  DataType type;
-};
+// class ColumnDefinition
+// {
+//  public:
+//   ColumnDefinition() = default;
+//   explicit ColumnDefinition(const std::string &name, DataType type);
+
+//   std::string name;
+//   DataType type;
+// };
 
 
-} // namespace sql
+// } // namespace sql
