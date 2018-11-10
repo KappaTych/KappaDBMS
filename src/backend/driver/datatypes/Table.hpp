@@ -24,6 +24,7 @@ void to_json(my_json& j, const Table& t);
 class Table
 {
 public:
+  explicit Table(std::_Vector_iterator<std::string> fields);
   explicit Table(std::string name, nlohmann::fifo_map<std::string, DataType> columns);
 
   const nlohmann::fifo_map<std::string, DataType>& GetColumns() const { return columns_; }
