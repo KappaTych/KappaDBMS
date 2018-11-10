@@ -12,7 +12,8 @@ public:
 
   Instruction* tableName;
   std::list<Instruction*> args;
-  const Instruction& Dispatch() const override { return *this; };
+
+  const Instruction& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd

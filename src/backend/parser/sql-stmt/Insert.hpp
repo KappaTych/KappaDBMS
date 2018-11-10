@@ -9,7 +9,7 @@ class Insert : public Instruction
 {
 public:
   Insert() : Instruction(INSERT) {}
-  const Instruction& Dispatch() const override { return *this; };
+  const Instruction& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd

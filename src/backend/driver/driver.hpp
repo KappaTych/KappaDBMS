@@ -4,6 +4,7 @@
 #include <list>
 #include <unordered_map>
 #include <exception>
+#include <type_traits>
 
 #include "table.hpp"
 #include "parser.hpp"
@@ -23,6 +24,8 @@ public:
     std::string RunQuery(const std::string) {};
 
     Table Execute(const cmd::Instruction&);
+    Table Execute(const cmd::Literal&);
+    Table Execute(const cmd::Operation&);
     Table Execute(const cmd::CreateTable&);
     Table Execute(const cmd::DropTable&);
     Table Execute(const cmd::Select&);

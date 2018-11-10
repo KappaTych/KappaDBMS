@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Instruction.hpp"
+#include "Expression.hpp"
 
 
 namespace cmd {
@@ -14,7 +15,7 @@ enum class LiteralType
   STRING,
 };
 
-class Literal : public Instruction
+class Literal : public Expression
 {
 public:
   Literal() : Instruction(LITERAL), valueType_(LiteralType::NONE) {}
@@ -22,10 +23,12 @@ public:
   explicit Literal(int64_t v) : Instruction(LITERAL), valueType_(LiteralType::INT), fval_(v) {}
   explicit Literal(double v) : Instruction(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
   explicit Literal(std::string v) : Instruction(LITERAL), valueType_(LiteralType::STRING), strval_(v) {}
-  virtual ~Literal() = default;
+  
+  ~Literal() = default;
+
+  const Literal& Dispatch() const override { return *this; }
 
   const LiteralType valueType() const { return valueType_; }
-  const Instruction& Dispatch() const override { return *this; };
 
 private:
   const LiteralType valueType_;

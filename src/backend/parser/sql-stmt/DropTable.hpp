@@ -9,7 +9,9 @@ class DropTable : public Instruction
 {
 public:
   DropTable() : Instruction(DROP_TABLE) {}
-  const Instruction& Dispatch() const override { return *this; };
+  ~DropTable() = default;
+
+  const Instruction& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd

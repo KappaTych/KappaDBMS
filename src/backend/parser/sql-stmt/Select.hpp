@@ -9,7 +9,7 @@ class Select : public Instruction
 {
 public:
   Select() : Instruction(SELECT) {}
-  const Instruction& Dispatch() const override { return *this; };
+  const Instruction& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd

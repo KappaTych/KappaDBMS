@@ -36,8 +36,9 @@ enum InstructionType
   DELETE,
   UPDATE,
   SELECT,
-  LITERAL,
   EXPRESSION,
+  LITERAL,
+  OPERATION,
 };
 
 class Instruction
@@ -46,6 +47,7 @@ public:
   Instruction() : type_(INVALID) {}
   explicit Instruction(InstructionType type) : type_(type) {}
   virtual ~Instruction() = default;
+
   const InstructionType type() const { return type_; }
   virtual const Instruction& Dispatch() const = 0;
 
