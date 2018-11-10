@@ -15,11 +15,11 @@ public:
   }
 
   /**
-  * Parses SQL-request and returns tree of commands to execute
-  *
-  * @param std::string& SQL-request to process
-  * @return sql::Command
-  */
+   * Parses SQL-request and returns tree of commands to execute
+   *
+   * @param std::string& SQL-request to process
+   * @return sql::Command
+   */
   void Process(const std::string&);
 
 private:

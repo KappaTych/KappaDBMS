@@ -36,6 +36,7 @@ enum InstructionType
   DELETE,
   UPDATE,
   SELECT,
+  LITERAL,
   EXPRESSION,
 };
 
