@@ -1,25 +1,19 @@
-%{
+%code top {
     #include "bison_sql.h"
     #include "flex_sql.h"
 
-    #include <stdio.h>
     #include <string>
-
 
     int yyerror(YYLTYPE* llocp, yyscan_t scanner, const char *msg) {
         return 1;
     }
-%}
+}
 
 // Specify code that is included in the generated .h and .c files
 %code requires {
 
 #include "../sql-stmt/Table.h"
 #include "../sql-stmt/Expression.h"
-
-
-#include "../../storage/datatypes/object.h"
-#include "../../storage/StorageEngine.h"
 
 #ifndef YYtypeDEF_YY_SCANNER_T
 #define YYtypeDEF_YY_SCANNER_T
@@ -28,47 +22,22 @@ typedef void* yyscan_t;
 
 }
 
-%output  "bison_sql.cpp"
-%defines "bison_sql.h"
-
 // Tell bison to create a reentrant parser
 %define api.pure full
-
-%locations
 
 // For Pure Calling
 %lex-param   { yyscan_t scanner }
 %parse-param { yyscan_t scanner }
 
 
-// Define all data-types
-%union {
-    int64_t ival;
-    double fval;
-    bool bval;
-    std::string* strval;
-    
-    sql::TableName* table_name;
-    sql::ColumnDefinition* column;
-    sql::DataType column_type_t;
-    sql::Expression* expr_t;
-
-    std::vector<sql::ColumnDefinition>* column_vec;
-    std::vector<std::string>* id_vec;
-    std::vector<sql::Expression>* expr_vec;
-}
-
-//  Destructor
-%destructor { } <ival> <fval> <bval> <column_type_t>
-%destructor{ delete(($$)); } <table_name> <strval> <column> <expr_t> <column_vec> <id_vec> <expr_vec>
-
+%define api.value.type union
 
 // Token definition
 
-%token<strval> IDENTIFIER STRING BLOB_STRING
-%token<ival> INT_CONST 
-%token<bval> TRUE FALSE
-%token<fval> DOUBLE_CONST
+%token<std::string> IDENTIFIER STRING BLOB_STRING
+%token<long int> INT_CONST 
+%token<bool> TRUE FALSE
+%token<long double> DOUBLE_CONST
 
 
 %token DOUBLE TEXT INTEGER
@@ -76,19 +45,13 @@ typedef void* yyscan_t;
 
 // Non-terminal types
 
-// %type       sql_stmt_list
-// %type       statement
-// %type       create_statement
-// %type       drop_statement
-// %type       show_statement
-
-%type<table_name>    table_name
-%type<column_type_t> column_type
-%type<column>        column_def
-%type<column_vec>    column_def_commalist
-%type<id_vec>        id_comma_list
-%type<expr_vec>      expr_list
-%type<expr_t> expr   literal_value
+%type <sql::TableName>    table_name
+%type <sql::DataType> column_type
+%type <sql::ColumnDefinition>        column_def
+%type < std::vector<sql::ColumnDefinition> >    column_def_commalist
+%type < std::vector<std::string> >        id_comma_list
+%type < std::vector<sql::Expression> >      expr_list
+%type <sql::Expression> expr   literal_value
 
 // Token Precedence and Associativity
 
