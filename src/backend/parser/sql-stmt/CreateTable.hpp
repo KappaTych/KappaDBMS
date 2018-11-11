@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Instruction.hpp"
+#include "TableDefinition.hpp"
 
 
 namespace cmd {
