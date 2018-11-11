@@ -3,17 +3,20 @@ Digit        [0-9]
 Letter       [a-zA-Z_]
 HexDigit     [a-fA-F0-9]
 Exp          [Ee][+-]?{Digit}+
-UNSIGN_INT 	 {Digit}+
+UNSIGN_INT   {Digit}+
 
 %{
+    // #include "src/backend/parser/sql-stmt/expressions"
     #include "bison_sql.h"
     #include <stdio.h>
 
 %}
 
+    /*
 %option header-file="flex_sql.h"
 %option outfile="flex_sql.cpp"
-
+    */
+    
 %option reentrant
 %option bison-bridge
 
@@ -31,32 +34,79 @@ UNSIGN_INT 	 {Digit}+
 
 [ \t\n]+    ;
 
+    // keyword
 CREATE      return CREATE;
 DROP        return DROP;
-SHOW		return SHOW;
+SHOW        return SHOW;
 TABLE       return TABLE;
-NULL 		return NULL;
-SELECT 		return SELECT;
-VALUES 		return VALUES;
-INTO 		return INTO;
-INSERT 		return INSERT;
-FROM		return FROM;
+NULL        return NULL_;
+SELECT      return SELECT;
+UPDATE      return UPDATE;
+SET         return SET;
+WHERE       return WHERE;
+LIMIT       return LIMIT;
+OFFSET      return OFFSET;
+VALUES      return VALUES;
+INTO        return INTO;
+INSERT      return INSERT;
+FROM        return FROM;
+CAST        return CAST;
+AS          return AS;
+ESCAPE      return ESCAPE;
+ISNULL      return ISNULL;
+NOTNULL     return NOTNULL;
+BETWEEN     return BETWEEN;
+DISTINCT    return DISTINCT;
+EXISTS      return EXISTS;
+WHEN        return WHEN;
+THEN        return THEN;
+ELSE        return ELSE;
 
+ // unary keyword operator 
+NOT         return NOT;
+COLLATE     return COLLATE;
+
+ // binary keyword operator
+IS          return IS;
+IN          return IN;
+LIKE        return LIKE;
+GLOB        return GLOB;
+MATCH       return MATCH;
+REGEXP      return REGEXP;
+AND         return AND;
+OR          return OR;
+
+
+ // not sqlite keyword
 INTEGER     return INTEGER;
 DOUBLE      return DOUBLE;
 TEXT        return TEXT;
 
-[(),;]    { return yytext[0]; }
+"=="        return EQUALL
+"!="        return NOTEQUALL
+"<>"        return NOTEQUALL
+"<="        return LESSEQUALL
+">="        return GREATEQUALL
+"||"        return CONCATENATION
+"<<"        return LEFTSHIFT
+">>"        return RIGHTSHIFT
+
+[-+*/%(),.;<>=&|~]    { return yytext[0]; }
 
 
-UNSIGN_INT   {
+UNSIGN_INT {
     yylval->ival = atol(yytext);
-    return INT_CONST;
+    return INTEGER_CONST;
 }
 
-({UNSIGN_INT}\.{UNSIGN_INT}?|{UNSIGN_INT}?\.{UNSIGN_INT}){Exp}? 	{
-	yylval->fval = std::stoll(yytext);
-	return DOUBLE_CONST;
+({UNSIGN_INT}\.{UNSIGN_INT}?|{UNSIGN_INT}?\.{UNSIGN_INT}){Exp}? {
+    yylval->fval = std::stoll(yytext);
+    return DOUBLE_CONST;
+}
+
+\"[^\"\n]+\" {
+    yylval->strval = new std::string(yytext + 1, yyleng - 1);
+    return IDENTIFIER;
 }
 
 {Letter}({Letter}|{Digit})* {
@@ -64,20 +114,19 @@ UNSIGN_INT   {
     return IDENTIFIER;
 }
 
-\'([^'\n]|\'\')+\' {
-	yylval->strval = new std::string(yytext + 1, yyleng - 1);
-	return STRING;
+\'([^'\n]|\'\')*\' {
+    yylval->strval = new std::string(yytext + 1, yyleng - 1);
+    return STRING;
 }
 
-
 . { 
-	fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); 
-	return 0; 
+    fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); 
+    return 0; 
 }
 
 %%
 
-
 int yyerror(const char *msg) {
-    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg); return 0;
+    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg); 
+    return 0;
 }
