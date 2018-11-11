@@ -6,127 +6,133 @@ Exp          [Ee][+-]?{Digit}+
 UNSIGN_INT   {Digit}+
 
 %{
-    // #include "src/backend/parser/sql-stmt/expressions"
-    #include "bison_sql.h"
-    #include <stdio.h>
+    #include "flex_sql.hpp"
+    #include "bison_sql.hpp"
+    #include "location.hh"
+
+    #define YY_USER_ACTION loc.columns(yyleng);
 
 %}
 
-    /*
-%option header-file="flex_sql.h"
 %option outfile="flex_sql.cpp"
-    */
-    
-%option reentrant
-%option bison-bridge
+
+%option c++
 
 %option noyywrap
 %option case-insensitive
-%option bison-locations
-
+%option yyclass="FlexScanner"
 
 %s COMMENT
 
 %%
+
+%{
+    loc.step();
+%}
 --              BEGIN(COMMENT);
 <COMMENT>[^\n]* ;
 <COMMENT>\n     BEGIN(INITIAL);
 
-[ \t\n]+    ;
+[ \t]+      loc.step();
+\n+         loc.lines(yyleng); loc.step();
 
-    // keyword
-CREATE      return CREATE;
-DROP        return DROP;
-SHOW        return SHOW;
-TABLE       return TABLE;
-NULL        return NULL_;
-SELECT      return SELECT;
-UPDATE      return UPDATE;
-SET         return SET;
-WHERE       return WHERE;
-LIMIT       return LIMIT;
-OFFSET      return OFFSET;
-VALUES      return VALUES;
-INTO        return INTO;
-INSERT      return INSERT;
-FROM        return FROM;
-CAST        return CAST;
-AS          return AS;
-ESCAPE      return ESCAPE;
-ISNULL      return ISNULL;
-NOTNULL     return NOTNULL;
-BETWEEN     return BETWEEN;
-DISTINCT    return DISTINCT;
-EXISTS      return EXISTS;
-WHEN        return WHEN;
-THEN        return THEN;
-ELSE        return ELSE;
+<<EOF>>     return yy::BisonParser::make_END(loc);;
 
- // unary keyword operator 
-NOT         return NOT;
-COLLATE     return COLLATE;
+CREATE      return yy::BisonParser::make_CREATE(loc);
+DROP        return yy::BisonParser::make_DROP(loc);
+SHOW        return yy::BisonParser::make_SHOW(loc);
+TABLE       return yy::BisonParser::make_TABLE(loc);
+NULL        return yy::BisonParser::make_NULL_(loc);
+SELECT      return yy::BisonParser::make_SELECT(loc);
+UPDATE      return yy::BisonParser::make_UPDATE(loc);
+SET         return yy::BisonParser::make_SET(loc);
+WHERE       return yy::BisonParser::make_WHERE(loc);
+LIMIT       return yy::BisonParser::make_LIMIT(loc);
+OFFSET      return yy::BisonParser::make_OFFSET(loc);
+VALUES      return yy::BisonParser::make_VALUES(loc);
+INTO        return yy::BisonParser::make_INTO(loc);
+INSERT      return yy::BisonParser::make_INSERT(loc);
+FROM        return yy::BisonParser::make_FROM(loc);
+CAST        return yy::BisonParser::make_CAST(loc);
+AS          return yy::BisonParser::make_AS(loc);
+ESCAPE      return yy::BisonParser::make_ESCAPE(loc);
+ISNULL      return yy::BisonParser::make_ISNULL(loc);
+NOTNULL     return yy::BisonParser::make_NOTNULL(loc);
+BETWEEN     return yy::BisonParser::make_BETWEEN(loc);
+DISTINCT    return yy::BisonParser::make_DISTINCT(loc);
+EXISTS      return yy::BisonParser::make_EXISTS(loc);
+WHEN        return yy::BisonParser::make_WHEN(loc);
+THEN        return yy::BisonParser::make_THEN(loc);
+ELSE        return yy::BisonParser::make_ELSE(loc);
 
- // binary keyword operator
-IS          return IS;
-IN          return IN;
-LIKE        return LIKE;
-GLOB        return GLOB;
-MATCH       return MATCH;
-REGEXP      return REGEXP;
-AND         return AND;
-OR          return OR;
+NOT         return yy::BisonParser::make_NOT(loc);
+COLLATE     return yy::BisonParser::make_COLLATE(loc);
 
+IS          return yy::BisonParser::make_IS(loc);
+IN          return yy::BisonParser::make_IN(loc);
+LIKE        return yy::BisonParser::make_LIKE(loc);
+GLOB        return yy::BisonParser::make_GLOB(loc);
+MATCH       return yy::BisonParser::make_MATCH(loc);
+REGEXP      return yy::BisonParser::make_REGEXP(loc);
+AND         return yy::BisonParser::make_AND(loc);
+OR          return yy::BisonParser::make_OR(loc);
 
- // not sqlite keyword
-INTEGER     return INTEGER;
-DOUBLE      return DOUBLE;
-TEXT        return TEXT;
+"=="        return yy::BisonParser::make_EQUALL(loc);
+"!="        return yy::BisonParser::make_NOTEQUALL(loc);
+"<>"        return yy::BisonParser::make_NOTEQUALL(loc);
+"<="        return yy::BisonParser::make_LESSEQUALL(loc);
+">="        return yy::BisonParser::make_GREATEQUALL(loc);
+"<"         return yy::BisonParser::make_LESS(loc);
+">"         return yy::BisonParser::make_GREATE(loc);
+"="         return yy::BisonParser::make_EQUALL(loc);
 
-"=="        return EQUALL
-"!="        return NOTEQUALL
-"<>"        return NOTEQUALL
-"<="        return LESSEQUALL
-">="        return GREATEQUALL
-"||"        return CONCATENATION
-"<<"        return LEFTSHIFT
-">>"        return RIGHTSHIFT
+"||"        return yy::BisonParser::make_CONCATENATION(loc);
 
-[-+*/%(),.;<>=&|~]    { return yytext[0]; }
+"~"         return yy::BisonParser::make_BINNOT(loc);
+"&"         return yy::BisonParser::make_BINAND(loc);
+"|"         return yy::BisonParser::make_BINOR(loc);
+"<<"        return yy::BisonParser::make_LEFTSHIFT(loc);
+">>"        return yy::BisonParser::make_RIGHTSHIFT(loc);
+
+"+"         return yy::BisonParser::make_PLUS(loc);
+"-"         return yy::BisonParser::make_MINUS(loc);
+"*"         return yy::BisonParser::make_MULTI(loc);
+"/"         return yy::BisonParser::make_DIVISION(loc);
+"%"         return yy::BisonParser::make_MOD(loc);
+
+";"         return yy::BisonParser::make_SEMICOLON(loc);
+"."         return yy::BisonParser::make_DOT(loc);
+","         return yy::BisonParser::make_COMMA(loc);
+"("         return yy::BisonParser::make_OPENBRACKET(loc);
+")"         return yy::BisonParser::make_CLOSEBRACKET(loc);
 
 
 UNSIGN_INT {
-    yylval->ival = atol(yytext);
-    return INTEGER_CONST;
+    return yy::BisonParser::make_INTEGER_CONST(std::stoll(yytext), loc);
 }
 
 ({UNSIGN_INT}\.{UNSIGN_INT}?|{UNSIGN_INT}?\.{UNSIGN_INT}){Exp}? {
-    yylval->fval = std::stoll(yytext);
-    return DOUBLE_CONST;
+    return yy::BisonParser::make_DOUBLE_CONST(std::stold(yytext), loc);
 }
 
 \"[^\"\n]+\" {
-    yylval->strval = new std::string(yytext + 1, yyleng - 1);
-    return IDENTIFIER;
+    return yy::BisonParser::make_IDENTIFIER(std::string(yytext + 1, yyleng - 1), loc);
 }
 
 {Letter}({Letter}|{Digit})* {
-    yylval->strval = new std::string(yytext);
-    return IDENTIFIER;
+    return yy::BisonParser::make_IDENTIFIER(std::string(yytext), loc);
 }
 
 \'([^'\n]|\'\')*\' {
-    yylval->strval = new std::string(yytext + 1, yyleng - 1);
-    return STRING;
+    return yy::BisonParser::make_STRING(std::string(yytext + 1, yyleng - 1), loc);
 }
 
 . { 
-    fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); 
-    return 0; 
+    throw "[SQL-Lexer-Error] Unknown Character: " +  yytext[0];
 }
 
 %%
 
 int yyerror(const char *msg) {
-    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg); 
-    return 0;
+    throw "[SQL-Lexer-Error] " + std::string(msg);
 }

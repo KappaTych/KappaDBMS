@@ -3,6 +3,12 @@
 #include <vector>
 #include <string>
 
+#include "flex-bison/bison_sql.hpp"
+#include "flex-bison/flex_sql.hpp"
+#include "flex-bison/location.hh"
+
+#include "sql.hpp"
+
 namespace sql {
 
 class Parser
@@ -27,6 +33,10 @@ private:
   ~Parser() = default;
   Parser(Parser const &) = delete;
   void operator=(Parser const &) = delete;
-}
+
+  friend class yy::BisonParser;
+  friend class yy::FlexScanner;
+
+};
 
 } // namespace sql
