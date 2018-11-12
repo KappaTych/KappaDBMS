@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
   std::string s;
-  auto& parser = Parser::Instance();
+  auto& parser = sql::Parser::Instance();
 
   s = "Drop table t";
   parser.Process(s);
