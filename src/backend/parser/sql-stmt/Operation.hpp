@@ -4,6 +4,8 @@
 #include "Expression.hpp"
 #include "Select.hpp"
 
+#include <vector>
+
 namespace cmd {
 
 enum class OperationType
@@ -12,15 +14,16 @@ enum class OperationType
   UNARY_PLUS,
   BIN_NOT,
   NOT,
-  COLLATE,
-  CAST,
   ISNULL,
+
+  CAST,
+  COLLATE,
 
   CONCATENATION,
   PLUS,
   MINUS,
   MULTIPLY,
-  DIVIDE,
+  DIVISION,
   MOD,
   LEFTSHIFT,
   RIGHTSHIFT,
@@ -53,12 +56,14 @@ enum class OperationType
   EXPRESSION_LIST,
 };
 
+using ptr_Expression = std::shared_ptr<Expression>;
+
 class Operation : public Expression
 {
 public:
   Operation() = delete;
-  explicit Operation(Operation t) : type(t) {}
-  explicit Operation(OperationType t, const std::vector<Expression>& params)
+  explicit Operation(OperationType t) : operation_(t) {}
+  explicit Operation(OperationType t, const std::vector<ptr_Expression>& params)
     : Expression(),
       operation_(t),
       params_(params) {}
@@ -68,14 +73,12 @@ public:
   const Operation& Dispatch() const override { return *this; }
 
   const OperationType operation() const { return operation_; }
-  const sts::array<Expression>& params() const { return params_; }
-
-  void push_back(const Expression& exp) { params_.push_back(exp); }
+  const std::vector<ptr_Expression>& params() const { return params_; }
 
 private:
   const OperationType operation_;
 
-  std::vector<Expression> params_;
+  std::vector<ptr_Expression> params_;
 };
 
 
@@ -83,8 +86,8 @@ class UnaryOperation : public Operation
 {
 public:
   UnaryOperation() = delete;
-  explicit UnaryOperation(OperationType type, const Expression& exp)
-    : Operation(type, std::vector<Expression>({exp, })) {}
+  explicit UnaryOperation(OperationType type, const ptr_Expression& exp)
+    : Operation(type, {exp, }) {}
 
 };
 
@@ -92,8 +95,8 @@ class BinaryOperation : public Operation
 {
  public:
   BinaryOperation() = delete;
-  explicit BinaryOperation(OperationType type, const Expression& left, const Expression& right)
-    : Operation(type, std::vector({left, right, })) {}
+  explicit BinaryOperation(OperationType type, const ptr_Expression& left, const ptr_Expression& right)
+    : Operation(type, {left, right, }) {}
 };
 
 
@@ -101,7 +104,7 @@ class CollateOperation : public UnaryOperation
 {
 public:
   CollateOperation() = delete;
-  explicit CollateOperation(const Expression& exp, const std::string& collationName)
+  explicit CollateOperation(const ptr_Expression& exp, const std::string& collationName)
     : UnaryOperation(OperationType::COLLATE, exp), collationName_(collationName) {}
 
 private:
@@ -112,28 +115,28 @@ class CastOperation : public UnaryOperation
 {
 public:
   CastOperation() = delete;
-  explicit CastOperation(const Expression& exp, const std::string typeName)
-    : UnaryOperation(OperationType::Cast, exp),  typeName_(typeName) {}
+  explicit CastOperation(const ptr_Expression& exp, const std::string typeName)
+    : UnaryOperation(OperationType::CAST, exp),  typeName_(typeName) {}
 
 private:
   std::string typeName_;
 };
 
-class EmbeddedFunction : public UnaryOperation
+class EmbeddedFunction : public BinaryOperation
 {
 public:
   EmbeddedFunction() = delete;
-  explicit EmbeddedFunction(OperationType type, const Expression& left, const Expression& right)
-    : UnaryOperation(type, left, right),
+  explicit EmbeddedFunction(OperationType type, const ptr_Expression& left, const ptr_Expression& right)
+    : BinaryOperation(type, left, right),
       isWithEscape_(false), escape_() {}
 
-  explicit EmbeddedFunction(OperationType type, const Expression& left, const Expression& right,
-                            const Expression& escape)
-    : UnaryOperation(type, left, right),
+  explicit EmbeddedFunction(OperationType type, const ptr_Expression& left, const ptr_Expression& right,
+                            const ptr_Expression& escape)
+    : BinaryOperation(type, left, right),
       isWithEscape_(true), escape_(escape) {}
 
 private:
-  Expression escape_;
+  ptr_Expression escape_;
   bool isWithEscape_;
 };
 
@@ -141,31 +144,31 @@ class BetweenOperation : public Operation
 {
  public:
   BetweenOperation() = delete;
-  BetweenOperation(const Expression& base, const Expression& left, const Expresion& right)
-    : Operation(OperationType::BETWEEN, std::vector<Expression>({base, left, right})) {}
+  BetweenOperation(const ptr_Expression& base, const ptr_Expression& left, const ptr_Expression& right)
+    : Operation(OperationType::BETWEEN, {base, left, right}) {}
 };
 
 class WhenOperation : public Operation
 {
 public:
   WhenOperation() = delete;
-  WhenOperation(const Expresion& whenExp) : Operation(OperationType::WHEN, std::vector<Expression>({whenExp})) {}
-  WhenOperation(const Expresion& whenExp, const Expression& elseExp)
-    : Operation(OperationType::WHEN_ELSE, std::vector<Expression>({whenExp, elseExp})) {}
+  WhenOperation(const ptr_Expression& whenExp) : Operation(OperationType::WHEN, {whenExp}) {}
+  WhenOperation(const ptr_Expression& whenExp, const ptr_Expression& elseExp)
+    : Operation(OperationType::WHEN_ELSE, {whenExp, elseExp}) {}
 };
 
 class CaseWhenOperation : public WhenOperation
 {
 public:
   CaseWhenOperation() = delete;
-  CaseWhenOperation(const Expression& base, const Expresion& whenExp)
+  CaseWhenOperation(const ptr_Expression& base, const ptr_Expression& whenExp)
     : WhenOperation(whenExp), base_(base) {}
-  WhenOperation(const Expression& base, const Expresion& whenExp, const Expression& elseExp)
+  CaseWhenOperation(const ptr_Expression& base, const ptr_Expression& whenExp, const ptr_Expression& elseExp)
       : WhenOperation(whenExp, elseExp), base_(base) {}
 
 
  private:
-  Expression base_;
+  ptr_Expression base_;
 };
 
 class ExistsOperation : public Operation
@@ -183,7 +186,7 @@ class InListOperation : public Operation
 {
  public:
   InListOperation() = delete;
-  InListOperation(std::vector<Expression> expList) : Operation(OperationType::IN, expList) {}
+  InListOperation(const std::vector<ptr_Expression>& expList) : Operation(OperationType::IN, expList) {}
 };
 
 
@@ -202,10 +205,10 @@ class InTableOperation : public Operation
  public:
   InTableOperation() = delete;
   InTableOperation(const std::string& schema, const std::string& name)
-      : Operation(OperationType::In), schema_(schema), name_(name) {}
+      : Operation(OperationType::IN), schema_(schema), name_(name) {}
 
 private:
-  std::string shema_, name_;
+  std::string schema_, name_;
 };
 
 class Function : public Operation
@@ -213,7 +216,7 @@ class Function : public Operation
  public:
   Function(const std::string& functionName)
     : Operation(OperationType::FUNCTION), functionName_(functionName) {}
-  Function(const std::string& functionName, const std::vector<Expression>& params_)
+  Function(const std::string& functionName, const std::vector<ptr_Expression>& params)
     : Operation(OperationType::FUNCTION, params), functionName_(functionName) {}
 
  private:
