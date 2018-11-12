@@ -37,6 +37,9 @@ private:
   friend class yy::BisonParser;
   friend class yy::FlexScanner;
 
+  void addInstruction(const std::shared_ptr<cmd::Instruction>&);
+
+  std::vector<std::shared_ptr<cmd::Instruction>> trees_;
 };
 
 } // namespace sql
