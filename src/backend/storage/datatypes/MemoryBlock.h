@@ -8,35 +8,50 @@
 #include <memory>
 #include <fstream>
 
-//namespace se
-//{
+namespace se {class MemoryBlock;}
+
+std::ostream& operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
+
+std::istream& operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+
+namespace se
+{
 
 class MemoryBlock
 {
 public:
   static const uint32_t DEFAULT_CAPACITY = 128000;
   static const uint8_t DIVIDOR = 7;
+
 public:
+  MemoryBlock() : data_(new uint8_t[DEFAULT_CAPACITY]) {};
+
+  explicit MemoryBlock(uint8_t* data, uint32_t size);
+
+  MemoryBlock(uint8_t* data, MemoryBlock* next) : data_(data_), next_(next)
+  {  };
+
+public:
+  uint32_t size() const { return size_; }
+
+  uint32_t capacity() const { return capacity_; }
+
+  std::shared_ptr<uint8_t> data() const { return data_; }
+
+  std::shared_ptr<MemoryBlock> next() const { return next_; }
+
+public:
+  friend std::ostream& ::operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
+
+  friend std::istream& ::operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+
+private:
   uint32_t capacity_ = DEFAULT_CAPACITY;
   uint32_t size_ = 0;
   std::shared_ptr<uint8_t> data_;
   std::shared_ptr<MemoryBlock> next_;
-public:
-  MemoryBlock() : data_(new uint8_t[DEFAULT_CAPACITY]) {};
-
-  explicit MemoryBlock(uint8_t* data, uint32_t capacity)
-      : data_(data), capacity_(capacity), size_(sizeof(data))
-  {};
-
-  MemoryBlock(uint8_t* data, MemoryBlock* next, uint32_t capacity) : data_(data), next_(next),
-                                                                                            capacity_(capacity)
-  {};
-
-  friend std::ofstream operator<<(std::ofstream& out, const MemoryBlock& memoryBlock);
-
-  friend std::ifstream operator>>(std::ifstream& in, MemoryBlock memoryBlock);
 };
 
-//} //namespace se
+} //namespace se
 
 

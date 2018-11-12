@@ -104,3 +104,19 @@ my_json se::StorageEngine::select(std::string tableName)
   sql::to_json(j, t);
   return j;
 }
+
+my_json se::StorageEngine::findMetaData(const std::string& metaData)
+{
+  std::ifstream fin;
+  my_json j;
+  fin.open("./database/tables.json");
+  if (!fin.is_open()) {
+    return false;
+  }
+  fin >> j;
+  fin.close();
+
+  if (j.find(metaData) == j.end())
+    return my_json();
+  return j[metaData];
+}

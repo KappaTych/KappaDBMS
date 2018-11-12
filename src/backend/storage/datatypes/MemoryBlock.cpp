@@ -2,15 +2,26 @@
 // Created by nixtaxe on 10.11.18.
 //
 
+#include <iostream>
 #include "MemoryBlock.h"
 
-std::ofstream operator<<(std::ofstream& fout, const MemoryBlock& memoryBlock)
+namespace se {
+
+MemoryBlock::MemoryBlock(uint8_t* data, uint32_t size) : data_(new uint8_t[DEFAULT_CAPACITY]), size_(size)
 {
-  fout.write((char*) &memoryBlock.data_, memoryBlock.size_);
+  std::copy(data, data + size, data_.get());
+};
+
+} // namespace se
+
+std::ostream& operator<<(std::ostream& fout, const se::MemoryBlock& memoryBlock)
+{
+  fout.write((char*) memoryBlock.data().get(), memoryBlock.capacity());
+  return fout;
 }
 
-std::ifstream operator>>(std::ifstream& fin, MemoryBlock memoryBlock)
+std::istream& operator>>(std::istream& fin, se::MemoryBlock& memoryBlock)
 {
-//  memoryBlock.data_.get(std::istreambuf_iterator<char>(fin));
-  fin.read(reinterpret_cast<char*>(memoryBlock.data_.get()), sizeof(memoryBlock.data_.get()));
+  fin.read(reinterpret_cast<char*>(memoryBlock.data().get()), memoryBlock.capacity());
+  return fin;
 }

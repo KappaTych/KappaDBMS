@@ -16,6 +16,7 @@
 
 #include "tables/Table.h"
 #include "datatypes/object.h"
+#include "BlockManager.h"
 
 template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
@@ -33,6 +34,10 @@ public:
     return instance;
   }
 
+  bool hasMetaData(const std::string& metaData) const;
+
+  my_json findMetaData(const std::string& metaData);
+
   bool create(std::string name, nlohmann::fifo_map<std::string, sql::DataType> columns);
 
   bool insert(std::string tableName, std::string input);
@@ -46,6 +51,9 @@ public:
   StorageEngine(StorageEngine const &) = delete;
 
   void operator=(StorageEngine const &) = delete;
+
+public:
+  se::BlockManager blockManager;
 
 private:
   StorageEngine();
