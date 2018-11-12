@@ -22,7 +22,7 @@ public:
   Literal() : Expression(LITERAL), valueType_(LiteralType::NONE) {}
   explicit Literal(bool v) : Expression(LITERAL), valueType_(LiteralType::BOOL), ival_(v) {}
   explicit Literal(int64_t v) : Expression(LITERAL), valueType_(LiteralType::INT), fval_(v) {}
-  explicit Literal(double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
+  explicit Literal(long double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
   explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::STRING), strval_(v) {}
   
   ~Literal() = default;
