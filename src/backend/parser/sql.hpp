@@ -1,6 +1,9 @@
 #include "sql-stmt/Instruction.hpp"
-#include "sql-stmt/Literal.hpp"
 #include "sql-stmt/Expression.hpp"
+#include "sql-stmt/Literal.hpp"
+#include "sql-stmt/Operation.hpp"
+
+#include "sql-stmt/TableDefinition.hpp"
 #include "sql-stmt/CreateTable.hpp"
 #include "sql-stmt/DropTable.hpp"
 #include "sql-stmt/ShowCreateTable.hpp"
