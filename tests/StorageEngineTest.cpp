@@ -2,10 +2,12 @@
 #include <fstream>
 #include <cstdio>
 #include <cstdint>
+#include <btree/safe_btree_map.h>
 
 #include "../src/backend/storage/StorageEngine.h"
 #include "../src/backend/storage/datatypes/object.h"
 #include "../src/backend/storage/datatypes/MemoryBlock.h"
+#include "../src/backend/storage/datatypes/MetaData.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,20 +31,30 @@ int main(int argc, char *argv[])
 //  std::cout << storage.select("test").dump() << std::endl;
 //  std::cout << storage.select("test_problem").dump() << std::endl;
 
-  std::string canary = "canary";
+//  std::string canary = "canary";
+//
+//  se::MemoryBlock memoryBlock((uint8_t*)(canary.c_str()), canary.length());
+//  std::ofstream fout("../database/testMemBlock.kp", std::ios::out | std::ios::binary);
+//  if (fout.is_open())
+//    std::cout << "opened" << std::endl;
+//
+//  fout << memoryBlock;
+//  fout.close();
+//  std::ifstream fin("../database/testMemBlock.kp", std::ios::in | std::ios::binary);
+//  fin >> memoryBlock;
+//  fin.close();
+//  for (int i = 0; i < memoryBlock.size(); ++i)
+//    std::cout << memoryBlock.data().get()[i];
 
-  se::MemoryBlock memoryBlock((uint8_t*)(canary.c_str()), canary.length());
-  std::ofstream fout("../database/testMemBlock.kp", std::ios::out | std::ios::binary);
-  if (fout.is_open())
-    std::cout << "opened" << std::endl;
+//  btree::safe_btree_map<uint32_t, std::string> safeTree;
+//  std::cout << safeTree.size() << std::endl;
 
-  fout << memoryBlock;
-  fout.close();
-  std::ifstream fin("../database/testMemBlock.kp", std::ios::in | std::ios::binary);
-  fin >> memoryBlock;
-  fin.close();
-  for (int i = 0; i < memoryBlock.size(); ++i)
-    std::cout << memoryBlock.data().get()[i];
+  std::ifstream fin("../database/tables.json");
+  se::MetaData j(fin);
+
+  std::cout << j.data().get()->dump() << std::endl;
+  j.data().get()->at("test") = "strTest";
+  std::cout << j.data().get()->dump() << std::endl;
 
 //  std::cout << storage.findMetaData("test").dump() << std::endl;
   return 0;
