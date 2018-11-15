@@ -8,3 +8,5 @@
 #include "sql-stmt/Insert.hpp"
 #include "sql-stmt/Update.hpp"
 #include "sql-stmt/Delete.hpp"
+#include "sql-stmt/TableDefinition.hpp"
+#include "sql-stmt/ColumnDefinition.hpp"

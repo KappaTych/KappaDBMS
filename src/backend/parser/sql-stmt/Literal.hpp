@@ -11,9 +11,9 @@ enum class LiteralType
 {
   NONE,
   BOOL,
-  INT,
+  INTEGER,
   DOUBLE,
-  STRING,
+  TEXT,
 };
 
 class Literal : public Expression
@@ -21,9 +21,9 @@ class Literal : public Expression
 public:
   Literal() : Expression(LITERAL), valueType_(LiteralType::NONE) {}
   explicit Literal(bool v) : Expression(LITERAL), valueType_(LiteralType::BOOL), ival_(v) {}
-  explicit Literal(int64_t v) : Expression(LITERAL), valueType_(LiteralType::INT), fval_(v) {}
+  explicit Literal(int64_t v) : Expression(LITERAL), valueType_(LiteralType::INTEGER), fval_(v) {}
   explicit Literal(double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
-  explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::STRING), strval_(v) {}
+  explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::TEXT), strval_(v) {}
   
   ~Literal() = default;
 
@@ -36,9 +36,9 @@ public:
     switch (valueType_) {
       case LiteralType::NONE:   return "";
       case LiteralType::BOOL:   return (bval_ ? "true" : "false");
-      case LiteralType::INT:    return std::to_string(fval_);
+      case LiteralType::INTEGER:    return std::to_string(fval_);
       case LiteralType::DOUBLE: return std::to_string(ival_);
-      case LiteralType::STRING: return strval_;
+      case LiteralType::TEXT: return strval_;
     }
   }
 

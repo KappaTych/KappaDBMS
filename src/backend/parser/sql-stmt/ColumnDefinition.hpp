@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "Instruction.hpp"
+#include "Literal.hpp"
 
 
 namespace cmd {

@@ -14,8 +14,7 @@
 #include <json.hpp>
 #include <fifo_map.hpp>
 
-#include "tables/Table.h"
-#include "datatypes/object.h"
+#include "datatypes/MetaData.h"
 #include "BlockManager.h"
 
 template<class K, class V, class dummy_compare, class A>
