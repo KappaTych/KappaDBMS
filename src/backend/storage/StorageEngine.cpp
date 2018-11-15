@@ -6,7 +6,7 @@
 
 se::StorageEngine::StorageEngine() : tables_()
 {
-  auto dir = system("mkdir database"); // TODO: fix this workaround
+//  auto dir = system("mkdir database"); // TODO: fix this workaround
   std::ifstream fin("./database/tables.json");
   if (fin.is_open()) {
     my_json j;
@@ -37,7 +37,6 @@ se::StorageEngine::StorageEngine() : tables_()
 bool se::StorageEngine::create(std::string name, nlohmann::fifo_map<std::string, sql::DataType> columns)
 {
   tables_.insert(std::pair<std::string, sql::Table>(name, sql::Table(name, columns)));
-  // TODO: remove columns with some stream of pare values - column name and column type
   if (flush())
     return true;
   return false;
@@ -104,4 +103,20 @@ my_json se::StorageEngine::select(std::string tableName)
   my_json j;
   sql::to_json(j, t);
   return j;
+}
+
+my_json se::StorageEngine::findMetaData(const std::string& metaData)
+{
+  std::ifstream fin;
+  my_json j;
+  fin.open("./database/tables.json");
+  if (!fin.is_open()) {
+    return false;
+  }
+  fin >> j;
+  fin.close();
+
+  if (j.find(metaData) == j.end())
+    return my_json();
+  return j[metaData];
 }
