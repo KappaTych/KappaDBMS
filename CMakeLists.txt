@@ -63,7 +63,8 @@ endif()
 
 option(BUILD_PARSER "Build PARSER" OFF)
 option(BUILD_STORAGE "Build STORAGE" ON)
-option(BUILD_SERVER "Build SERVER" ON)
+option(BUILD_DRIVER "Build DRIVER" OFF)
+option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" OFF)
 
 
@@ -82,6 +83,14 @@ if (BUILD_STORAGE)
     list(APPEND LINK_LIBS storage)
 endif()
 
+if (BUILD_DRIVER)
+    add_subdirectory(${src}/driver)
+    list(APPEND LINK_LIBS driver)
+endif()
+
+#tests part
+add_subdirectory(tests)
+
 if (BUILD_SERVER)
     file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
 
@@ -89,10 +98,9 @@ if (BUILD_SERVER)
     set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
     target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
     target_include_directories(${EXECUTABLE} PUBLIC
-        ${src}/
-        ${src}/include
-        ${lib}/clsocket/src
-        ${lib}/ctpl
-    )
+            ${src}/
+            ${src}/include
+            ${lib}/clsocket/src
+            ${lib}/ctpl
+            )
 endif()
-

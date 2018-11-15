@@ -21,6 +21,10 @@ public:
 
   MetaData(std::ifstream& fin);
 
+  MetaData(std::string name);
+
+  MetaData(my_json j);
+
 public:
   void read(std::ifstream& fin);
 
@@ -32,6 +36,10 @@ public:
 
 private:
   std::shared_ptr<my_json> data_;
+
+  void add(std::string key, size_t size);
+
+  void add(std::string key, std::string path);
 };
 
 } //namespace se
