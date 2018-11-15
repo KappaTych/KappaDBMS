@@ -3,7 +3,7 @@
 //
 
 #include <fstream>
-#include "BlockManager.h"
+#include "BlockManager.hpp"
 
 se::BlockManager::BlockManager(std::ifstream& fin)
 {

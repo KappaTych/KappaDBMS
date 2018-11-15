@@ -5,9 +5,9 @@
 #pragma once
 
 #include <vector>
-#include "datatypes/MemoryBlock.h"
-#include "datatypes/Row.h"
-#include "datatypes/MetaData.h"
+#include "datatypes/MemoryBlock.hpp"
+#include "datatypes/Row.hpp"
+#include "datatypes/MetaData.hpp"
 #include <btree/btree_map.h>
 
 namespace se

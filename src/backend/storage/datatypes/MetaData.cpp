@@ -2,7 +2,7 @@
 // Created by nixtaxe on 13.11.18.
 //
 
-#include "MetaData.h"
+#include "MetaData.hpp"
 
 se::MetaData::MetaData(std::ifstream& fin)
 {

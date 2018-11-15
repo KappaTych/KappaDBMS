@@ -1,7 +1,3 @@
-//
-// Created by truefinch on 02.11.18.
-//
-
 #pragma once
 
 #include <cstdlib>
@@ -14,10 +10,10 @@
 #include <json.hpp>
 #include <fifo_map.hpp>
 
-#include "tables/Table.h"
-#include "datatypes/object.h"
-#include "BlockManager.h"
-#include "datatypes/MetaData.h"
+#include "tables/Table.hpp"
+#include "datatypes/object.hpp"
+#include "BlockManager.hpp"
+#include "datatypes/MetaData.hpp"
 
 template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;

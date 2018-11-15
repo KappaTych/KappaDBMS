@@ -1,8 +1,4 @@
-//
-// Created by truefinch on 02.11.18.
-//
-
-#include "StorageEngine.h"
+#include "StorageEngine.hpp"
 
 se::StorageEngine::StorageEngine()
 {
