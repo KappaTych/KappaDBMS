@@ -29,9 +29,9 @@ public:
 
   const Literal& Dispatch() const override { return *this; }
 
-  const LiteralType valueType() const { return valueType_; }
+  const LiteralType ValueType() const { return valueType_; }
 
-  std::string value() const
+  std::string Value() const
   {
     switch (valueType_) {
       case LiteralType::NONE:   return "";

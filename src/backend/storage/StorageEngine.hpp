@@ -31,15 +31,15 @@ public:
     return instance;
   }
 
-  bool hasMetaData(const std::string& metaData) const;
+  bool HasMetaData(const std::string& metaData) const;
 
-  se::MetaData getMetaData(const std::string& metaData);
+  se::MetaData& GetMetaData(const std::string& metaData);
 
-  se::MetaData& createData(se::MetaData&);
+  se::MetaData& CreateData(se::MetaData&);
 
-  void addRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
+  void AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
 
-  bool flush();
+  bool Flush();
 
 
   void operator=(StorageEngine const &) = delete;

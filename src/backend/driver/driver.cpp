@@ -1,3 +1,5 @@
+#include <exception>
+
 #include "driver.hpp"
 
 namespace sql {
@@ -21,14 +23,28 @@ Table Driver::Execute(const cmd::Instruction& instruction)
     return Execute(instRef);
 }
 
+Table Driver::Execute(const cmd::Literal& instruction)
+{
+    Record record({ TextField(instruction.Value()) });
+    cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
+    return Table({ column }, { record });
+}
+
 Table Driver::Execute(const cmd::TableDefinition& instruction)
 {
-    return Table();
+    return Table(instruction);
 }
 
 Table Driver::Execute(const cmd::CreateTable& instruction)
 {
-    return Table();
+    auto& storage = StorageEngine.Instance();
+    if (storage.HasMetaData(instruction.table_.ToString())) {
+        throw std::exception("DriverError: Table is already exist");
+    }
+    se::MetaData& meta = storage.CreateData(instruction.table_.ToString()));
+    Record record({ BoolField(true) });
+    cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
+    return Table({ column }, { record });
 }
 
 Table Driver::Execute(const cmd::DropTable& instruction)
@@ -58,7 +74,14 @@ Table Driver::Execute(const cmd::Delete& instruction)
 
 Table Driver::Execute(const cmd::ShowCreateTable& instruction)
 {
-    return Table();
+    auto& storage = StorageEngine.Instance();
+    if (!storage.HasMetaData(instruction.table_.ToString())) {
+        throw std::exception("DriverError: Table doesn't exist");
+    }
+    se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString()));
+    Record record({ TextField(instruction.table_.ToString()) });
+    cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
+    return Table({ column }, { record });
 }
 
 

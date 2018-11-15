@@ -11,7 +11,7 @@ public:
   DropTable() : Instruction(DROP_TABLE) {}
   ~DropTable() = default;
 
-  const Instruction& Dispatch() const override { return *this; }
+  const DropTable& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd

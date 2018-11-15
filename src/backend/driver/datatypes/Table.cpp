@@ -23,8 +23,7 @@ void Table::DeleteRecord(int index) {
 
 std::string Table::ToString() const
 {
-  std::string result;
-  result += name_.ToString() + " (";
+  std::string result = "CREATE TABLE " + name_.ToString() + " (";
   for (auto &col : columns_) {
     result += col.name_ + " " + sql::to_string(col.type_) + ", ";
   }

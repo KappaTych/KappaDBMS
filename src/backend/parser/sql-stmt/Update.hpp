@@ -9,7 +9,7 @@ class Update : public Instruction
 {
 public:
   Update() : Instruction(UPDATE) {}
-  const Instruction& Dispatch() const override { return *this; }
+  const Update& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd
