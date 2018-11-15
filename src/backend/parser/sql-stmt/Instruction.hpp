@@ -32,7 +32,7 @@ enum InstructionType
   DROP_USER,
   DROP_TRIGGER,
   DROP_INDEX,
-  BEGIN,
+  BEGIN_,
   ROLLBACK,
   COMMIT,
   INSERT,
