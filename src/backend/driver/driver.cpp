@@ -21,10 +21,74 @@ Table Driver::Execute(const cmd::Instruction& instruction)
     return Execute(instRef);
 }
 
+Table Driver::Execute(const cmd::TableDefinition& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::CreateTable& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::DropTable& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::Select& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::Insert& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::Update& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::Delete& instruction)
+{
+    return Table();
+}
+
+Table Driver::Execute(const cmd::ShowCreateTable& instruction)
+{
+    return Table();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // TODO: Think how to do it better
 Table Driver::Execute(const cmd::Literal& literal)
 {
     return Table( {literal.value()} );
+}
+
+Table Driver::Execute(const cmd::Operation& instruction) 
+{
+    auto& instRef = instruction.Dispatch();
+    if (instRef.type() == instruction.type()) {
+        throw std::exception("DriverError: Invalid instruction");
+    }
+    return Execute(instRef);
 }
 
 // TODO: refactor this ...
@@ -87,31 +151,6 @@ Table Driver::Execute(const cmd::Operation& instruction)
             throw std::exception("DriverError: Unknown OperationType");
     }
     throw std::exception("DriverError: Nothing to return from operation");
-}
-
-Table Driver::Execute(const cmd::CreateTable& instruction)
-{
-    return Table();
-}
-
-Table Driver::Execute(const cmd::DropTable& instruction)
-{
-    return Table();
-}
-
-Table Driver::Execute(const cmd::Select& instruction)
-{
-    return Table();
-}
-
-Table Driver::Execute(const cmd::Insert& instruction)
-{
-    return Table();
-}
-
-Table Driver::Execute(const cmd::ShowCreateTable& instruction)
-{
-    return Table();
 }
 
 } // namespace sql
