@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[])
 {
-//  auto& storage = se::StorageEngine::Instance();
+  auto& storage = se::StorageEngine::Instance();
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},
 //      {"name", sql::DataType::TEXT}
@@ -48,14 +48,16 @@ int main(int argc, char *argv[])
 
 //  btree::safe_btree_map<uint32_t, std::string> safeTree;
 //  std::cout << safeTree.size() << std::endl;
+//
+//  std::ifstream fin("../database/tables.json");
+//  se::MetaData j(fin);
+//
+//  std::cout << j.data().get()->dump() << std::endl;
+//  j.data().get()->at("test") = "strTest";
+//  std::cout << j.data().get()->dump() << std::endl;
 
-  std::ifstream fin("../database/tables.json");
-  se::MetaData j(fin);
+//  storage.findMetaData("../database/test.kp");
 
-  std::cout << j.data().get()->dump() << std::endl;
-  j.data().get()->at("test") = "strTest";
-  std::cout << j.data().get()->dump() << std::endl;
-
-//  std::cout << storage.findMetaData("test").dump() << std::endl;
+  storage.getMetaData("test");
   return 0;
 }
