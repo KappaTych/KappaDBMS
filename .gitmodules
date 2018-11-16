@@ -4,3 +4,6 @@
 [submodule "src/backend/lib/ctpl"]
 	path = src/backend/lib/ctpl
 	url = https://github.com/vit-vit/ctpl.git
+[submodule "tests/lib/googletest"]
+	path = tests/lib/googletest
+	url = https://github.com/abelidze/googletest.git
