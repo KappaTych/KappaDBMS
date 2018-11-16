@@ -50,7 +50,7 @@ public:
   se::BlockManager blockManager;
 
 private:
-  const std::string META_DATA_PATH = "../database/tables.meta";
+  const std::string META_DATA_PATH = "./database/data.meta";
   std::unordered_map<std::string, MetaData> meta_;
 
 };

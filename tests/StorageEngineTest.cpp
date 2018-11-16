@@ -10,7 +10,11 @@
 
 int main(int argc, char *argv[])
 {
+  std::cout << argv[0] << std::endl;
+
   auto& storage = se::StorageEngine::Instance();
+  storage.CreateData("some_table");
+
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},
 //      {"name", sql::DataType::TEXT}

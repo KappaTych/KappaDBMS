@@ -43,8 +43,12 @@ bool se::StorageEngine::Flush()
 
 se::MetaData& se::StorageEngine::CreateData(const std::string& key)
 {
-  // metaData.data()->at(name);
-  // blockManager.createFile(metaData);
+  if (meta_.find(key) == meta_.end()) {
+    throw std::invalid_argument("StorageError: Data already exists");
+  }
+  auto md = se::MetaData(key);
+  blockManager.CreateBlockList(md);
+  meta_.insert({key, md});
 }
 
 se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
@@ -67,5 +71,5 @@ se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
 
 void se::StorageEngine::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
 {
-  blockManager.addRow(metaData, row, size);
+  blockManager.AddRow(metaData, row, size);
 }

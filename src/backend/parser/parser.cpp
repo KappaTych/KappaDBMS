@@ -24,7 +24,7 @@ std::vector<std::shared_ptr<cmd::Instruction>> Parser::Process(const std::string
   return trees_;
 }
 
-void Parser::addInstruction(const std::shared_ptr<cmd::Instruction>& instruction)
+void Parser::AddInstruction(const std::shared_ptr<cmd::Instruction>& instruction)
 {
   trees_.push_back(instruction);
 }
