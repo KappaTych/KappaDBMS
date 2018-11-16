@@ -1,0 +1,6 @@
+[submodule "src/lib/clsocket"]
+	path = src/lib/clsocket
+	url = https://github.com/DFHack/clsocket.git
+[submodule "src/lib/ctpl"]
+	path = src/lib/ctpl
+	url = https://github.com/vit-vit/ctpl.git
