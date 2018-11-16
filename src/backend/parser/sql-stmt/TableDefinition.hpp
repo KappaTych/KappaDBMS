@@ -22,7 +22,6 @@ public:
 
   //TODO: tostring method
 public: // It's not an error
-  std::string database_;
   std::string schema_;
   std::string name_;
 };

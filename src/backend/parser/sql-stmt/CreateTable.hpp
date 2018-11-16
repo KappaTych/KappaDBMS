@@ -2,7 +2,7 @@
 
 #include "Instruction.hpp"
 #include "TableDefinition.hpp"
-
+#include "ColumnDefinition.hpp"
 
 namespace cmd {
 

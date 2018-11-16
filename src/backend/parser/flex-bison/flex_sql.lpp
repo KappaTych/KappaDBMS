@@ -12,6 +12,8 @@ UNSIGN_INT   {Digit}+
 
     #define YY_USER_ACTION loc.columns(yyleng);
 
+    #define yyterminate() return yy::BisonParser::make_END_FILE(loc);
+
 %}
 
 %option outfile="flex_sql.cpp"
@@ -33,10 +35,8 @@ UNSIGN_INT   {Digit}+
 <COMMENT>[^\n]* ;
 <COMMENT>\n     BEGIN(INITIAL);
 
-[ \t]+      loc.step();
-\n+         loc.lines(yyleng); loc.step();
-
-<<EOF>>     return yy::BisonParser::make_END(loc);;
+[ \t]+      { loc.step(); }
+\n+         { loc.lines(yyleng); loc.step(); }
 
 CREATE      return yy::BisonParser::make_CREATE(loc);
 DROP        return yy::BisonParser::make_DROP(loc);
@@ -77,14 +77,18 @@ REGEXP      return yy::BisonParser::make_REGEXP(loc);
 AND         return yy::BisonParser::make_AND(loc);
 OR          return yy::BisonParser::make_OR(loc);
 
-"=="        return yy::BisonParser::make_EQUALL(loc);
-"!="        return yy::BisonParser::make_NOTEQUALL(loc);
-"<>"        return yy::BisonParser::make_NOTEQUALL(loc);
-"<="        return yy::BisonParser::make_LESSEQUALL(loc);
-">="        return yy::BisonParser::make_GREATEQUALL(loc);
+DOUBLE      return yy::BisonParser::make_DOUBLE(loc); 
+TEXT        return yy::BisonParser::make_TEXT(loc);
+INTEGER     return yy::BisonParser::make_INTEGER(loc);
+
+"=="        return yy::BisonParser::make_EQUAL(loc);
+"!="        return yy::BisonParser::make_NOTEQUAL(loc);
+"<>"        return yy::BisonParser::make_NOTEQUAL(loc);
+"<="        return yy::BisonParser::make_LESSEQUAL(loc);
+">="        return yy::BisonParser::make_GREATERQUALL(loc);
 "<"         return yy::BisonParser::make_LESS(loc);
-">"         return yy::BisonParser::make_GREATE(loc);
-"="         return yy::BisonParser::make_EQUALL(loc);
+">"         return yy::BisonParser::make_GREATER(loc);
+"="         return yy::BisonParser::make_EQUAL(loc);
 
 "||"        return yy::BisonParser::make_CONCATENATION(loc);
 
@@ -96,7 +100,7 @@ OR          return yy::BisonParser::make_OR(loc);
 
 "+"         return yy::BisonParser::make_PLUS(loc);
 "-"         return yy::BisonParser::make_MINUS(loc);
-"*"         return yy::BisonParser::make_MULTI(loc);
+"*"         return yy::BisonParser::make_MULTIPLY(loc);
 "/"         return yy::BisonParser::make_DIVISION(loc);
 "%"         return yy::BisonParser::make_MOD(loc);
 
@@ -107,7 +111,7 @@ OR          return yy::BisonParser::make_OR(loc);
 ")"         return yy::BisonParser::make_CLOSEBRACKET(loc);
 
 
-UNSIGN_INT {
+{UNSIGN_INT} {
     return yy::BisonParser::make_INTEGER_CONST(std::stoll(yytext), loc);
 }
 
