@@ -25,16 +25,16 @@ public:
 public:
   BlockManager() = default;
 
-//  void ReadMetaData(std::ifstream& fin);
-  void ReadData(std::ifstream& fin);
+  void LoadBlockList(MetaData& metaData);
 
   void WriteData(std::ofstream& fout);
 
-  void CreateBlockList(MetaData& metaData);
+  void ReadData(std::ifstream& fin);
+
+  void AddRow(MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
 
 //  void CreateIndex(std::string tableName, uint32_t columnIndex);
 
-  void AddRow(MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
 };
 
 } //namespace se

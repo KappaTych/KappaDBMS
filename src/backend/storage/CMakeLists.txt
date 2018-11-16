@@ -11,7 +11,7 @@ option(STORAGE_TEST "Build storage with tests" OFF)
 
 file(GLOB_RECURSE SRC_STORAGE . *.hpp *.cpp)
 
-set(SRC_TESTS ../../../tests/StorageEngineTest.cpp)
+set(SRC_TESTS ../../../tests/playground/StorageEngineTest.cpp)
 
 if (STORAGE_SHARED)
     add_library(storage SHARED EXCLUDE_FROM_ALL ${SRC_STORAGE})
@@ -24,10 +24,11 @@ target_include_directories(storage PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
 )
 
-#if (STORAGE_TEST OR BUILD_TESTS)
-#    add_executable(storage_test ${SRC_TESTS})
-#    target_link_libraries(storage_test storage)
-#    target_include_directories(storage_test PUBLIC
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../include
-#    )
-#endif()
+if (STORAGE_TEST OR BUILD_TESTS)
+    add_executable(storage_test ${SRC_TESTS})
+    target_link_libraries(storage_test storage)
+    target_include_directories(storage_test PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+    )
+endif()

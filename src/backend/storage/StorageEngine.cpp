@@ -17,41 +17,41 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
 
 bool se::StorageEngine::Flush()
 {
-  // my_json j;
-  // std::ofstream fout;
+  my_json j;
+  std::ofstream fout(META_DATA_PATH);
 
-  // for (auto& table : tables_) {
-  //   j[table.first] = table.second.getColumns();
-  //   fout.open("./database/" + table.first + ".kp", std::ios_base::binary);
-  //   for (auto record : table.second.records)
-  //     if (record.get() != NULL) {
-  //       fout.write(record.get(), sizeof(record.get()));
-  //     }
-  //   fout.close();
-  // }
+  for (auto it = meta_.begin(); it != meta_.end(); ++it) {
+    j[it->first] = it->second.data();
+    // fout.open("./database/" + it.first + ".kp", std::ios_base::binary);
+    // for (auto record : it.second.records)
+    //   if (record.get() != NULL) {
+    //     fout.write(record.get(), sizeof(record.get()));
+    //   }
+    // fout.close();
+  }
 
   // std::string result = j.dump();
   // fout.open(se::StorageEngine::META_DATA_PATH);
   // if (!fout.is_open()) {
   //   return false;
   // }
-  // fout << result;
-  // fout.close();
+
+  fout << j.dump();
+  fout.close();
 
   return true;
 }
 
 se::MetaData& se::StorageEngine::CreateData(const std::string& key)
 {
-  meta_[key].Add("size", 0);
-  meta_[key].Add("path", "../database/" + key + ".kp");
-  blockManager.CreateBlockList(meta_[key]);
-  if (meta_.find(key) == meta_.end()) {
+  if (meta_.find(key) != meta_.end()) {
     throw std::invalid_argument("StorageError: Data already exists");
   }
   auto md = se::MetaData(key);
-  blockManager.CreateBlockList(md);
+  blockManager.LoadBlockList(md);
   meta_.insert({key, md});
+  Flush();
+  return meta_.at(key);
 }
 
 se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
