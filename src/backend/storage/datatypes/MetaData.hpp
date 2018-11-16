@@ -28,7 +28,7 @@ public:
   void Write(std::ostream& fout);
 
   void Add(std::string key, size_t size);
-  void Add(std::string key, std::string path);
+  void Add(std::string key, std::string value);
 
 public:
   std::shared_ptr<my_json> data() { return data_; }

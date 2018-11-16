@@ -13,7 +13,7 @@ se::MetaData::MetaData(my_json j) : data_(std::make_shared<my_json>(j)) { }
 
 se::MetaData::MetaData(const std::string name) : data_(std::make_shared<my_json>())
 {
-  // (*data_)("_path", name);
+  (*data_)["_path"] = name;
 }
 
 void se::MetaData::Read(std::istream& fin)
@@ -35,7 +35,7 @@ void se::MetaData::Add(std::string key, size_t size)
   data_.get()->push_back({key, size});
 }
 
-void se::MetaData::Add(std::string key, std::string str)
+void se::MetaData::Add(std::string key, std::string value)
 {
-  data_.get()->push_back({key, str});
+  data_.get()->push_back({key, value});
 }

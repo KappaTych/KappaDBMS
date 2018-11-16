@@ -5,8 +5,9 @@
 #include <fstream>
 #include "BlockManager.hpp"
 
-void se::BlockManager::addRow(se::MetaData& metaData, std::shared_ptr<se::MemoryBlock::data_t>& row, size_t size)
+void se::BlockManager::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
 {
+  //
 }
 
 void se::BlockManager::CreateBlockList(se::MetaData& metaData)
