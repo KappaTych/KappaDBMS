@@ -33,6 +33,8 @@ public:
 //  void createIndex(std::string tableName, uint32_t columnIndex);
 
   void addRow(MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
+
+  void CreateBlockList(se::MetaData& metaData);
 };
 
 } //namespace se

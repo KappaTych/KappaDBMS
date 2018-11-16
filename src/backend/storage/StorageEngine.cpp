@@ -43,8 +43,9 @@ bool se::StorageEngine::Flush()
 
 se::MetaData& se::StorageEngine::CreateData(const std::string& key)
 {
-  // metaData.data()->at(name);
-  // blockManager.createFile(metaData);
+  meta_[key].Add("size", 0);
+  meta_[key].Add("path", "../database/" + key + ".kp");
+  blockManager.CreateBlockList(meta_[key]);
 }
 
 se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
