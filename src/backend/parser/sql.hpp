@@ -7,6 +7,7 @@
 #include "sql-stmt/CreateTable.hpp"
 #include "sql-stmt/DropTable.hpp"
 #include "sql-stmt/ShowCreateTable.hpp"
+#include "sql-stmt/ShowCreateTable.hpp"
 #include "sql-stmt/Select.hpp"
 #include "sql-stmt/Insert.hpp"
 #include "sql-stmt/Update.hpp"
