@@ -64,6 +64,7 @@ EXISTS      return yy::BisonParser::make_EXISTS(loc);
 WHEN        return yy::BisonParser::make_WHEN(loc);
 THEN        return yy::BisonParser::make_THEN(loc);
 ELSE        return yy::BisonParser::make_ELSE(loc);
+DELETE      return yy::BisonParser::make_DELETE(loc);
 
 NOT         return yy::BisonParser::make_NOT(loc);
 COLLATE     return yy::BisonParser::make_COLLATE(loc);

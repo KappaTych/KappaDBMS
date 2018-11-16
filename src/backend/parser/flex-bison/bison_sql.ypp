@@ -16,6 +16,7 @@
     #define YYDEBUG 1
     
     #include <memory>
+    #include <utility>
     #include "../sql.hpp"
 
     namespace yy {
@@ -49,7 +50,7 @@
 
 %token DOUBLE TEXT INTEGER
 %token CREATE TABLE DROP SHOW NULL_ SELECT VALUES INTO INSERT FROM
-%token UPDATE SET WHERE LIMIT OFFSET
+%token UPDATE SET WHERE LIMIT OFFSET DELETE
 %token CAST AS ESCAPE ISNULL NOTNULL BETWEEN DISTINCT EXISTS WHEN
 %token THEN ELSE NOT COLLATE IS IN LIKE GLOB MATCH REGEXP AND OR
 
@@ -112,7 +113,8 @@ statement:
     |   create_statement
     |   select_statement
     |   insert_statement
-    |   update_statement    
+    |   update_statement
+    |   delete_statement
     ;
 
 
@@ -163,7 +165,7 @@ column_type:
     ;
 
 // Drop Statement
-%type <std::shared_ptr<cmd::Instruction>> drop_statement;
+%type <std::shared_ptr<cmd::DropTable>> drop_statement;
 drop_statement:
         DROP TABLE table_name 
         {
@@ -199,7 +201,7 @@ optional_where:
 
 
 // Inser Statement
-%type <std::shared_ptr<cmd::Instruction>> insert_statement;
+%type <std::shared_ptr<cmd::Insert>> insert_statement;
 insert_statement:
         INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET 
         {
@@ -222,13 +224,42 @@ optional_column_list:
 %type <std::shared_ptr<cmd::Update>> update_statement;
 update_statement:
         UPDATE table_name SET update_list optional_where {
-
+            $$ = std::make_shared<cmd::Update>($2, $4, $5);
         }
+    ;
+    
+%type <std::list<cmd::update_clause>> update_list;
+update_list:
+        update_clause 
+        {
+            $$.push_back($1);
+        }
+    |   update_list COMMA update_clause 
+        {
+            $1.push_back($3);
+            $$ = std::move($1);
+        }
+    ;     
 
+%type <cmd::update_clause> update_clause;
+update_clause:
+        IDENTIFIER EQUAL expr 
+        {
+            $$.first = cmd::Column($1);
+            $$.second = $3;
+        }
+    ;
 
+// Delete statement
+%type <std::shared_ptr<cmd::Delete>> delete_statement;
+delete_statement:
+        DELETE FROM table_name optional_where
+        {
+            $$ = std::make_shared<cmd::Delete>($3, $4);
+        }
+    ;    
+ 
 // Expression
-
-
 %type <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> expr_list;
 expr_list:
         expr 
