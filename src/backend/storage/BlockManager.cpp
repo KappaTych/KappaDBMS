@@ -10,13 +10,13 @@ void se::BlockManager::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& 
   //
 }
 
-void se::BlockManager::CreateBlockList(se::MetaData& metaData)
+void se::BlockManager::LoadBlockList(se::MetaData& metaData)
 {
   auto j = metaData.data();
-  std::string path = j->at("path");
+  std::string path = j.at("_path");
   std::ofstream fout(path);
   if (!fout.is_open())
-    throw std::invalid_argument("StorageError: Couldn't create file" + path);
+    throw std::invalid_argument("StorageError: Couldn't create file " + path);
 
-  fout << (size_t)j->at("size");
+  fout << (size_t)j.at("_size");
 }

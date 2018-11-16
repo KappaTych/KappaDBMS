@@ -31,7 +31,7 @@ public:
   void Add(std::string key, std::string value);
 
 public:
-  std::shared_ptr<my_json> data() { return data_; }
+  my_json& data() { return *data_; }
 
 private:
   std::shared_ptr<my_json> data_;

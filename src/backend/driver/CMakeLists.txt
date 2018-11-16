@@ -9,10 +9,10 @@ set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 option(DRIVER_SHARED "Make driver shared library" ON)
 option(DRIVER_TEST "Build driver with tests" OFF)
 
-file(GLOB_RECURSE SRC_DRIVER . *.cpp)
+file(GLOB_RECURSE SRC_DRIVER . *.hpp *.cpp)
 
 set(SRC_TESTS
-# ../../../tests/DriverTest.cpp
+    ../../../tests/playground/DriverTest.cpp
 )
 
 if (DRIVER_SHARED)

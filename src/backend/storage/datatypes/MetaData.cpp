@@ -13,7 +13,8 @@ se::MetaData::MetaData(my_json j) : data_(std::make_shared<my_json>(j)) { }
 
 se::MetaData::MetaData(const std::string name) : data_(std::make_shared<my_json>())
 {
-  (*data_)["_path"] = name;
+  (*data_)["_path"] = "database/" + name + ".kp";
+  (*data_)["_size"] = 0;
 }
 
 void se::MetaData::Read(std::istream& fin)

@@ -9,10 +9,10 @@ set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 option(PARSER_SHARED "Make parser shared library" ON)
 option(PARSER_TEST "Build parser with tests" OFF)
 
-file(GLOB_RECURSE SRC_PARSER . *.cpp)
+file(GLOB_RECURSE SRC_PARSER . *.hpp *.cpp)
 
 set(SRC_TESTS
-../../../tests/ParserTest.cpp
+    ../../../tests/playground/ParserTest.cpp
 )
 
 if (PARSER_SHARED)
