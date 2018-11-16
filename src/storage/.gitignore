@@ -1,0 +1,7 @@
+main.cpp
+build/
+cmake-build-debug/
+cmake-build-debug/*
+database/*
+
+!database/.gitkeep

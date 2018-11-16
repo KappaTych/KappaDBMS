@@ -8,7 +8,7 @@ set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 
 set(EXECUTABLE kappa)
 
-set(CMAKE_CURRENT_SOURCE_DIR ${CMAKE_BINARY_DIR}/../src/backend)
+set(CMAKE_CURRENT_SOURCE_DIR ${CMAKE_BINARY_DIR}/../src)
 set(src ${CMAKE_CURRENT_SOURCE_DIR})
 set(lib ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(dir ${CMAKE_BINARY_DIR}/bin)
@@ -61,9 +61,9 @@ endif()
 #   ${lib}/ctpl
 # )
 
-option(BUILD_PARSER "Build PARSER" ON)
+option(BUILD_PARSER "Build PARSER" OFF)
 option(BUILD_STORAGE "Build STORAGE" ON)
-option(BUILD_SERVER "Build SERVER" ON)
+option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" OFF)
 
 
