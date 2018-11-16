@@ -14,7 +14,7 @@ public:
         name_(s),
         type_(t) { }
 
-  const Instruction& Dispatch() const override { return *this; }
+  const ColumnDefinition& Dispatch() const override { return *this; }
 
 public: // It's not an error
   std::string name_;

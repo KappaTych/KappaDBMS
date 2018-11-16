@@ -6,7 +6,7 @@
 #include <json.hpp>
 #include <fifo_map.hpp>
 #include <parser/sql.hpp>
-#include <storage/StorageEngine.h>
+#include <storage/StorageEngine.hpp>
 #include "Record.hpp"
 
 namespace sql
@@ -29,7 +29,7 @@ std::string to_string(cmd::LiteralType t)
       return "TEXT";
     }
     case cmd::LiteralType::BOOL : {
-      return "TEXT";
+      return "BOOL";
     }
     default: {
       return "UNKNOWN";
@@ -40,11 +40,10 @@ std::string to_string(cmd::LiteralType t)
 class Table
 {
 public:
-// TODO: Fix this constructors:
   explicit Table(cmd::TableDefinition name) 
       : 
       name_(name),
-      meta_(name.ToString()) {}
+      meta_(std::make_shared(name.ToString())) {}
 
   explicit Table(
     cmd::TableDefinition name,
@@ -53,7 +52,7 @@ public:
       : 
       name_(name),
       columns_(columns),
-      meta_(name.ToString()) {}
+      meta_(std::make_shared(name.ToString())) {}
 
   explicit Table(
     cmd::TableDefinition name,
@@ -63,7 +62,14 @@ public:
       name_(name),
       columns_(columns),
       records_(records),
-      meta_(name.ToString()) {}
+      meta_(std::make_shared(name.ToString())) {}
+
+  explicit Table(
+    std::list<cmd::ColumnDefinition> columns,
+    std::list<Record> records)
+      :
+      columns_(columns),
+      records_(records) {}
 
   void AddColumn(cmd::ColumnDefinition column);
   void InsertRecord(Record record);
@@ -81,7 +87,7 @@ private:
   std::list<Record> records_;
 
 // TODO: Create it in constructor
-  se::MetaData meta_;
+  std::share_ptr<se::MetaData> meta_;
 };
 
 } //namespace sql
