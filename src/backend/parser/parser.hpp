@@ -26,7 +26,7 @@ public:
    * @param std::string& SQL-request to process
    * @return sql::Command
    */
-  void Process(const std::string&);
+  std::vector<std::shared_ptr<cmd::Instruction>> Process(const std::string&);
 
 private:
   Parser() = default;
@@ -40,6 +40,7 @@ private:
   void addInstruction(const std::shared_ptr<cmd::Instruction>&);
 
   std::vector<std::shared_ptr<cmd::Instruction>> trees_;
+  bool trace_ = true;
 };
 
 } // namespace sql
