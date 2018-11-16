@@ -3,6 +3,7 @@
 #include "Instruction.hpp"
 #include "Expression.hpp"
 #include "Select.hpp"
+#include "Column.hpp"
 
 #include <vector>
 
@@ -40,6 +41,8 @@ enum class OperationType
 };
 
 using ptr_Expression = std::shared_ptr<Expression>;
+using ptr_update_clause = std::shared_ptr<std::pair<cmd::Column, ptr_Expression>>;
+using update_clause = std::pair<cmd::Column, cmd::ptr_Expression>;
 
 class Operation : public Expression
 {
