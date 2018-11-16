@@ -63,7 +63,7 @@ endif()
 
 option(BUILD_PARSER "Build PARSER" OFF)
 option(BUILD_STORAGE "Build STORAGE" ON)
-option(BUILD_SERVER "Build SERVER" ON)
+option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" OFF)
 
 

@@ -5,10 +5,11 @@
 #pragma once
 
 #include <vector>
-#include "datatypes/MemoryBlock.hpp"
-#include "datatypes/Row.hpp"
-#include "datatypes/MetaData.hpp"
 #include <btree/btree_map.h>
+
+#include "datatypes/MemoryBlock.hpp"
+#include "datatypes/MetaData.hpp"
+#include "datatypes/Row.hpp"
 
 namespace se
 {
@@ -18,13 +19,11 @@ class BlockManager
 public:
   std::map< std::string, std::shared_ptr<MemoryBlock> > freeBlocks_;
   std::map< std::string, std::shared_ptr<MemoryBlock> > takenBlocks_;
-  MetaData metaData_;
 
   std::map< std::string, btree::btree_map<uint32_t, se::Row> > indexes_;
 
 public:
   BlockManager() = default;
-  BlockManager(std::ifstream& fin);
 
 //  void readMetaData(std::ifstream& fin);
   void readData(std::ifstream& fin);

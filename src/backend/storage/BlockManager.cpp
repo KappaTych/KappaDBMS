@@ -5,11 +5,6 @@
 #include <fstream>
 #include "BlockManager.hpp"
 
-se::BlockManager::BlockManager(std::ifstream& fin)
-{
-  metaData_ = se::MetaData(fin);
-}
-
 void se::BlockManager::addRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
 {
 }
