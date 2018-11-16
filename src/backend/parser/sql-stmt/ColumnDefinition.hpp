@@ -7,8 +7,9 @@
 namespace cmd {
 
 class ColumnDefinition : public Instruction
- {
- public:
+{
+public:
+  ColumnDefinition() = default;
   ColumnDefinition(const std::string& s, cmd::LiteralType t)
     : Instruction(COLUMN_DEF), name_(s), type_(t) {}
 
