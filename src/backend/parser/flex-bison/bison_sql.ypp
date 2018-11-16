@@ -8,9 +8,14 @@
     static yy::BisonParser::symbol_type yylex(yy::FlexScanner& scanner) {
         return scanner.get_next_token();
     }
+
+    void yy::BisonParser::error(yy::location const&, const std::string&) {}
 }
 
 %code requires {
+    #define YYDEBUG 1
+    
+    #include <memory>
     #include "../sql.hpp"
 
     namespace yy {
@@ -33,7 +38,7 @@
 
 %lex-param   { yy::FlexScanner& scanner }
 %parse-param { yy::FlexScanner& scanner }
-
+%parse-param { sql::Parser& driver }
 
 // Token definition
 %token<std::string> IDENTIFIER STRING BLOB_STRING
@@ -42,38 +47,35 @@
 %token<long double> DOUBLE_CONST
 
 
-//%token DOUBLE TEXT INTEGER
+%token DOUBLE TEXT INTEGER
 %token CREATE TABLE DROP SHOW NULL_ SELECT VALUES INTO INSERT FROM
 %token UPDATE SET WHERE LIMIT OFFSET
 %token CAST AS ESCAPE ISNULL NOTNULL BETWEEN DISTINCT EXISTS WHEN
 %token THEN ELSE NOT COLLATE IS IN LIKE GLOB MATCH REGEXP AND OR
 
-%token EQUALL NOTEQUALL LESSEQUALL GREATEQUALL LESS GREATE
+%token EQUAL NOTEQUAL LESSEQUAL GREATERQUALL LESS GREATER
 %token CONCATENATION LEFTSHIFT RIGHTSHIFT BINNOT BINAND BINOR
-%token PLUS MINUS MULTI DIVISION MOD
+%token PLUS MINUS MULTIPLY DIVISION MOD
 %token SEMICOLON DOT COMMA OPENBRACKET CLOSEBRACKET
-%token END
-// Non-terminal types
-//%type
+%token UMINUS UPLUS
+%token END_FILE 0
 
 // Token Precedence and Associativity
 // lowest to highest
 %left OR
 %left AND
-%right NOT
-%precedence EQUALL NOTEQUALL LIKE GLOB MATCH REGEXP
-%precedence LESS GREATE LESSEQUALL GREATEQUALL
-%left LEFTSHIFT RIGHTSHIFT
+%nonassoc IN IS ISNULL NOTNULL LIKE GLOB MATCH REGEXP
+%left NOT
+%left BETWEEN
+%nonassoc EQUAL NOTEQUAL
+%nonassoc LESS GREATER LESSEQUAL GREATERQUALL
+
 %left BINOR
 %left BINAND
-
-%precedence NOTNULL
-%precedence ISNULL
-%precedence IS 
-%right IN
+%left LEFTSHIFT RIGHTSHIFT
 
 %left PLUS MINUS
-%left MULTI DIVISION MOD
+%left MULTIPLY DIVISION MOD
 %left CONCATENATION
 
 %right UMINUS UPLUS
@@ -87,97 +89,365 @@
 
 %%
 %start input;
+
 input:
-        sql_stmt_list opt_semicolon
+        sql_stmt_list opt_semicolon        
     ;
 
 sql_stmt_list:
         statement 
+        { 
+            driver.addInstruction($1); 
+        }
     |   sql_stmt_list SEMICOLON statement
+        {
+            driver.addInstruction($3);
+        }
     ;
 
+%type <std::shared_ptr<cmd::Instruction>> statement;
 statement:
-        create_statement
-    |   drop_statement
+        drop_statement
     |   show_statement
+    |   create_statement
     |   select_statement
     |   insert_statement
+    |   update_statement    
     ;
 
 
 // Show Statement
+%type <std::shared_ptr<cmd::Instruction>> show_statement;
 show_statement:
-        SHOW TABLE table_name { }
+        SHOW TABLE table_name 
+        { 
+            $$ = std::make_shared<cmd::ShowCreateTable>($3);
+        }
     ;
 
 // Create Statement
+%type <std::shared_ptr<cmd::Instruction>> create_statement;
 create_statement:
-    CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET {}
+        CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET 
+        {
+            $$ = std::make_shared<cmd::CreateTable>($3, $5);
+        }
     ;
 
+%type <std::list<cmd::ColumnDefinition>> column_def_commalist;
 column_def_commalist:
-        column_def {}
-    |   column_def_commalist ',' column_def {}
+        column_def 
+        {
+            $$ = std::list<cmd::ColumnDefinition>({std::move($1)});
+        }
+    |   column_def_commalist COMMA column_def 
+        {
+            $1.push_back($3);
+            $$ = std::move($1);
+        }
     ;
 
+%type <cmd::ColumnDefinition> column_def;
 column_def:
-        IDENTIFIER column_type {}
+        IDENTIFIER column_type 
+        {
+            $$ = cmd::ColumnDefinition($1, $2);
+        }
     ;
+
+%type <cmd::LiteralType> column_type;
 column_type:
-        IDENTIFIER
+        INTEGER { $$ = cmd::LiteralType::INT; }
+    |   DOUBLE { $$ = cmd::LiteralType::DOUBLE; }
+    |   TEXT { $$ = cmd::LiteralType::STRING; }
     ;
 
 // Drop Statement
+%type <std::shared_ptr<cmd::Instruction>> drop_statement;
 drop_statement:
-        DROP TABLE table_name {}
+        DROP TABLE table_name 
+        {
+            $$ = std::make_shared<cmd::DropTable>($3);
+        }
     ;
 
 // Select Statement
+%type <std::shared_ptr<cmd::Select>> select_statement;
 select_statement:
-    SELECT '*' FROM IDENTIFIER {}
+        SELECT select_list FROM table_name optional_where 
+        {
+            if ($2 == nullptr) {
+                $$ = std::make_shared<cmd::Select>($4, $5);
+            } else {
+                $$ = std::make_shared<cmd::Select>($4, *($2), $5);
+            }
+        }
+    ;
+
+%type <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> select_list;
+select_list:
+        MULTIPLY { $$ = nullptr; }
+    |   expr_list
+    ;    
+    
+
+%type <std::shared_ptr<cmd::Expression>> optional_where;
+optional_where:
+        WHERE expr { $$ = $2; }
+    |   %empty  { $$ = nullptr; } 
+    ;   
+
 
 // Inser Statement
+%type <std::shared_ptr<cmd::Instruction>> insert_statement;
 insert_statement:
-    INSERT INTO table_name OPENBRACKET id_comma_list CLOSEBRACKET VALUES OPENBRACKET expr_list CLOSEBRACKET
+        INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET 
+        {
+            if ($4 == nullptr) {
+                $$ = std::make_shared<cmd::Insert>($3, *($7));
+            } else {
+                $$ = std::make_shared<cmd::Insert>($3, *($7), *($4));
+            }
+        }
     ;
+
+
+%type <std::shared_ptr<std::list<cmd::Column>>> optional_column_list;
+optional_column_list:
+        id_comma_list
+    |   %empty { $$ = nullptr; }
+    ;
+    
+// Update statement
+%type <std::shared_ptr<cmd::Update>> update_statement;
+update_statement:
+        UPDATE table_name SET update_list optional_where {
+
+        }
 
 
 // Expression
 
+
+%type <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> expr_list;
 expr_list:
-        expr {       }
-    |   expr_list ',' expr {        }
+        expr 
+        {  
+            $$ = std::make_shared<std::list<std::shared_ptr<cmd::Expression>>>();
+            $$->push_back($1);
+        }
+    |   expr_list COMMA expr 
+        {
+            $1->push_back($3);
+            $$ = $1;
+        }
     ;
 
+%type <std::shared_ptr<cmd::Expression>> expr;
 expr:   
-        literal_value
+        operand
+    |   logical_operator
     ;
 
+%type <std::shared_ptr<cmd::Expression>> operand;
+operand:
+        OPENBRACKET expr CLOSEBRACKET { $$ = $2; }
+    |   binary_operator
+    |   scalar_expr
+    |   unary_operator
+    ;
 
+%type <std::shared_ptr<cmd::Expression>> unary_operator;
+unary_operator:
+        MINUS operand %prec UMINUS 
+        { 
+            $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::UNARY_MINUS, $2); 
+        }
+    |   PLUS operand %prec UPLUS 
+        { 
+            $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::UNARY_PLUS, $2); 
+        }
+    |   BINNOT  operand 
+        { 
+            $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::BIN_NOT, $2); 
+        }
+    |   NOT operand 
+        { 
+            $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, $2); 
+        }
+    |   operand ISNULL 
+        { 
+            $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, $1); 
+        }
+    |   operand NOTNULL 
+        {
+            auto nodeIsNull = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, $1);
+            $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, nodeIsNull);
+        }
+    ;
+
+%type <std::shared_ptr<cmd::Expression>> binary_operator;
+binary_operator:
+        operand LESS operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS, $1, $3); 
+        }
+    |   operand GREATER operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER, $1, $3); 
+        }
+    |   operand EQUAL operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::EQUAL, $1, $3); 
+        }
+    |   operand NOTEQUAL operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::NOT_EQUAL, $1, $3); 
+        }
+    |   operand LESSEQUAL operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS_EQUAL, $1, $3); 
+        }
+    |   operand GREATERQUALL operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER_EQUAL, $1, $3); 
+        }
+    |   operand PLUS operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::PLUS, $1, $3); 
+        }
+    |   operand MINUS operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MINUS, $1, $3); 
+        }
+    |   operand MULTIPLY operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MULTIPLY, $1, $3); 
+        }
+    |   operand DIVISION operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::DIVISION, $1, $3); 
+        }
+    |   operand MOD operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MOD, $1, $3); 
+        }
+    |   operand CONCATENATION operand 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::CONCATENATION, $1, $3); 
+        }
+    ;
+
+%type <std::shared_ptr<cmd::Expression>> logical_operator;
+logical_operator:
+        expr AND expr 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::AND, $1, $3); 
+        } 
+    |   expr OR expr 
+        { 
+            $$ = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::OR, $1, $3); 
+        }
+    ;
+
+%type <std::shared_ptr<cmd::Expression>> scalar_expr;
+scalar_expr:
+        literal_value
+    |   column_name
+    ;
+
+%type <std::shared_ptr<cmd::Literal>> literal_value;
 literal_value:
-        INTEGER_CONST { }
-    |   DOUBLE_CONST {  }
-    |   STRING {  }
-    |   BLOB_STRING {  }
-    |   NULL_ {  }
-    |   TRUE { }
-    |   FALSE {  }
+        INTEGER_CONST 
+        { 
+            $$ = std::make_shared<cmd::Literal>($1); 
+        }
+    |   DOUBLE_CONST 
+        { 
+            $$ = std::make_shared<cmd::Literal>($1); 
+        }
+    |   STRING 
+        { 
+            $$ = std::make_shared<cmd::Literal>($1); 
+        }
+    |   BLOB_STRING 
+        { 
+            $$ = std::make_shared<cmd::Literal>($1); 
+        }
+    |   NULL_ 
+        { 
+            $$ = std::make_shared<cmd::Literal>(); 
+        }
+    |   TRUE 
+        { 
+            $$ = std::make_shared<cmd::Literal>($1); 
+        }
+    |   FALSE 
+        { 
+            $$ = std::make_shared<cmd::Literal>($1); 
+        }
+    ;
+
+%type <std::shared_ptr<cmd::Column>> column_name;
+column_name:
+        IDENTIFIER  
+        {        
+            $$ = std::make_shared<cmd::Column>($1); 
+        } 
+    |   IDENTIFIER DOT IDENTIFIER   
+        { 
+            $$ = std::make_shared<cmd::Column>($3, $1); 
+        }
+    |   IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER 
+        { 
+            $$ = std::make_shared<cmd::Column>($5, $3, $1); 
+        }
+    ;
 
 // Table
-
+%type <cmd::TableDefinition> table_name;
 table_name:
-        IDENTIFIER                {        }
-    |   IDENTIFIER '.' IDENTIFIER {        }
+        IDENTIFIER                
+        {
+            $$ = cmd::TableDefinition($1);
+        }
+    |   IDENTIFIER DOT IDENTIFIER 
+        {
+            $$ = cmd::TableDefinition($3, $1);
+        }
     ;
 
 // Misc
 
 opt_semicolon:
-    SEMICOLON
-|   /* empty */
-;
+        SEMICOLON
+    |   END_FILE
+    ;
 
+%type <std::shared_ptr<std::list<cmd::Literal>>> literal_list;
+literal_list:
+        literal_value
+        {
+            $$ = std::make_shared<std::list<cmd::Literal>>();
+            $$->push_back(*($1));
+        } 
+    |   literal_list COMMA literal_value 
+        {
+            $1->push_back(*($3));
+            $$ = $1;
+        }    
+    ;
+
+%type <std::shared_ptr<std::list<cmd::Column>>> id_comma_list;
 id_comma_list:
-         IDENTIFIER  {         }
-    |    id_comma_list ',' IDENTIFIER {         }
+        IDENTIFIER  
+        {   
+            $$ = std::make_shared<std::list<cmd::Column>>();
+            $$->push_back(cmd::Column($1)); 
+        }
+    |   id_comma_list COMMA IDENTIFIER
+        {         
+            $1->push_back(cmd::Column($3));
+            $$ = $1;
+        }
     ;

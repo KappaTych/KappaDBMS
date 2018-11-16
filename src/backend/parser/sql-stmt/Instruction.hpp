@@ -2,6 +2,7 @@
 
 #include <list>
 #include <memory>
+#include <vector>
 
 
 namespace cmd {
@@ -38,6 +39,7 @@ enum InstructionType
   INSERT,
   DELETE,
   UPDATE,
+  SELECT_ALL,
   SELECT,
   EXPRESSION,
   LITERAL,
@@ -50,12 +52,11 @@ public:
   Instruction() : type_(INVALID) {}
   explicit Instruction(InstructionType type) : type_(type) {}
   virtual ~Instruction() = default;
-
   const InstructionType type() const { return type_; }
   virtual const Instruction& Dispatch() const = 0;
 
 private:
-  const InstructionType type_;
+  InstructionType type_;
 };
 
 } // namespace cmd

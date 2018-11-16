@@ -11,7 +11,7 @@ public:
   Delete() : Instruction(DELETE) {}
   ~Delete() = default;
 
-  const Instruction& Dispatch() const override { return *this; }
+  const Delete& Dispatch() const override { return *this; }
 };
 
 } // namespace cmd

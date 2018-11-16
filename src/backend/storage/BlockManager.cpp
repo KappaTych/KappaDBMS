@@ -3,13 +3,20 @@
 //
 
 #include <fstream>
-#include "BlockManager.h"
+#include "BlockManager.hpp"
 
-se::BlockManager::BlockManager(std::ifstream& fin)
+void se::BlockManager::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
 {
-  metaData_ = se::MetaData(fin);
+  //
 }
 
-void se::BlockManager::addRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
+void se::BlockManager::CreateBlockList(se::MetaData& metaData)
 {
+  auto j = metaData.data();
+  std::string path = j->at("path");
+  std::ofstream fout(path);
+  if (!fout.is_open())
+    throw std::invalid_argument("StorageError: Couldn't create file" + path);
+
+  fout << (size_t)j->at("size");
 }

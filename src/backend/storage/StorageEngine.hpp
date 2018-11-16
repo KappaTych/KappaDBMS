@@ -1,7 +1,3 @@
-//
-// Created by truefinch on 02.11.18.
-//
-
 #pragma once
 
 #include <cstdlib>
@@ -11,11 +7,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <json.hpp>
 #include <fifo_map.hpp>
 
-#include "BlockManager.h"
-#include "datatypes/MetaData.h"
+#include "datatypes/MetaData.hpp"
+#include "BlockManager.hpp"
 
 template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
@@ -33,30 +30,29 @@ public:
     return instance;
   }
 
-  bool hasMetaData(const std::string& metaData) const;
+  se::MetaData& CreateData(const std::string& key);
 
-  se::MetaData getMetaData(const std::string& metaData);
+  se::MetaData& GetMetaData(const std::string& key);
 
-  se::MetaData& createData(se::MetaData&);
+  bool HasMetaData(const std::string& key) const;
 
-  void addRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
+  void AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
 
-  bool flush();
-
+  bool Flush();
 
   void operator=(StorageEngine const &) = delete;
+
+private:
+  StorageEngine();
+  ~StorageEngine() = default;
 
 public:
   se::BlockManager blockManager;
 
 private:
-  std::map<std::string, sql::Table> tables_;
+  const std::string META_DATA_PATH = "./database/data.meta";
+  std::unordered_map<std::string, MetaData> meta_;
 
-  ~StorageEngine() = default;
-
-private:
-  const std::string META_DATA_PATH = "../database/tables.json";
-  std::map<std::string, sql::Table> tables_;
 };
 
 } // namespace se

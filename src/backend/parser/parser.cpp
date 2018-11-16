@@ -5,16 +5,28 @@
 
 namespace sql {
 
-void Parser::Process(const std::string& sql)
+std::vector<std::shared_ptr<cmd::Instruction>> Parser::Process(const std::string& sql)
 {
+  yy::FlexScanner scanner(sql);
+  scanner.set_debug(trace_);
 
-  yy::FlexScanner scanner;
+  yy::BisonParser parser(scanner, *this);
+  parser.set_debug_level(trace_);
 
-  yy::BisonParser parser(scanner);
+  trees_.clear();
+
   int ret = parser.parse();
+
   if (ret != 0) {
     throw "SQLParser: Error!\n";
   }
+
+  return trees_;
+}
+
+void Parser::AddInstruction(const std::shared_ptr<cmd::Instruction>& instruction)
+{
+  trees_.push_back(instruction);
 }
 
 } // namespace sql

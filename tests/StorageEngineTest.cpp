@@ -4,14 +4,17 @@
 #include <cstdint>
 #include <btree/safe_btree_map.h>
 
-#include "../src/backend/storage/StorageEngine.h"
-#include "../src/backend/storage/datatypes/object.h"
-#include "../src/backend/storage/datatypes/MemoryBlock.h"
-#include "../src/backend/storage/datatypes/MetaData.h"
+#include "../src/backend/storage/StorageEngine.hpp"
+#include "../src/backend/storage/datatypes/MemoryBlock.hpp"
+#include "../src/backend/storage/datatypes/MetaData.hpp"
 
 int main(int argc, char *argv[])
 {
+  std::cout << argv[0] << std::endl;
+
   auto& storage = se::StorageEngine::Instance();
+  storage.CreateData("some_table");
+
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},
 //      {"name", sql::DataType::TEXT}
@@ -58,6 +61,6 @@ int main(int argc, char *argv[])
 
 //  storage.findMetaData("../database/test.kp");
 
-  storage.getMetaData("test");
+  // storage.getMetaData("test");
   return 0;
 }

@@ -1,7 +1,7 @@
 BISON_OPTIONS = -vd
 BISON_OUTPUT_CPP = bison_sql.cpp
 
-FLEX_OPTIONS = -v
+FLEX_OPTIONS = -vd
 FLEX_OUTPUT_CPP = flex_sql.cpp
 
 all: bison_sql.cpp flex_sql.cpp

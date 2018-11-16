@@ -2,7 +2,6 @@
 
 #include "Instruction.hpp"
 
-
 namespace cmd {
 
 class TableDefinition : public Instruction
@@ -12,12 +11,17 @@ public:
       : Instruction(TABLE_DEF),
         database_(d),
         schema_(s),
-        name_(n) { }
+        name_(n) {}
 
-  const Instruction& Dispatch() const override { return *this; }
+  const TableDefinition& Dispatch() const override { return *this; }
 
+  std::string ToString() const {
+    return name_;
+    // return database_ + ':' + schema_ + ':' + name_;
+  }
+
+  //TODO: tostring method
 public: // It's not an error
-  std::string database_;
   std::string schema_;
   std::string name_;
 };

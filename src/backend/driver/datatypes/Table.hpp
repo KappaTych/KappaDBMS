@@ -6,43 +6,88 @@
 #include <json.hpp>
 #include <fifo_map.hpp>
 #include <parser/sql.hpp>
-
+#include <storage/StorageEngine.hpp>
 #include "Record.hpp"
-
-template<class K, class V, class dummy_compare, class A>
-using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
-using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
 
 namespace sql
 {
 
-const char DIVIDER = '~';
+using TabDef = cmd::TableDefinition;
+using Cols = std::vector<cmd::ColumnDefinition>;
+using Rows = std::vector<Record>;
 
-void to_json(my_json& j, const Table& t);
-
+std::string to_string(cmd::LiteralType t)
+{
+  switch (t) {
+    case cmd::LiteralType::INTEGER : {
+      return "INTEGER";
+    }
+    case cmd::LiteralType::DOUBLE : {
+      return "DOUBLE";
+    }
+    case cmd::LiteralType::TEXT : {
+      return "TEXT";
+    }
+    case cmd::LiteralType::BOOL : {
+      return "BOOL";
+    }
+    default: {
+      return "UNKNOWN";
+    }
+  }
+}
 
 class Table
 {
 public:
-  explicit Table(std::_Vector_iterator<std::string> fields);
-  explicit Table(std::string name, nlohmann::fifo_map<std::string, DataType> columns);
+  explicit Table(cmd::TableDefinition name) 
+      : 
+      name_(name),
+      meta_(std::make_shared(name.ToString())) {}
 
-  const nlohmann::fifo_map<std::string, DataType>& GetColumns() const { return columns_; }
-  const std::vector< std::shared_ptr<uint8_t> >& GetRecords() const { return records_; }
+  explicit Table(
+    cmd::TableDefinition name,
+    std::list<cmd::ColumnDefinition> columns,
+    ) 
+      : 
+      name_(name),
+      columns_(columns),
+      meta_(std::make_shared(name.ToString())) {}
 
-  std::string ToString();
+  explicit Table(
+    cmd::TableDefinition name,
+    std::list<cmd::ColumnDefinition> columns,
+    std::list<Record> records)
+      : 
+      name_(name),
+      columns_(columns),
+      records_(records),
+      meta_(std::make_shared(name.ToString())) {}
+
+  explicit Table(
+    std::list<cmd::ColumnDefinition> columns,
+    std::list<Record> records)
+      :
+      columns_(columns),
+      records_(records) {}
+
+  void AddColumn(cmd::ColumnDefinition column);
+  void InsertRecord(Record record);
+  void DeleteRecord(int index);
+
+  const std::list<cmd::ColumnDefinition>& GetColumns() const { return columns_; }
+  const std::list<Record>& GetRecords() const { return records_; }
+
+// TODO: Make its implementation working normal:
+  std::string ToString() const;
 
 private:
   cmd::TableDefinition name_;
-  nlohmann::fifo_map<std::string, DataType> columns_;
-  std::vector< std::shared_ptr<uint8_t> > records_;
+  std::list<cmd::ColumnDefinition> columns_;
+  std::list<Record> records_;
+
+// TODO: Create it in constructor
+  std::share_ptr<se::MetaData> meta_;
 };
 
 } //namespace sql
-
-// NLOHMANN_JSON_SERIALIZE_ENUM(cmd::LiteralType, {
-//   { cmd::LiteralType::BOOL,    "BOOL" },
-//   { cmd::LiteralType::INTEGER, "INTEGER" },
-//   { cmd::LiteralType::DOUBLE,  "DOUBLE" },
-//   { cmd::LiteralType::TEXT,    "TEXT" }
-// });
