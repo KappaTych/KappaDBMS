@@ -38,6 +38,7 @@ enum InstructionType
   INSERT,
   DELETE,
   UPDATE,
+  SELECT_ALL,
   SELECT,
   EXPRESSION,
   LITERAL,
