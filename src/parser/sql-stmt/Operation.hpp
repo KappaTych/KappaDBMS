@@ -51,7 +51,7 @@ public:
   explicit Operation(OperationType t) : operation_(t) {}
   ~Operation() = default;
 
-//   const Operation& Dispatch() const override { return *this; }
+  const Operation& Dispatch() const override { return *this; }
 
   const OperationType operation() const { return operation_; }
 private:
