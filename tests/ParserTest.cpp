@@ -50,5 +50,14 @@ int main(int argc, char *argv[])
   s = "insert into table_name field1, field2 values ('1', '2');";
   tree = parser.Process(s);
 
+  s = "delete from table_name";
+  tree = parser.Process(s);
+
+  s = "update table_name set field2 = 12, field3 = 'dd', field4 = 12.1";
+  tree = parser.Process(s);
+
+  s = "update table_name set field2 = 12, field3 = 'dd' where t > 0";
+  tree = parser.Process(s);
+
   return 0;
 }
