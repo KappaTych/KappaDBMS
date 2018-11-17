@@ -69,8 +69,9 @@ option(BUILD_TESTS "Build TESTS" OFF)
 
 set(CLSOCKET_DEP_ONLY ON)
 add_subdirectory(${lib}/clsocket)
+add_subdirectory(${lib}/cppfs)
 
-set(LINK_LIBS clsocket pthread)
+set(LINK_LIBS clsocket cppfs pthread)
 
 if (BUILD_PARSER)
     add_subdirectory(${src}/parser)
@@ -93,6 +94,7 @@ if (BUILD_SERVER)
         ${src}/include
         ${lib}/clsocket/src
         ${lib}/ctpl
+        ${lib}/cppfs/source/cppfs/include/cppfs
     )
 endif()
 

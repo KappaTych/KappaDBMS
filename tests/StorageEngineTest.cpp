@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdint>
 #include <btree/safe_btree_map.h>
+#include <cppfs/fs.h>
+#include <cppfs/FileHandle.h>
 
 #include <storage/StorageEngine.hpp>
 #include <storage/datatypes/MemoryBlock.hpp>

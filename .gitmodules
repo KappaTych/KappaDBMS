@@ -4,3 +4,6 @@
 [submodule "src/lib/ctpl"]
 	path = src/lib/ctpl
 	url = https://github.com/vit-vit/ctpl.git
+[submodule "src/lib/cppfs"]
+	path = src/lib/cppfs
+	url = https://github.com/cginternals/cppfs.git
