@@ -4,15 +4,18 @@ using json = nlohmann::json;
 
 namespace sql {
 
-void Table::AddColumn(cmd::ColumnDefinition column) {
+void Table::AddColumn(cmd::ColumnDefinition column)
+{
   columns_.push_back(column);
 }
 
-void Table::InsertRecord(Record record) {
+void Table::InsertRecord(Record record)
+{
   records_.push_back(record);
 }
 
-void Table::DeleteRecord(int index) {
+void Table::DeleteRecord(int index)
+{
   auto it = records_.begin();
   while (index > 0) {
     --index;
