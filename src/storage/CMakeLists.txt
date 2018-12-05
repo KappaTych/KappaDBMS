@@ -20,6 +20,7 @@ else()
 endif()
 
 set_target_properties(storage PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
+target_link_libraries(storage cppfs)
 target_include_directories(storage PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
 )

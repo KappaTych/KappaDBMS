@@ -14,6 +14,12 @@ const std::string& se::StorageEngine::GetRootPath()
 se::StorageEngine::StorageEngine() : blockManager(), meta_()
 {
   auto metaPath = GetRootPath() + META_DATA_PATH;
+
+  cppfs::FileHandle dbFile = cppfs::fs::open(GetRootPath() + "database");
+  if (!dbFile.isDirectory()) {
+    dbFile.createDirectory();
+  }
+
   std::cout << metaPath << std::endl;
   std::ifstream fin(metaPath);
   if (!fin.is_open()) {

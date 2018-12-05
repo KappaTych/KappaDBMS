@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
   auto& storage = se::StorageEngine::Instance();
-  // storage.CreateData("some_table");
-  auto meta = storage.GetMetaData("some_table");
+  storage.CreateData("some_table");
+  // auto meta = storage.GetMetaData("some_table");
   // storage.AddRow(meta, std::make_shared<uint8_t>(2), 1);
 
 //  storage.create("test", {
