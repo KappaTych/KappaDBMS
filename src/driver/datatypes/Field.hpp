@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-// #include <parser/sql.hpp>
 
 
 namespace sql {
@@ -21,7 +20,7 @@ public:
   void SetValue(double value) { value_ = value }
 private:
   double value_;
-}
+};
 
 class BoolField : public Field
 {
@@ -31,7 +30,7 @@ public:
   void SetValue(bool value) { value_ = value }
 private:
   bool value_;
-}
+};
 
 class TextField : public Field
 {
@@ -41,6 +40,6 @@ public:
   void SetValue(std::string value) { value_ = value }
 private:
   std::string value_;
-}
+};
 
 } // namespace sql

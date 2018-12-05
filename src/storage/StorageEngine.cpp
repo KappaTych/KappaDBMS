@@ -1,16 +1,36 @@
 #include "StorageEngine.hpp"
 
+
+void se::StorageEngine::SetRootPath(const std::string& path)
+{
+  se::ROOT = path;
+}
+
+const std::string& se::StorageEngine::GetRootPath()
+{
+  return se::ROOT;
+}
+
 se::StorageEngine::StorageEngine() : blockManager(), meta_()
 {
-  std::ifstream fin(META_DATA_PATH);
+  auto metaPath = GetRootPath() + META_DATA_PATH;
+  std::cout << metaPath << std::endl;
+  std::ifstream fin(metaPath);
   if (!fin.is_open()) {
-    throw std::invalid_argument("StorageError: Couldn't open metaData-file.");
+    std::ofstream fout(metaPath);
+    if (!fout.is_open()) {
+      throw std::invalid_argument("StorageError: Couldn't open metaData-file.");
+    }
+    fout << "{}";
+    fout.close();
+    fin.open(metaPath);
   }
+
   my_json j;
   fin >> j;
   if (!j.empty()) {
     for (auto it = j.begin(); it != j.end(); ++it) {
-      meta_.at(it.key()) = it.value();
+      meta_.insert({it.key(), it.value()});
     }
   }
 }
@@ -18,7 +38,7 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
 bool se::StorageEngine::Flush()
 {
   my_json j;
-  std::ofstream fout(META_DATA_PATH);
+  std::ofstream fout( GetRootPath() + META_DATA_PATH );
 
   for (auto it = meta_.begin(); it != meta_.end(); ++it) {
     j[it->first] = it->second.data();
@@ -31,7 +51,7 @@ bool se::StorageEngine::Flush()
   }
 
   // std::string result = j.dump();
-  // fout.open(se::StorageEngine::META_DATA_PATH);
+  // fout.open( GetRootPath() + META_DATA_PATH );
   // if (!fout.is_open()) {
   //   return false;
   // }
@@ -56,19 +76,9 @@ se::MetaData& se::StorageEngine::CreateData(const std::string& key)
 
 se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
 {
-  // std::ifstream fin;
-  // fin.open(se::StorageEngine::META_DATA_PATH);
-  // if (!fin.is_open()) {
-  //   throw std::invalid_argument("No such file or directory.");
-  // }
-
-  // se::MetaData j;
-  // j.read(fin);
-  // fin.close();
-  // if (j.data()->find(key) == j.data()->end())
-  //   throw std::range_error("No such table");
-
-  // return se::MetaData(j.data()->at(key));
+  if (meta_.find(key) == meta_.end()) {
+    throw std::range_error("StorageError: No such metadata");
+  }
   return meta_.at(key);
 }
 

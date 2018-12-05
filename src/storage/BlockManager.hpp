@@ -4,28 +4,30 @@
 
 #pragma once
 
-#include <vector>
+#include <memory>
+#include <fstream>
+#include <map>
+#include <unordered_map>
 #include <btree/btree_map.h>
 
 #include "datatypes/MemoryBlock.hpp"
 #include "datatypes/MetaData.hpp"
 #include "datatypes/Row.hpp"
 
-namespace se
-{
+namespace se {
 
 class BlockManager
 {
 public:
   std::map< std::string, std::shared_ptr<MemoryBlock> > freeBlocks_;
   std::map< std::string, std::shared_ptr<MemoryBlock> > takenBlocks_;
-
   std::map< std::string, btree::btree_map<uint32_t, se::Row> > indexes_;
+  std::unordered_map<std::string, int> data_;
 
 public:
   BlockManager() = default;
 
-  void LoadBlockList(MetaData& metaData);
+  const std::string LoadBlockList(MetaData& metaData);
 
   void WriteData(std::ofstream& fout);
 

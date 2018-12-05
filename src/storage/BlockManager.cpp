@@ -2,21 +2,36 @@
 // Created by nixtaxe on 12.11.18.
 //
 
-#include <fstream>
 #include "BlockManager.hpp"
+#include "StorageEngine.hpp"
 
-void se::BlockManager::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
-{
-  //
-}
+namespace se {
 
-void se::BlockManager::LoadBlockList(se::MetaData& metaData)
+const std::string BlockManager::LoadBlockList(MetaData& metaData)
 {
   auto j = metaData.data();
-  std::string path = j.at("_path");
-  std::ofstream fout(path);
-  if (!fout.is_open())
-    throw std::invalid_argument("StorageError: Couldn't create file " + path);
+  std::string key = j.at("_path");
+  if (data_.find(key) != data_.end()) {
+    return key;
+  }
 
-  fout << (size_t)j.at("_size");
+  std::string path = StorageEngine::GetRootPath() + key;
+  std::ifstream fin(path);
+  if (!fin.is_open()) {
+    std::ofstream fout(path);
+    if (!fout.is_open())
+      throw std::invalid_argument("StorageError: Couldn't create file " + path);
+    fout.close();
+  }
+  data_.insert({key, 1});
+  return key;
 }
+
+void BlockManager::AddRow(MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
+{
+  auto key = LoadBlockList(metaData);
+  // auto fout = data_[key]->createOutputStream();
+  // fout << "Hello\n";
+}
+
+} // namespace se
