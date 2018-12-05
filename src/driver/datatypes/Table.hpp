@@ -42,14 +42,14 @@ public:
   explicit Table(
       cmd::TableDefinition name
     ) : name_(name),
-        meta_(std::make_shared(name.ToString())) { }
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
       cmd::TableDefinition name,
-      std::list<cmd::ColumnDefinition> columns,
+      std::list<cmd::ColumnDefinition> columns
     ) : name_(name),
         columns_(columns),
-        meta_(std::make_shared(name.ToString())) { }
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
       cmd::TableDefinition name,
@@ -58,7 +58,7 @@ public:
     ) : name_(name),
         columns_(columns),
         records_(records),
-        meta_(std::make_shared(name.ToString())) { }
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
       std::list<cmd::ColumnDefinition> columns,

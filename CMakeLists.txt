@@ -64,6 +64,7 @@ endif()
 
 option(BUILD_PARSER "Build PARSER" OFF)
 option(BUILD_STORAGE "Build STORAGE" ON)
+option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" OFF)
 
@@ -91,6 +92,11 @@ endif()
 if (BUILD_STORAGE)
     add_subdirectory(${src}/storage)
     list(APPEND LINK_LIBS storage)
+endif()
+
+if (BUILD_DRIVER)
+    add_subdirectory(${src}/driver)
+    list(APPEND LINK_LIBS driver)
 endif()
 
 if (BUILD_SERVER)
