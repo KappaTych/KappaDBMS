@@ -7,11 +7,11 @@ namespace cmd {
 class TableDefinition : public Instruction
 {
 public:
-  TableDefinition(const std::string& n, const std::string& d = "default", const std::string& s = "public")
+  TableDefinition(const std::string& n = "temp", const std::string& d = "default", const std::string& s = "public")
       : Instruction(TABLE_DEF),
-        database_(d),
         schema_(s),
-        name_(n) {}
+        name_(n),
+        database_(d) {}
 
   const TableDefinition& Dispatch() const override { return *this; }
 
@@ -22,6 +22,7 @@ public:
 
   //TODO: tostring method
 public: // It's not an error
+  std::string database_;
   std::string schema_;
   std::string name_;
 };

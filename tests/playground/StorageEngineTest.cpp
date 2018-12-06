@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdint>
 #include <btree/safe_btree_map.h>
+#include <cppfs/FilePath.h>
 
 #include <storage/StorageEngine.hpp>
 #include <storage/datatypes/MemoryBlock.hpp>
@@ -11,10 +12,11 @@
 
 int main(int argc, char *argv[])
 {
-  std::cout << argv[0] << std::endl;
-
+  se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
   auto& storage = se::StorageEngine::Instance();
-  storage.CreateData("some_table");
+  // storage.CreateData("some_table");
+  auto meta = storage.GetMetaData("some_table");
+  // storage.AddRow(meta, std::make_shared<uint8_t>(2), 1);
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},

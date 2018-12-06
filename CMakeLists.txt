@@ -15,13 +15,21 @@ set(dir ${CMAKE_BINARY_DIR}/bin)
 
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 set(LIBRARY_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
+set(LIBRARY_OUTPUT_DIRECTORY ${dir})
+
+set(CMAKE_LIBRARY_OUTPUT_PATH ${dir})
+set(CMAKE_ARCHIVE_OUTPUT_PATH ${dir})
+set(CMAKE_RUNTIME_OUTPUT_PATH ${dir})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${dir})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${dir})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${dir})
 set(CMAKE_BUILD_FILES_DIRECTORY ${dir})
 set(CMAKE_BUILD_DIRECTORY ${dir})
-set(CMAKE_BINARY_DIR ${dir})
-set(EXECUTABLE_OUTPUT_PATH ${dir})
-set(LIBRARY_OUTPUT_PATH ${dir}/lib)
 set(CMAKE_CACHEFILE_DIR ${dir})
+set(CMAKE_BINARY_DIR ${dir})
+set(CMAKE_CURRENT_BINARY_DIR ${dir})
+
+set(PROJECT_BINARY_DIR ${dir})
 
 # set(CMAKE_C_COMPILER gcc)
 # set(CMAKE_CXX_COMPILER g++)
@@ -53,24 +61,28 @@ elseif(WIN32)
     endif()
 endif()
 
-# set(CMAKE_PREFIX_PATH ${src}/include)
 
-# include_directories(
-#   ${src}/include
-#   ${lib}/clsocket/src
-#   ${lib}/ctpl
-# )
-
-option(BUILD_PARSER "Build PARSER" OFF)
+option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
+option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" OFF)
 
+# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
+# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)
+# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/cppfs)
+
+include_directories(
+    ${lib}/ctpl
+    ${lib}/clsocket/src
+    ${lib}/cppfs/source/cppfs/include
+)
 
 set(CLSOCKET_DEP_ONLY ON)
+add_subdirectory(${lib}/cppfs)
 add_subdirectory(${lib}/clsocket)
 
-set(LINK_LIBS clsocket pthread)
+set(LINK_LIBS clsocket cppfs pthread)
 
 if (BUILD_PARSER)
     add_subdirectory(${src}/parser)
@@ -82,6 +94,11 @@ if (BUILD_STORAGE)
     list(APPEND LINK_LIBS storage)
 endif()
 
+if (BUILD_DRIVER)
+    add_subdirectory(${src}/driver)
+    list(APPEND LINK_LIBS driver)
+endif()
+
 if (BUILD_SERVER)
     file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
 
@@ -91,8 +108,6 @@ if (BUILD_SERVER)
     target_include_directories(${EXECUTABLE} PUBLIC
         ${src}/
         ${src}/include
-        ${lib}/clsocket/src
-        ${lib}/ctpl
     )
 endif()
 

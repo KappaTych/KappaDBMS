@@ -84,21 +84,6 @@ Table Driver::Execute(const cmd::ShowCreateTable& instruction)
     return Table({ column }, { record });
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // TODO: Think how to do it better
 Table Driver::Execute(const cmd::Literal& literal)
 {

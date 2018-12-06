@@ -15,8 +15,6 @@ public:
 
   const ColumnDefinition& Dispatch() const override { return *this; }
 
-  const ColumnDefinition& Dispatch() const override { return *this; }
-
 public: // It's not an error
   std::string name_;
   cmd::LiteralType type_;

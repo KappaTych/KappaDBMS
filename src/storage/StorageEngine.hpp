@@ -18,8 +18,9 @@ template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
 using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
 
-namespace se
-{
+namespace se {
+
+static std::string ROOT;
 
 class StorageEngine
 {
@@ -29,6 +30,10 @@ public:
     static se::StorageEngine instance;
     return instance;
   }
+
+  static void SetRootPath(const std::string& path);
+
+  static const std::string& GetRootPath();
 
   se::MetaData& CreateData(const std::string& key);
 
@@ -50,9 +55,8 @@ public:
   se::BlockManager blockManager;
 
 private:
-  const std::string META_DATA_PATH = "./database/data.meta";
+  const std::string META_DATA_PATH = "database/data.meta";
   std::unordered_map<std::string, MetaData> meta_;
-
 };
 
 } // namespace se

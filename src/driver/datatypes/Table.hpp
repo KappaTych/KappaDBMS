@@ -9,8 +9,7 @@
 #include <storage/StorageEngine.hpp>
 #include "Record.hpp"
 
-namespace sql
-{
+namespace sql {
 
 using TabDef = cmd::TableDefinition;
 using Cols = std::vector<cmd::ColumnDefinition>;
@@ -40,36 +39,32 @@ std::string to_string(cmd::LiteralType t)
 class Table
 {
 public:
-  explicit Table(cmd::TableDefinition name) 
-      : 
-      name_(name),
-      meta_(std::make_shared(name.ToString())) {}
+  explicit Table(
+      cmd::TableDefinition name
+    ) : name_(name),
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
-    cmd::TableDefinition name,
-    std::list<cmd::ColumnDefinition> columns,
-    ) 
-      : 
-      name_(name),
-      columns_(columns),
-      meta_(std::make_shared(name.ToString())) {}
+      cmd::TableDefinition name,
+      std::list<cmd::ColumnDefinition> columns
+    ) : name_(name),
+        columns_(columns),
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
-    cmd::TableDefinition name,
-    std::list<cmd::ColumnDefinition> columns,
-    std::list<Record> records)
-      : 
-      name_(name),
-      columns_(columns),
-      records_(records),
-      meta_(std::make_shared(name.ToString())) {}
+      cmd::TableDefinition name,
+      std::list<cmd::ColumnDefinition> columns,
+      std::list<Record> records
+    ) : name_(name),
+        columns_(columns),
+        records_(records),
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
-    std::list<cmd::ColumnDefinition> columns,
-    std::list<Record> records)
-      :
-      columns_(columns),
-      records_(records) {}
+      std::list<cmd::ColumnDefinition> columns,
+      std::list<Record> records
+    ) : columns_(columns),
+        records_(records) { }
 
   void AddColumn(cmd::ColumnDefinition column);
   void InsertRecord(Record record);
@@ -87,7 +82,7 @@ private:
   std::list<Record> records_;
 
 // TODO: Create it in constructor
-  std::share_ptr<se::MetaData> meta_;
+  std::shared_ptr<se::MetaData> meta_;
 };
 
 } //namespace sql
