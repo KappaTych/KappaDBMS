@@ -23,13 +23,23 @@ const std::string BlockManager::LoadBlockList(MetaData& metaData)
       throw std::invalid_argument("StorageError: Couldn't create file " + path);
     fout.close();
   }
-  data_.insert({key, 1});
+
+  se::MemoryBlock::size_t size = j.at("_size");
+  MemoryBlock* memoryBlocks = new MemoryBlock[size];
+  for (auto i = 0; i < size; ++i) {
+    fin >> memoryBlocks[i];
+  }
+
   return key;
 }
 
 void BlockManager::AddRow(MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
 {
   auto key = LoadBlockList(metaData);
+  auto loadedBlocks = takenBlocks_[key].get();
+  MemoryBlock memoryBlock = loadedBlocks[loadedBlocks->size() - 1];
+  auto data = memoryBlock.data();
+
   // auto fout = data_[key]->createOutputStream();
   // fout << "Hello\n";
 }
