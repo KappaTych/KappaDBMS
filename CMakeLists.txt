@@ -62,7 +62,7 @@ elseif(WIN32)
 endif()
 
 
-option(BUILD_PARSER "Build PARSER" OFF)
+option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
 option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)

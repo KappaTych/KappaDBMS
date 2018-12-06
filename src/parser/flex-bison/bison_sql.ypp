@@ -43,7 +43,7 @@
 
 // Token definition
 %token<std::string> IDENTIFIER STRING BLOB_STRING
-%token<long int> INTEGER_CONST
+%token<long long> INTEGER_CONST
 %token<bool> TRUE FALSE
 %token<long double> DOUBLE_CONST
 
@@ -92,17 +92,17 @@
 %start input;
 
 input:
-        sql_stmt_list opt_semicolon        
+        sql_stmt_list opt_semicolon
     ;
 
 sql_stmt_list:
         statement 
-        { 
-            driver.addInstruction($1); 
+        {
+            driver.AddInstruction($1);
         }
     |   sql_stmt_list SEMICOLON statement
         {
-            driver.addInstruction($3);
+            driver.AddInstruction($3);
         }
     ;
 
@@ -121,7 +121,7 @@ statement:
 // Show Statement
 %type <std::shared_ptr<cmd::Instruction>> show_statement;
 show_statement:
-        SHOW TABLE table_name 
+        SHOW TABLE table_name
         { 
             $$ = std::make_shared<cmd::ShowCreateTable>($3);
         }
@@ -130,7 +130,7 @@ show_statement:
 // Create Statement
 %type <std::shared_ptr<cmd::Instruction>> create_statement;
 create_statement:
-        CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET 
+        CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET
         {
             $$ = std::make_shared<cmd::CreateTable>($3, $5);
         }
@@ -159,15 +159,15 @@ column_def:
 
 %type <cmd::LiteralType> column_type;
 column_type:
-        INTEGER { $$ = cmd::LiteralType::INT; }
+        INTEGER { $$ = cmd::LiteralType::INTEGER; }
     |   DOUBLE { $$ = cmd::LiteralType::DOUBLE; }
-    |   TEXT { $$ = cmd::LiteralType::STRING; }
+    |   TEXT { $$ = cmd::LiteralType::TEXT; }
     ;
 
 // Drop Statement
 %type <std::shared_ptr<cmd::DropTable>> drop_statement;
 drop_statement:
-        DROP TABLE table_name 
+        DROP TABLE table_name
         {
             $$ = std::make_shared<cmd::DropTable>($3);
         }
@@ -196,7 +196,7 @@ select_list:
 %type <std::shared_ptr<cmd::Expression>> optional_where;
 optional_where:
         WHERE expr { $$ = $2; }
-    |   %empty  { $$ = nullptr; } 
+    |   %empty  { $$ = nullptr; }
     ;   
 
 
