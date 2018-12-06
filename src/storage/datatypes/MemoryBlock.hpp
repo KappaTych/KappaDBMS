@@ -14,9 +14,9 @@ class MemoryBlock;
 
 } // namespace se
 
-// std::ostream& operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
+ std::ostream& operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
 
-// std::istream& operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+ std::istream& operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
 
 namespace se {
 
@@ -42,9 +42,14 @@ public:
   index_t next() const { return next_; }
   std::shared_ptr<data_t> data() const { return data_; }
 
+  void size(size_t size) { size_ = size; }
+  void capacity(size_t capacity) { capacity_ = capacity; }
+  void next(index_t index) { next_ = next_; }
+//  void data(data_t* data) const { data_ = std::make_shared<data_t>(data); }
+
 public:
-  // friend std::ostream&::operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
-  // friend std::istream&::operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+   friend std::ostream&::operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
+   friend std::istream&::operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
 
 private:
   size_t capacity_ = DEFAULT_CAPACITY;

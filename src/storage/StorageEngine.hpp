@@ -10,6 +10,8 @@
 #include <unordered_map>
 #include <json.hpp>
 #include <fifo_map.hpp>
+#include <cppfs/fs.h>
+#include <cppfs/FileHandle.h>
 
 #include "datatypes/MetaData.hpp"
 #include "BlockManager.hpp"

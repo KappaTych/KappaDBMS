@@ -14,6 +14,12 @@ const std::string& se::StorageEngine::GetRootPath()
 se::StorageEngine::StorageEngine() : blockManager(), meta_()
 {
   auto metaPath = GetRootPath() + META_DATA_PATH;
+
+  cppfs::FileHandle dbFile = cppfs::fs::open(GetRootPath() + "database");
+  if (!dbFile.isDirectory()) {
+    dbFile.createDirectory();
+  }
+
   std::cout << metaPath << std::endl;
   std::ifstream fin(metaPath);
   if (!fin.is_open()) {
@@ -80,6 +86,14 @@ se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
     throw std::range_error("StorageError: No such metadata");
   }
   return meta_.at(key);
+}
+
+bool se::StorageEngine::HasMetaData(const std::string& key) const
+{
+  if (meta_.find(key) != meta_.end()) {
+    return true;
+  }
+  return false;
 }
 
 void se::StorageEngine::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
