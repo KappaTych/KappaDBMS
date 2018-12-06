@@ -15,30 +15,13 @@ using TabDef = cmd::TableDefinition;
 using Cols = std::vector<cmd::ColumnDefinition>;
 using Rows = std::vector<Record>;
 
-std::string to_string(cmd::LiteralType t)
-{
-  switch (t) {
-    case cmd::LiteralType::INTEGER : {
-      return "INTEGER";
-    }
-    case cmd::LiteralType::DOUBLE : {
-      return "DOUBLE";
-    }
-    case cmd::LiteralType::TEXT : {
-      return "TEXT";
-    }
-    case cmd::LiteralType::BOOL : {
-      return "BOOL";
-    }
-    default: {
-      return "UNKNOWN";
-    }
-  }
-}
+std::string to_string(cmd::LiteralType t);
 
 class Table
 {
 public:
+  Table() {}
+
   explicit Table(
       cmd::TableDefinition name
     ) : name_(name),

@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <parser/parser.hpp>
 #include <parser/sql.hpp>
-
+#include <storage/StorageEngine.hpp>
 #include "datatypes/Table.hpp"
 
 
@@ -30,6 +30,9 @@ public:
     Table Execute(const cmd::Select&);
     Table Execute(const cmd::Insert&);
     Table Execute(const cmd::ShowCreateTable&);
+    Table Execute(const cmd::TableDefinition&);
+    Table Execute(const cmd::Update& instruction);
+    Table Execute(const cmd::Delete& instruction);
 
 private:
     Driver() = default;

@@ -4,6 +4,27 @@ using json = nlohmann::json;
 
 namespace sql {
 
+std::string to_string(cmd::LiteralType t)
+{
+  switch (t) {
+    case cmd::LiteralType::INTEGER : {
+      return "INTEGER";
+    }
+    case cmd::LiteralType::DOUBLE : {
+      return "DOUBLE";
+    }
+    case cmd::LiteralType::TEXT : {
+      return "TEXT";
+    }
+    case cmd::LiteralType::BOOL : {
+      return "BOOL";
+    }
+    default: {
+      return "UNKNOWN";
+    }
+  }
+}
+
 void Table::AddColumn(cmd::ColumnDefinition column)
 {
   columns_.push_back(column);
@@ -27,13 +48,13 @@ void Table::DeleteRecord(int index)
 std::string Table::ToString() const
 {
   std::string result = "CREATE TABLE " + name_.ToString() + " (";
-  for (auto &col : columns_) {
-    result += col.name_ + " " + sql::to_string(col.type_) + ", ";
-  }
+  // for (auto &col : columns_) {
+  //   result += col.name_ + " " + sql::to_string(col.type_) + ", ";
+  // }
 
-  result.pop_back();
-  result.pop_back();
-  result += ");";
+  // result.pop_back();
+  // result.pop_back();
+  // result += ");";
   return result;
 }
 
