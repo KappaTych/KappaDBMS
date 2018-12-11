@@ -7,6 +7,7 @@
 #include <parser/parser.hpp>
 #include <parser/sql.hpp>
 #include <storage/StorageEngine.hpp>
+#include <json.hpp>
 #include "datatypes/Table.hpp"
 
 

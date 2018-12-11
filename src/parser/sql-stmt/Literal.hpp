@@ -40,6 +40,7 @@ public:
       case LiteralType::DOUBLE: return std::to_string(ival_);
       case LiteralType::TEXT: return strval_;
     }
+    return "";
   }
 
 private:

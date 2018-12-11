@@ -1,17 +1,22 @@
-#include <exception>
-
 #include "driver.hpp"
 
+
 namespace sql {
+
+using json = nlohmann::json;
 
 std::string Driver::RunQuery(const std::string query)
 {
     auto& parser = Parser::Instance();
     auto instructions = parser.Process(query);
-    std::list<Table> tables;
+    std::vector<Table> tables;
     for (auto& instruction : instructions) {
         tables.push_back(Execute(instruction->Dispatch()));
     }
+    json result;
+    result["code"] = 1;
+    result["result"] = tables;
+    return result.dump();
 }
 
 Table Driver::Execute(const cmd::Instruction& instruction)
