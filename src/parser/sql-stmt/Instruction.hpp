@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-
 namespace cmd {
 
 enum InstructionType

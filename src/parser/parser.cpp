@@ -1,4 +1,7 @@
 #include "parser.hpp"
+
+#include <exception>
+
 #include "flex-bison/flex_sql.hpp"
 #include "flex-bison/bison_sql.hpp"
 
@@ -18,7 +21,7 @@ std::vector<std::shared_ptr<cmd::Instruction>> Parser::Process(const std::string
   int ret = parser.parse();
 
   if (ret != 0) {
-    throw "SQLParser: Error!\n";
+    throw std::logic_error("SQLParser: Break sql grammar rule");
   }
 
   return trees_;
