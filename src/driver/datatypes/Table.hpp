@@ -15,6 +15,8 @@ using TabDef = cmd::TableDefinition;
 using Cols = std::vector<cmd::ColumnDefinition>;
 using Rows = std::vector<Record>;
 
+using json = nlohmann::json;
+
 std::string to_string(cmd::LiteralType t);
 
 class Table
@@ -59,13 +61,18 @@ public:
 // TODO: Make its implementation working normal:
   std::string ToString() const;
 
-private:
   cmd::TableDefinition name_;
+
+private:
   std::list<cmd::ColumnDefinition> columns_;
   std::list<Record> records_;
 
 // TODO: Create it in constructor
   std::shared_ptr<se::MetaData> meta_;
 };
+
+
+void to_json(json& j, const Table& t);
+void from_json(const json& j, Table& t);
 
 } //namespace sql

@@ -40,7 +40,7 @@ private:
   void AddInstruction(const std::shared_ptr<cmd::Instruction>&);
 
   std::vector<std::shared_ptr<cmd::Instruction>> trees_;
-  bool trace_ = true;
+  bool trace_ = false;
 };
 
 } // namespace sql

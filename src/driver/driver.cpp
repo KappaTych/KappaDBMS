@@ -1,26 +1,31 @@
-#include <exception>
-
 #include "driver.hpp"
 
+
+
 namespace sql {
+
+using json = nlohmann::json;
 
 std::string Driver::RunQuery(const std::string query)
 {
     auto& parser = Parser::Instance();
     auto instructions = parser.Process(query);
-    std::list<Table> tables;
+    std::vector<Table> tables;
     for (auto& instruction : instructions) {
         tables.push_back(Execute(instruction->Dispatch()));
     }
+    json result;
+    result["code"] = 1;
+    result["result"] = tables;
+    return result.dump();
 }
 
 Table Driver::Execute(const cmd::Instruction& instruction)
 {
-    auto& instRef = instruction.Dispatch();
-    if (instRef.type() == instruction.type()) {
-        std::string mes = "DriverError: Invalid instruction";
-            throw std::logic_error(mes.c_str());
+    if (instruction.type() == cmd::InstructionType::INVALID) {
+        throw std::logic_error("DriverError: Invalid instruction. Didn' find child instruction");
     }
+    auto& instRef = instruction.Dispatch();
     return Execute(instRef);
 }
 
@@ -38,6 +43,7 @@ Table Driver::Execute(const cmd::TableDefinition& instruction)
 
 Table Driver::Execute(const cmd::CreateTable& instruction)
 {
+    
     auto& storage = se::StorageEngine::Instance();
     if (storage.HasMetaData(instruction.table_.ToString())) {
         throw std::logic_error("DriverError: Table is already exist");
@@ -88,8 +94,8 @@ Table Driver::Execute(const cmd::ShowCreateTable& instruction)
 Table Driver::Execute(const cmd::Operation& instruction) 
 {
     auto& instRef = instruction.Dispatch();
-    if (instRef.type() == instruction.type()) {
-        throw std::logic_error("DriverError: Invalid instruction");
+    if (instRef.type() == cmd::InstructionType::INVALID) {
+        throw std::logic_error("DriverError: Invalid instruction. Didn' find child instruction");
     }
     return Execute(instRef);
 }

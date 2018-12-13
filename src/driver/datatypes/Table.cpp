@@ -25,6 +25,16 @@ std::string to_string(cmd::LiteralType t)
   }
 }
 
+void to_json(json& j, const Table& t)
+{
+  j = json{{"name", t.name_.ToString()}};
+}
+
+void from_json(const json& j, Table& t)
+{
+  j.at("name").get_to(t.name_.name_);
+}
+
 void Table::AddColumn(cmd::ColumnDefinition column)
 {
   columns_.push_back(column);
