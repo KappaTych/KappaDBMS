@@ -24,10 +24,10 @@ public:
   explicit Literal(long long v) : Expression(LITERAL), valueType_(LiteralType::INTEGER), fval_(v) {}
   explicit Literal(long double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
   explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::TEXT), strval_(v) {}
-  
+
   ~Literal() = default;
 
-  const Literal& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
   const LiteralType ValueType() const { return valueType_; }
 

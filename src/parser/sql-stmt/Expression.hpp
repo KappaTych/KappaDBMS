@@ -11,7 +11,7 @@ public:
   Expression() : Instruction(EXPRESSION) {}
   Expression(InstructionType t) : Instruction(t) {}
 
-  const Expression& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
   ~Expression() = default;
 };

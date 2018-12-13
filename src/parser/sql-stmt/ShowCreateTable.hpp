@@ -12,7 +12,7 @@ public:
   explicit ShowCreateTable(TableDefinition table)
     : Instruction(SHOW_CREATE_TABLE), table_(std::move(table)) {}
 
-  const ShowCreateTable& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public:
   cmd::TableDefinition table_;

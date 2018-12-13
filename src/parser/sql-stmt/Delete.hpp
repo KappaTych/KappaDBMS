@@ -14,7 +14,7 @@ public:
       table_(std::move(table)), where_(std::move(where)) {}
   ~Delete() = default;
 
-  const Delete& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public:
   TableDefinition table_;

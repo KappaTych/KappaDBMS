@@ -14,7 +14,7 @@ public:
     : Instruction(UPDATE), table_(table),  setList_(setList),
       where_(where) {}
 
-  const Update& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public:
   TableDefinition table_;

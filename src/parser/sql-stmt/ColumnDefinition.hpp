@@ -13,7 +13,7 @@ public:
   ColumnDefinition(const std::string& s, cmd::LiteralType t)
     : Instruction(COLUMN_DEF), name_(s), type_(t) {}
 
-  const ColumnDefinition& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public: // It's not an error
   std::string name_;

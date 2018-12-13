@@ -13,7 +13,7 @@ public:
         name_(n),
         database_(d) {}
 
-  const TableDefinition& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
   std::string ToString() const {
     return name_;

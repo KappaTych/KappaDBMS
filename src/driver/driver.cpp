@@ -12,7 +12,7 @@ std::string Driver::RunQuery(const std::string query)
     auto instructions = parser.Process(query);
     std::vector<Table> tables;
     for (auto& instruction : instructions) {
-        tables.push_back(Execute(instruction->Dispatch()));
+        tables.push_back(*instruction->Accept(*this));
     }
     json result;
     result["code"] = 1;
@@ -20,30 +20,25 @@ std::string Driver::RunQuery(const std::string query)
     return result.dump();
 }
 
-Table Driver::Execute(const cmd::Instruction& instruction)
+Table* Driver::Execute(const cmd::Instruction& instruction)
 {
-    if (instruction.type() == cmd::InstructionType::INVALID) {
-        throw std::logic_error("DriverError: Invalid instruction. Didn' find child instruction");
-    }
-    auto& instRef = instruction.Dispatch();
-    return Execute(instRef);
+    throw std::logic_error("DriverError: Invalid instruction. Didn't find child instruction");
 }
 
-Table Driver::Execute(const cmd::Literal& instruction)
+Table* Driver::Execute(const cmd::Literal& instruction)
 {
     Record record({ TextField(instruction.Value()) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
-    return Table({ column }, { record });
+    return new Table({ column }, { record });
 }
 
-Table Driver::Execute(const cmd::TableDefinition& instruction)
+Table* Driver::Execute(const cmd::TableDefinition& instruction)
 {
-    return Table(instruction);
+    return new Table(instruction);
 }
 
-Table Driver::Execute(const cmd::CreateTable& instruction)
+Table* Driver::Execute(const cmd::CreateTable& instruction)
 {
-    
     auto& storage = se::StorageEngine::Instance();
     if (storage.HasMetaData(instruction.table_.ToString())) {
         throw std::logic_error("DriverError: Table is already exist");
@@ -51,35 +46,35 @@ Table Driver::Execute(const cmd::CreateTable& instruction)
     se::MetaData& meta = storage.CreateData(instruction.table_.ToString());
     Record record({ BoolField(true) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
-    return Table({ column }, { record });
+    return new Table({ column }, { record });
 }
 
-Table Driver::Execute(const cmd::DropTable& instruction)
+Table* Driver::Execute(const cmd::DropTable& instruction)
 {
-    return Table();
+    return new Table();
 }
 
-Table Driver::Execute(const cmd::Select& instruction)
+Table* Driver::Execute(const cmd::Select& instruction)
 {
-    return Table();
+    return new Table();
 }
 
-Table Driver::Execute(const cmd::Insert& instruction)
+Table* Driver::Execute(const cmd::Insert& instruction)
 {
-    return Table();
+    return new Table();
 }
 
-Table Driver::Execute(const cmd::Update& instruction)
+Table* Driver::Execute(const cmd::Update& instruction)
 {
-    return Table();
+    return new Table();
 }
 
-Table Driver::Execute(const cmd::Delete& instruction)
+Table* Driver::Execute(const cmd::Delete& instruction)
 {
-    return Table();
+    return new Table();
 }
 
-Table Driver::Execute(const cmd::ShowCreateTable& instruction)
+Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
 {
     auto& storage = se::StorageEngine::Instance();
     if (!storage.HasMetaData(instruction.table_.ToString())) {
@@ -88,16 +83,27 @@ Table Driver::Execute(const cmd::ShowCreateTable& instruction)
     se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
     Record record({ TextField(instruction.table_.ToString()) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
-    return Table({ column }, { record });
+    return new Table({ column }, { record });
 }
 
-Table Driver::Execute(const cmd::Operation& instruction) 
+Table* Driver::Execute(const cmd::Operation& instruction)
 {
-    auto& instRef = instruction.Dispatch();
-    if (instRef.type() == cmd::InstructionType::INVALID) {
-        throw std::logic_error("DriverError: Invalid instruction. Didn' find child instruction");
-    }
-    return Execute(instRef);
+    return new Table();
+}
+
+Table* Driver::Execute(const cmd::Column&)
+{
+    return new Table();
+}
+
+Table* Driver::Execute(const cmd::ColumnDefintion&)
+{
+    return new Table();
+}
+
+Table* Driver::Execute(const cmd::Expression &)
+{
+    return new Table();
 }
 
 // TODO: refactor this ...
