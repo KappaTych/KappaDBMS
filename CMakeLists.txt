@@ -65,6 +65,7 @@ endif()
 
 option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
+option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" OFF)
 
@@ -109,4 +110,8 @@ if (BUILD_SERVER)
     set_target_properties(${EXECUTABLE} PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
     target_link_libraries(${EXECUTABLE} ${LINK_LIBS})
     target_include_directories(${EXECUTABLE} PUBLIC
+        ${src}/
+        ${src}/include
+    )
 endif()
+
