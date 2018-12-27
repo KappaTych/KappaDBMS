@@ -14,7 +14,7 @@ public:
         table_(t),
         columns_(c) {}
 
-  const CreateTable& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) { return d.Execute(*this); }
 
 public: // It's not an error
   TableDefinition table_;

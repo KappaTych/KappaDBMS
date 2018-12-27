@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include <driver/DriverBase.hpp>
+
 
 namespace cmd {
 
@@ -53,7 +55,8 @@ public:
   explicit Instruction(InstructionType type) : type_(type) {}
   virtual ~Instruction() = default;
   const InstructionType type() const { return type_; }
-  virtual const Instruction& Dispatch() const = 0;
+
+  virtual sql::Table* Accept(sql::DriverBase&) = 0;
 
 private:
   InstructionType type_;

@@ -8,17 +8,17 @@
 #include <memory>
 #include <fstream>
 
-namespace se
-{
+namespace se {
+
 class MemoryBlock;
-}
 
-std::ostream& operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
+} // namespace se
 
-std::istream& operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+ std::ostream& operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
 
-namespace se
-{
+ std::istream& operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+
+namespace se {
 
 class MemoryBlock
 {
@@ -33,37 +33,23 @@ public:
   static const index_t offset = sizeof(size_t);
 
 public:
-  MemoryBlock() : data_(new data_t[DEFAULT_CAPACITY])
-  {};
-
+  MemoryBlock() : data_(new data_t[DEFAULT_CAPACITY]) { }
   explicit MemoryBlock(data_t* data, size_t size);
 
 public:
-  size_t size() const
-  { return size_; }
+  size_t size() const { return size_; }
+  size_t capacity() const { return capacity_; }
+  index_t next() const { return next_; }
+  std::shared_ptr<data_t> data() const { return data_; }
 
-  size_t& getSize()
-  { return size_; }
-
-  size_t capacity() const
-  { return capacity_; }
-
-  std::shared_ptr<data_t> data() const
-  { return data_; }
-
-  std::shared_ptr<data_t> getData()
-  { return data_; }
-
-  index_t next() const
-  { return next_; }
-
-  index_t getNext()
-  { return next_; }
+  void size(size_t size) { size_ = size; }
+  void capacity(size_t capacity) { capacity_ = capacity; }
+  void next(index_t index) { next_ = next_; }
+//  void data(data_t* data) const { data_ = std::make_shared<data_t>(data); }
 
 public:
-  friend std::ostream&::operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
-
-  friend std::istream&::operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
+   friend std::ostream&::operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock);
+   friend std::istream&::operator>>(std::istream& in, se::MemoryBlock& memoryBlock);
 
 private:
   size_t capacity_ = DEFAULT_CAPACITY;
@@ -73,5 +59,3 @@ private:
 };
 
 } //namespace se
-
-
