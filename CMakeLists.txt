@@ -100,8 +100,8 @@ if (BUILD_DRIVER)
     list(APPEND LINK_LIBS driver)
 endif()
 
-#tests part
-add_subdirectory(tests)
+###############tests part <----------- VOVA, IT's URS
+# add_subdirectory(tests)
 
 if (BUILD_SERVER)
     file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)
