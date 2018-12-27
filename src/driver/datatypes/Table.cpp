@@ -4,15 +4,49 @@ using json = nlohmann::json;
 
 namespace sql {
 
-void Table::AddColumn(cmd::ColumnDefinition column) {
+std::string to_string(cmd::LiteralType t)
+{
+  switch (t) {
+    case cmd::LiteralType::INTEGER : {
+      return "INTEGER";
+    }
+    case cmd::LiteralType::DOUBLE : {
+      return "DOUBLE";
+    }
+    case cmd::LiteralType::TEXT : {
+      return "TEXT";
+    }
+    case cmd::LiteralType::BOOL : {
+      return "BOOL";
+    }
+    default: {
+      return "UNKNOWN";
+    }
+  }
+}
+
+void to_json(json& j, const Table& t)
+{
+  j = json{{"name", t.name_.ToString()}};
+}
+
+void from_json(const json& j, Table& t)
+{
+  j.at("name").get_to(t.name_.name_);
+}
+
+void Table::AddColumn(cmd::ColumnDefinition column)
+{
   columns_.push_back(column);
 }
 
-void Table::InsertRecord(Record record) {
+void Table::InsertRecord(Record record)
+{
   records_.push_back(record);
 }
 
-void Table::DeleteRecord(int index) {
+void Table::DeleteRecord(int index)
+{
   auto it = records_.begin();
   while (index > 0) {
     --index;
@@ -24,13 +58,13 @@ void Table::DeleteRecord(int index) {
 std::string Table::ToString() const
 {
   std::string result = "CREATE TABLE " + name_.ToString() + " (";
-  for (auto &col : columns_) {
-    result += col.name_ + " " + sql::to_string(col.type_) + ", ";
-  }
+  // for (auto &col : columns_) {
+  //   result += col.name_ + " " + sql::to_string(col.type_) + ", ";
+  // }
 
-  result.pop_back();
-  result.pop_back();
-  result += ");";
+  // result.pop_back();
+  // result.pop_back();
+  // result += ");";
   return result;
 }
 

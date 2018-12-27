@@ -15,7 +15,7 @@ public:
          std::list<cmd::Literal> values, std::list<cmd::Column> into_)
     : Instruction(INSERT), table_(table), values_(values), into_(into_) {}
 
-  const Insert& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public:
   cmd::TableDefinition table_;

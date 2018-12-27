@@ -51,7 +51,7 @@ public:
   explicit Operation(OperationType t) : operation_(t) {}
   ~Operation() = default;
 
-  const Operation& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
   const OperationType operation() const { return operation_; }
 private:

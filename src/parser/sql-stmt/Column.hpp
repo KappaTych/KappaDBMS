@@ -12,7 +12,7 @@ class Column : public Expression {
   Column(const std::string& name, const std::string& table) :  name_(name), table_(table) {}
   Column(const std::string& name) : name_(name){}
 
-  const Column &Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
  private:
   std::string schema_;

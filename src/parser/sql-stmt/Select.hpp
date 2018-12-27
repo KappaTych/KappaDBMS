@@ -23,7 +23,7 @@ class Select : public Instruction {
       table_(std::move(table)), columnDef_(std::move(columnDef)),
       whereExpr_(std::move(whereExpr)) {}
 
-  const Select& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
  public:
   cmd::TableDefinition table_;

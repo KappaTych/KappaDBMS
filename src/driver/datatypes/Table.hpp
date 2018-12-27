@@ -9,67 +9,47 @@
 #include <storage/StorageEngine.hpp>
 #include "Record.hpp"
 
-namespace sql
-{
+namespace sql {
 
 using TabDef = cmd::TableDefinition;
 using Cols = std::vector<cmd::ColumnDefinition>;
 using Rows = std::vector<Record>;
 
-std::string to_string(cmd::LiteralType t)
-{
-  switch (t) {
-    case cmd::LiteralType::INTEGER : {
-      return "INTEGER";
-    }
-    case cmd::LiteralType::DOUBLE : {
-      return "DOUBLE";
-    }
-    case cmd::LiteralType::TEXT : {
-      return "TEXT";
-    }
-    case cmd::LiteralType::BOOL : {
-      return "BOOL";
-    }
-    default: {
-      return "UNKNOWN";
-    }
-  }
-}
+using json = nlohmann::json;
+
+std::string to_string(cmd::LiteralType t);
 
 class Table
 {
 public:
-  explicit Table(cmd::TableDefinition name) 
-      : 
-      name_(name),
-      meta_(std::make_shared(name.ToString())) {}
+  Table() {}
 
   explicit Table(
-    cmd::TableDefinition name,
-    std::list<cmd::ColumnDefinition> columns,
-    ) 
-      : 
-      name_(name),
-      columns_(columns),
-      meta_(std::make_shared(name.ToString())) {}
+      cmd::TableDefinition name
+    ) : name_(name),
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
-    cmd::TableDefinition name,
-    std::list<cmd::ColumnDefinition> columns,
-    std::list<Record> records)
-      : 
-      name_(name),
-      columns_(columns),
-      records_(records),
-      meta_(std::make_shared(name.ToString())) {}
+      cmd::TableDefinition name,
+      std::list<cmd::ColumnDefinition> columns
+    ) : name_(name),
+        columns_(columns),
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
 
   explicit Table(
-    std::list<cmd::ColumnDefinition> columns,
-    std::list<Record> records)
-      :
-      columns_(columns),
-      records_(records) {}
+      cmd::TableDefinition name,
+      std::list<cmd::ColumnDefinition> columns,
+      std::list<Record> records
+    ) : name_(name),
+        columns_(columns),
+        records_(records),
+        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
+
+  explicit Table(
+      std::list<cmd::ColumnDefinition> columns,
+      std::list<Record> records
+    ) : columns_(columns),
+        records_(records) { }
 
   void AddColumn(cmd::ColumnDefinition column);
   void InsertRecord(Record record);
@@ -81,13 +61,18 @@ public:
 // TODO: Make its implementation working normal:
   std::string ToString() const;
 
-private:
   cmd::TableDefinition name_;
+
+private:
   std::list<cmd::ColumnDefinition> columns_;
   std::list<Record> records_;
 
 // TODO: Create it in constructor
-  std::share_ptr<se::MetaData> meta_;
+  std::shared_ptr<se::MetaData> meta_;
 };
+
+
+void to_json(json& j, const Table& t);
+void from_json(const json& j, Table& t);
 
 } //namespace sql

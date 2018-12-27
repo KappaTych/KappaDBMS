@@ -21,13 +21,13 @@ class Literal : public Expression
 public:
   Literal() : Expression(LITERAL), valueType_(LiteralType::NONE) {}
   explicit Literal(bool v) : Expression(LITERAL), valueType_(LiteralType::BOOL), ival_(v) {}
-  explicit Literal(int64_t v) : Expression(LITERAL), valueType_(LiteralType::INT), fval_(v) {}
+  explicit Literal(long long v) : Expression(LITERAL), valueType_(LiteralType::INTEGER), fval_(v) {}
   explicit Literal(long double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
-  explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::STRING), strval_(v) {}
-  
+  explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::TEXT), strval_(v) {}
+
   ~Literal() = default;
 
-  const Literal& Dispatch() const override { return *this; }
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
   const LiteralType ValueType() const { return valueType_; }
 
@@ -40,6 +40,7 @@ public:
       case LiteralType::DOUBLE: return std::to_string(ival_);
       case LiteralType::TEXT: return strval_;
     }
+    return "";
   }
 
 private:
@@ -47,7 +48,7 @@ private:
 
   bool bval_;
   double fval_;
-  int64_t ival_;
+  long long ival_;
   std::string strval_;
 };
 
