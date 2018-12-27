@@ -27,12 +27,12 @@ target_include_directories(driver PUBLIC
 )
 target_link_libraries(driver storage parser)
 set_target_properties(driver PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
-#
-#if (DRIVER_TEST OR BUILD_TESTS)
-#    add_executable(driver_test ${SRC_TESTS})
-#    target_link_libraries(driver_test driver)
-#    target_include_directories(driver_test PUBLIC
-#        ${CMAKE_CURRENT_SOURCE_DIR}/..
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../include
-#    )
-#endif()
+
+if (DRIVER_TEST OR BUILD_TESTS)
+    add_executable(driver_test ${SRC_TESTS})
+    target_link_libraries(driver_test driver)
+    target_include_directories(driver_test PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+    )
+endif()
