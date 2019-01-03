@@ -12,7 +12,9 @@ std::string Driver::RunQuery(const std::string query)
     auto instructions = parser.Process(query);
     std::vector<Table> tables;
     for (auto& instruction : instructions) {
-        tables.push_back(*instruction->Accept(*this));
+        Table* t = instruction->Accept(*this);
+        tables.push_back(*t);
+        delete(t);
     }
     json result;
     result["code"] = 1;
@@ -44,6 +46,24 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
         throw std::logic_error("DriverError: Table is already exist");
     }
     se::MetaData& meta = storage.CreateData(instruction.table_.ToString());
+    for (auto& col : instruction.columns_) {
+        switch (col.type_) {
+            case cmd::LiteralType::BOOL: {
+                meta.Add(col.name_, "Boolean");
+            }
+            case cmd::LiteralType::INTEGER: {
+                meta.Add(col.name_, "Integer");                
+            }
+            case cmd::LiteralType::DOUBLE: {
+                meta.Add(col.name_, "Double");
+            }
+            case cmd::LiteralType::TEXT: {
+                meta.Add(col.name_, "Text");
+            }
+        }
+    }
+    storage.Flush();
+
     Record record({ BoolField(true) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
     return new Table({ column }, { record });
@@ -70,7 +90,7 @@ Table* Driver::Execute(const cmd::Update& instruction)
 }
 
 Table* Driver::Execute(const cmd::Delete& instruction)
-{
+{ 
     return new Table();
 }
 
@@ -81,7 +101,18 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
         throw std::logic_error("DriverError: Table doesn't exist");
     }
     se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
-    Record record({ TextField(instruction.table_.ToString()) });
+
+    std::string result =  "CREATE TABLE " + instruction.table_.ToString() + " (";
+    for (auto& j : meta.data().items()) {
+        if (j.key()[0] == '_') continue;
+        result += j.key() + " " + std::string(j.value()) + ", ";
+    }
+    result.pop_back();
+    result.pop_back();
+    result += ");";    
+    std::cout << result << std::endl;
+
+    Record record({ TextField(result) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
     return new Table({ column }, { record });
 }
