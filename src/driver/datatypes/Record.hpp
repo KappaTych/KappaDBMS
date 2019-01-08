@@ -20,7 +20,7 @@ private:
   std::vector<Field> fields_;
 };
 
-  void to_json(json& j, const Record& t);
-  void from_json(const json& j, Record& t);
+  void to_json(json& j, const Record& r);
+  void from_json(const json& j, Record& r);
 
 } // namespace sql

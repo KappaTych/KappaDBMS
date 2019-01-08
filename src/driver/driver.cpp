@@ -47,20 +47,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
     }
     se::MetaData& meta = storage.CreateData(instruction.table_.ToString());
     for (auto& col : instruction.columns_) {
-        switch (col.type_) {
-            case cmd::LiteralType::BOOL: {
-                meta.Add(col.name_, "Boolean");
-            }
-            case cmd::LiteralType::INTEGER: {
-                meta.Add(col.name_, "Integer");                
-            }
-            case cmd::LiteralType::DOUBLE: {
-                meta.Add(col.name_, "Double");
-            }
-            case cmd::LiteralType::TEXT: {
-                meta.Add(col.name_, "Text");
-            }
-        }
+        meta.Add(col.name_, to_string(col.type_));
     }
     storage.Flush();
 

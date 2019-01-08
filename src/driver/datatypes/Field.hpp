@@ -1,9 +1,11 @@
 #pragma once
 
 #include <memory>
-
+#include <json.hpp>
 
 namespace sql {
+
+using json = nlohmann::json;
 
 class Field
 {
@@ -41,5 +43,8 @@ public:
 private:
   std::string value_;
 };
+
+void to_json(json& j, const Field&);
+void from_json(const json& j, Field&);
 
 } // namespace sql
