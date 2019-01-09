@@ -53,7 +53,8 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
 
     Record record({ BoolField(true) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
-    return new Table({ column }, { record });
+    cmd::TableDefinition definition(instruction.table_.ToString());
+    return new Table({definition}, { column }, { record });
 }
 
 Table* Driver::Execute(const cmd::DropTable& instruction)
@@ -101,7 +102,8 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
 
     Record record({ TextField(result) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
-    return new Table({ column }, { record });
+    cmd::TableDefinition definition(instruction.table_.ToString());
+    return new Table({definition}, { column }, { record });
 }
 
 Table* Driver::Execute(const cmd::Operation& instruction)

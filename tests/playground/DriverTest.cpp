@@ -5,10 +5,10 @@
 int main(int argc, char *argv[])
 {
   auto& instance = sql::Driver::Instance();
-  // std::string create_query = "CREATE TABLE users (id Text, id1 INTEGER);";
-  // std::cout << instance.RunQuery(create_query) << std::endl;
+  std::string create_query = "CREATE TABLE users2 (id Text, id1 INTEGER);";
+  std::cout << instance.RunQuery(create_query) << std::endl;
 
-  std::string show_query = "SHOW TABLE users";
+  std::string show_query = "SHOW TABLE users2";
   std::cout << instance.RunQuery(show_query) << std::endl;
   return 0;
 }
