@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <json.hpp>
+#include <string>
 
 namespace sql {
 

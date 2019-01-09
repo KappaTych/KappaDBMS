@@ -1,4 +1,5 @@
 #include "Table.hpp"
+#include <vector>
 
 using json = nlohmann::json;
 
@@ -27,7 +28,28 @@ std::string to_string(cmd::LiteralType t)
 
 void to_json(json& j, const Table& t)
 {
-  j = json{{"name", t.name_.ToString()}};
+  j["name"] = t.name_.name_;
+  j["database"] = t.name_.database_;
+  j["schema"] = t.name_.schema_;
+
+  std::vector<json> columns;
+  for (auto &column : t.GetColumns()) {
+    json c;
+    c["name"] = column.name_;
+    c["type"] = to_string(column.type_);
+    columns.push_back(c);
+  }
+  j["columns"] = json(columns);
+
+  std::vector<json> records;
+  for (auto &record: t.GetRecords()) {
+    std::vector<std::string> r;
+    for (auto field : record.GetFields()) {
+
+    }
+    records.push_back(r);
+  }
+  j["records"] = records;
 }
 
 void from_json(const json& j, Table& t)

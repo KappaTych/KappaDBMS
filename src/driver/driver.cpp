@@ -1,5 +1,5 @@
 #include "driver.hpp"
-
+#include <memory>
 
 
 namespace sql {
@@ -53,7 +53,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
 
     Record record({ BoolField(true) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
-    cmd::TableDefinition definition(instruction.table_.ToString());
+    cmd::TableDefinition definition("anonymous");
     return new Table({definition}, { column }, { record });
 }
 
@@ -102,7 +102,7 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
 
     Record record({ TextField(result) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
-    cmd::TableDefinition definition(instruction.table_.ToString());
+    cmd::TableDefinition definition("anonymous");
     return new Table({definition}, { column }, { record });
 }
 
