@@ -9,7 +9,7 @@ void to_json(json& j, const Field& t)
 
 void from_json(const json& j, Field& t)
 {
-  
+
 }
 
 }

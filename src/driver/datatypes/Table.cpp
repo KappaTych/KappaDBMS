@@ -45,7 +45,7 @@ void to_json(json& j, const Table& t)
   for (auto &record: t.GetRecords()) {
     std::vector<std::string> r;
     for (auto field : record.GetFields()) {
-
+      r.push_back(field->ToString());
     }
     records.push_back(r);
   }

@@ -29,7 +29,7 @@ Table* Driver::Execute(const cmd::Instruction& instruction)
 
 Table* Driver::Execute(const cmd::Literal& instruction)
 {
-    Record record({ TextField(instruction.Value()) });
+    Record record({ std::make_shared<TextField>(TextField(instruction.Value())) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
     return new Table({ column }, { record });
 }
@@ -51,7 +51,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
     }
     storage.Flush();
 
-    Record record({ BoolField(true) });
+    Record record({ std::make_shared<BoolField>(BoolField(true)) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
     cmd::TableDefinition definition("anonymous");
     return new Table({definition}, { column }, { record });
@@ -97,10 +97,9 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
     }
     result.pop_back();
     result.pop_back();
-    result += ");";    
-    std::cout << result << std::endl;
+    result += ");";
 
-    Record record({ TextField(result) });
+    Record record({ std::make_shared<TextField>(TextField(result)) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
     cmd::TableDefinition definition("anonymous");
     return new Table({definition}, { column }, { record });

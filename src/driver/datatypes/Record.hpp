@@ -13,12 +13,12 @@ using json = nlohmann::json;
 class Record
 {
 public:
-  explicit Record(std::list<Field> fields) : fields_(fields) {}
-    std::list<Field> GetFields() const {  return fields_; }
+  explicit Record(std::list<FieldSPtr> fields) : fields_(fields) {}
+    std::list<FieldSPtr> GetFields() const {  return fields_; }
 // TODO: Method AddField / AddValue / AddColumn <-- one of them
 // TODO: Method for getting i-th Field
 private:
-  std::list<Field> fields_;
+  std::list<FieldSPtr> fields_;
 };
 
   void to_json(json& j, const Record& r);
