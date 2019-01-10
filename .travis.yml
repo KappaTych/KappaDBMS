@@ -32,4 +32,4 @@ script:
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
   - cmake --build .
   #execute tests_run
-  - ./tests/tests_run [implemented]
+  - ./bin/tests_run [implemented]
