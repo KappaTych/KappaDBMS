@@ -3,6 +3,7 @@
 //
 
 #include <gtest/gtest.h>
+#include <driver/driver.hpp>
 #include <gmock/gmock.h>
 
 namespace {
@@ -21,5 +22,7 @@ namespace {
 }
 
 TEST_F(DriverTestsFixture, TEST1) {
-    ASSERT_EQ(1, 1);
+    auto& instance = sql::Driver::Instance();
+    std::string query = "CREATE TABLE students1 (id Text, id1 TEXT, idddd TEXT);";
+    std::cout << instance.RunQuery(query) << std::endl;
 }

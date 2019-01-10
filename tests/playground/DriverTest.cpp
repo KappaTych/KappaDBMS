@@ -9,3 +9,5 @@ int main(int argc, char *argv[])
   std::cout << instance.RunQuery(query) << std::endl;
   return 0;
 }
+//database/data.meta
+//"{\"code\":1,\"result\":[{\"name\":\"temp\"}]}"
