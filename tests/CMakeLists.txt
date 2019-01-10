@@ -47,3 +47,8 @@ target_include_directories(tests_run PUBLIC
         /src
         /src/include
         )
+
+if (COVERAGE)
+    target_compile_options(tests_run PRIVATE --coverage)
+    target_link_libraries(tests_run PRIVATE --coverage)
+endif()

@@ -18,6 +18,7 @@ git:
 before_install:
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
   - git submodule update --init --recursive
+  - pip install --user cpp-coveralls
 
 script:
   # Export CC and CXX to tell cmake which compiler to use
@@ -29,7 +30,10 @@ script:
   # switch to build directory
   - cd build
   # run cmake; here we assume that the project's top-level CMakeLists.txt is located at '..'
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCOVERAGE=1
   - cmake --build .
   #execute tests_run
   - ./bin/tests_run [implemented]
+
+after_success:
+  - coveralls --root . -E ".*gtest.*" -E ".*CMakeFiles.*"
