@@ -36,4 +36,4 @@ script:
   - ./bin/tests_run [implemented]
 
 after_success:
-  - coveralls --root .. -E ".*CMakeFiles.*" -E ".*tests/.*.cpp*"
+  - coveralls --root .. -E ".*CMakeFiles.*" -E ".src/lib/*.*"
