@@ -1,9 +1,9 @@
 #project(${CMAKE_PROJECT_NAME}_tests)
 
-option(BUILD_DRIVER_TESTS "Build DRIVER_TESTS" OFF)
+option(BUILD_DRIVER_TESTS "Build DRIVER_TESTS" ON)
 option(BUILD_PARSER_TESTS "Build PARSER_TESTS" ON)
-option(BUILD_STORAGE_TESTS "Build STORAGE_TESTS" OFF)
-option(BUILD_ALL_TESTS "Build TESTS_TESTS" OFF)
+option(BUILD_STORAGE_TESTS "Build STORAGE_TESTS" ON)
+option(BUILD_ALL_TESTS "Build TESTS_TESTS" ON)
 
 #include(${lib_cmake}/googletest.cmake)
 #fetch_googletest(

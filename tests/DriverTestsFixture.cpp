@@ -4,7 +4,6 @@
 
 #include <gtest/gtest.h>
 #include <driver/driver.hpp>
-#include <gmock/gmock.h>
 
 namespace {
     class DriverTestsFixture : public ::testing::Test {
