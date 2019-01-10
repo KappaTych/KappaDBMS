@@ -1,5 +1,7 @@
 # KappaDBMS
 
+[![Build Status](https://travis-ci.org/KappaTych/KappaDBMS.svg?branch=develop)](https://travis-ci.org/KappaTych/KappaDBMS)
+
 Main tasks:
 - SQLite based SQL-syntax
 - Multiple users
