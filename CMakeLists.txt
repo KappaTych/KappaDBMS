@@ -36,7 +36,7 @@ set(PROJECT_BINARY_DIR ${dir})
 # set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -std=c++11") # -Wall -Wextra -Werror
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11") # -Wall -Wextra -Werror
 #set(OPTION_BUILD_TESTS OFF)
 
 # OS and compiler checks.
