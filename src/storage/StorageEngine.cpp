@@ -90,10 +90,7 @@ se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
 
 bool se::StorageEngine::HasMetaData(const std::string& key) const
 {
-  if (meta_.find(key) != meta_.end()) {
-    return true;
-  }
-  return false;
+  return meta_.find(key) != meta_.end();
 }
 
 void se::StorageEngine::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
