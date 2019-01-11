@@ -70,7 +70,11 @@ option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" ON)
 
-option(COVERAGE "Coverage" OFF)
+option(COVERALLS "Turn on coveralls support" ON)
+option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+        ${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake)
 
  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)

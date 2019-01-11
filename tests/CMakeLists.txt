@@ -5,6 +5,11 @@ option(BUILD_PARSER_TESTS "Build PARSER_TESTS" ON)
 option(BUILD_STORAGE_TESTS "Build STORAGE_TESTS" ON)
 option(BUILD_ALL_TESTS "Build TESTS_TESTS" ON)
 
+if (COVERALLS)
+    include(Coveralls)
+    coveralls_turn_on_coverage()
+endif()
+
 #include(${lib_cmake}/googletest.cmake)
 #fetch_googletest(
 #        ${PROJECT_SOURCE_DIR}/cmake
@@ -39,6 +44,15 @@ unset(BUILD_STORAGE_TESTS CACHE)
 
 unset(BUILD_ALL_TESTS CACHE)
 
+# Setup the coveralls target and tell it to gather
+# coverage data for all the lib sources.
+if (COVERALLS)
+    coveralls_setup(
+            "${LIB_SRC}"
+            ${COVERALLS_UPLOAD}
+            "${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake")
+endif()
+
 enable_testing()
 
 add_executable(tests_run ${SRC_TESTS})
@@ -48,12 +62,12 @@ target_include_directories(tests_run PRIVATE
         /src/include
         )
 
-if (COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+if (COVERALLS)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftest-coverage")
+#    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
 #    target_compile_options(tests_run PRIVATE --coverage)
 #    target_link_libraries(tests_run PRIVATE --coverage)
 endif ()
