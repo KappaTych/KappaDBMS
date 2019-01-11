@@ -6,9 +6,6 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-#    packages:
-#      - gcc-8
-#      - g++-8
 
 # Handle git submodules yourself
 git:
@@ -18,13 +15,10 @@ git:
 before_install:
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
   - git submodule update --init --recursive
-#  installation coveralls used to send gcov to coveralls.io
+  #  installation coveralls used to send gcov to coveralls.io
   - pip install --user cpp-coveralls
 
 script:
-  # Export CC and CXX to tell cmake which compiler to use
-#  - export CC=gcc-8
-#  - export CXX=g++-8
   - g++ -v && cmake --version
   # create a build folder for the out-of-source build
   - mkdir build
@@ -38,16 +32,16 @@ script:
 
 after_success:
   - ls
-#  - coveralls -h
+  #  - coveralls -h
   - cd ..
   - |
-    coveralls --build-root build \
-     -e src/lib \
-     -e src/include \
-     -e tests
+    coveralls --build-root build --gcov-options '\-lp' \
      -e build/src/lib \
      -e build/CMakeFiles/3.13.1 \
      -e build/CMakeFiles/feature_tests.c \
      -e build/CMakeFiles/feature_tests.cxx \
-#    -E ".*CMakeFiles.*" \
-#    -E ".*lib.*"
+     -e src/lib \
+     -e src/include \
+     -e tests
+     -E ".*CMakeFiles.*" \
+     -E ".*lib.*"
