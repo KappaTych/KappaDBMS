@@ -56,4 +56,9 @@ if (COVERAGE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
     target_compile_options(tests_run PRIVATE --coverage)
     target_link_libraries(tests_run PRIVATE --coverage)
-endif()
+endif ()
+
+add_test(NAME
+        unit_tests
+        COMMAND
+        ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/tests_run)
