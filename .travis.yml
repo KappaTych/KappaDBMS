@@ -42,13 +42,13 @@ after_success:
   - cd ..
   - |
     coveralls --build-root build --gcov-options '\-lp' \
+     -e src/lib \
+     -e src/include \
+     -e tests \
 #    -e build/database \
 #    -e build/src/lib \
 #    -e build/CMakeFiles/3.13.1 \
 #    -e build/CMakeFiles/feature_tests.c \
 #    -e build/CMakeFiles/feature_tests.cxx \
-    -e src/lib \
-    -e src/include \
-    -e tests \
 #    -E ".*CMakeFiles.*" \
 #    -E ".*lib.*"
