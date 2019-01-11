@@ -6,12 +6,12 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-    packages:
-      - gcc-8
-      - g++-8
-      - gcov-8
 
-      # Handle git submodules yourself
+env:
+  global:
+    - CXX=g++-5 CC=gcc-5 GCOV=gcov-5
+
+# Handle git submodules yourself
 git:
   submodules: false
 
