@@ -19,6 +19,6 @@ namespace {
     };
 }
 
-TEST_F(StorageEngineTestsFixture, TEST1) {
-    ASSERT_EQ(1, 1);
-}
+//TEST_F(StorageEngineTestsFixture, TEST1) {
+//    ASSERT_EQ(1, 1);
+//}

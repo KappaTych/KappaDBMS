@@ -20,8 +20,8 @@ namespace {
     };
 }
 
-TEST_F(DriverTestsFixture, TEST1) {
-    auto& instance = sql::Driver::Instance();
-    std::string query = "CREATE TABLE students1 (id Text, id1 TEXT, idddd TEXT);";
-    std::cout << instance.RunQuery(query) << std::endl;
-}
+//TEST_F(DriverTestsFixture, TEST1) {
+//    auto& instance = sql::Driver::Instance();
+//    std::string query = "CREATE TABLE students1 (id Text, id1 TEXT, idddd TEXT);";
+//    std::cout << instance.RunQuery(query) << std::endl;
+//}

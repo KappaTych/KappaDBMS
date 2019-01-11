@@ -47,5 +47,7 @@ after_success:
     -e build/CMakeFiles/3.13.1 \
     -e build/CMakeFiles/feature_tests.c \
     -e build/CMakeFiles/feature_tests.cxx \
+    -e src/lib \
+    -e src/include \
     -E ".*CMakeFiles.*" \
     -E ".*lib.*"
