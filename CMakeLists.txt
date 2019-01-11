@@ -71,7 +71,7 @@ option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" ON)
 
 option(COVERALLS "Turn on coveralls support" ON)
-option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
+#option(COVERALLS_UPLOAD "Upload the generated coveralls json" OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
         ${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake)

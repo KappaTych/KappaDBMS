@@ -7,7 +7,4 @@
 [submodule "src/lib/cppfs"]
 	path = src/lib/cppfs
 	url = https://github.com/abelidze/cppfs.git
-[submodule "coveralls-cmake"]
-	path = coveralls-cmake
-	url = git://github.com/JoakimSoderberg/coveralls-cmake.git
 
