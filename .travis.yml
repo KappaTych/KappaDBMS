@@ -6,8 +6,12 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+    packages:
+      - gcc-8
+      - g++-8
+      - gcov-8
 
-# Handle git submodules yourself
+      # Handle git submodules yourself
 git:
   submodules: false
 
@@ -19,7 +23,8 @@ before_install:
   - pip install --user cpp-coveralls
 
 script:
-  - g++ -v && cmake --version
+  - g++ -v && cmake --version && gcov -v
+  - ./configure --enable-gcov
   # create a build folder for the out-of-source build
   - mkdir build
   # switch to build directory
@@ -37,7 +42,7 @@ after_success:
   - |
     coveralls --build-root build --gcov-options '\-lp' \
      -e build/src/lib \
-     -e build/CMakeFiles/3.13.1 \
+     -e build/CMakeFiles \
      -e build/CMakeFiles/feature_tests.c \
      -e build/CMakeFiles/feature_tests.cxx \
      -e src/lib \
