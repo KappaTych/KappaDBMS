@@ -70,7 +70,7 @@ option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)
 option(BUILD_TESTS "Build TESTS" ON)
 
-SET(COVERAGE OFF CACHE BOOL "Coverage")
+option(COVERAGE "Coverage" ON)
 
  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)

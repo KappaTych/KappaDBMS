@@ -30,10 +30,10 @@ script:
   # switch to build directory
   - cd build
   # run cmake; here we assume that the project's top-level CMakeLists.txt is located at '..'
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCOVERAGE=1
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCOVERAGE=ON
   - cmake --build .
   #execute tests_run
   - ./bin/tests_run [implemented]
 
 after_success:
-  - coveralls --root .. -E ".*CMakeFiles.*" -E ".src/lib/*.*"
+  - coveralls --root . -E ".*googletest.*" -E ".*CMakeFiles.*" -E ".*lib.*" -E
