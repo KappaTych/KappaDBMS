@@ -23,8 +23,8 @@ before_install:
   - pip install --user cpp-coveralls
 
 script:
-  - g++ -v && cmake --version && gcov -v
-  - ./configure --enable-gcov
+  - g++ -v && cmake --version
+  - gcov -v
   # create a build folder for the out-of-source build
   - mkdir build
   # switch to build directory

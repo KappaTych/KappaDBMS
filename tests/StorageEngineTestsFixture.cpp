@@ -3,10 +3,12 @@
 //
 
 #include <gtest/gtest.h>
+#include <ClassToTestCodeCoverage.h>
 
 namespace {
     class StorageEngineTestsFixture : public ::testing::Test {
     public:
+        ClassToTestCodeCoverage obj;
         StorageEngineTestsFixture() {}
 
         virtual void SetUp() {}
@@ -19,6 +21,10 @@ namespace {
     };
 }
 
-//TEST_F(StorageEngineTestsFixture, TEST1) {
-//    ASSERT_EQ(1, 1);
-//}
+TEST_F(StorageEngineTestsFixture, TEST1) {
+    ASSERT_EQ(obj.Print(), "Hello, World!");
+}
+
+TEST_F(StorageEngineTestsFixture, TEST2) {
+    ASSERT_EQ(obj.Print1(0), "Hello, coveralls!");
+}
