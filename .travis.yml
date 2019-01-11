@@ -36,8 +36,9 @@ script:
   - ./bin/tests_run [implemented]
 
 after_success:
+  - ls
   - |
-    coveralls --build-root build --gcov-options '\-lp' \
+    coveralls --build-root . --gcov-options '\-lp' \
     -e build/database \
     -e build/src/lib \
     -e build/CMakeFiles/3.13.1 \
