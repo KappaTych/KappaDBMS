@@ -39,8 +39,9 @@ script:
 after_success:
   - ls
   - coveralls -h
+  - cd ..
   - |
-    coveralls --build-root . --gcov-options '\-lp' \
+    coveralls --build-root build --gcov-options '\-lp' \
     -e build/database \
     -e build/src/lib \
     -e build/CMakeFiles/3.13.1 \
