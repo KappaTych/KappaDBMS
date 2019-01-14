@@ -5,19 +5,47 @@
 #include <btree/safe_btree_map.h>
 #include <cppfs/FilePath.h>
 
+#include <unordered_map>
+#include <string>
+
 #include <storage/StorageEngine.hpp>
-#include <storage/datatypes/MemoryBlock.hpp>
-#include <storage/datatypes/MetaData.hpp>
+#include <storage/datatypes/RawData.hpp>
 
 
 int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
   auto& storage = se::StorageEngine::Instance();
-  storage.CreateData("some_table");
 
-  // auto meta = storage.GetMetaData("some_table");
-  // storage.AddRow(meta, std::make_shared<uint8_t>(2), 1);
+  std::unordered_map<std::string, int> mapping = {
+    {"INTEGER", sizeof(int32_t)},
+    {"TEXT", 256},
+  };
+
+  if (!storage.HasMetaData("some_table")) {
+    auto meta = storage.CreateData("some_table");
+    meta.Add("id", "INTEGER");
+    meta.Add("name", "TEXT");
+    meta.Add("count", "INTEGER");
+
+    int size = 0;
+    for (auto& row : meta.data().items()) {
+      if (row.key()[0] == '_') continue;
+      size += mapping[row.value()];
+    }
+    meta.Add("_size", size);
+
+    storage.Flush();
+  }
+  auto meta = storage.GetMetaData("some_table");
+  int size = meta.data().at("_size");
+  se::RawData raw(size);
+  raw.Fill<int>(8)
+     .Fill( std::string("Hello World and fuck u, peace of shit!") )
+     .Fill<int>(255)
+     .Fill<double>(128);
+  storage.Write(meta, raw.data(), raw.capacity());
+  std::cout << storage.Read(meta, 0, size) << std::endl;
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},

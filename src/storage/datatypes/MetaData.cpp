@@ -14,7 +14,6 @@ se::MetaData::MetaData(my_json j) : data_(std::make_shared<my_json>(j)) { }
 se::MetaData::MetaData(const std::string name) : data_(std::make_shared<my_json>())
 {
   (*data_)["_path"] = "database/" + name + ".kp";
-  (*data_)["_size"] = 0;
 }
 
 void se::MetaData::Read(std::istream& fin)
@@ -31,9 +30,9 @@ void se::MetaData::Write(std::ostream& fout)
   fout << data_.get()->dump();
 }
 
-void se::MetaData::Add(std::string key, size_t size)
+void se::MetaData::Add(std::string key, int32_t value)
 {
-  data_.get()->push_back({key, size});
+  data_.get()->push_back({key, value});
 }
 
 void se::MetaData::Add(std::string key, std::string value)

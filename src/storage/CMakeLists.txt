@@ -16,7 +16,7 @@ set(SRC_TESTS ../../tests/playground/StorageEngineTest.cpp)
 if (STORAGE_SHARED)
     add_library(storage SHARED EXCLUDE_FROM_ALL ${SRC_STORAGE})
 else()
-    add_library(storage STATIC EXCLUDE_FROM_ALL ${SRC_STORAGE} BlockManager.cpp)
+    add_library(storage STATIC EXCLUDE_FROM_ALL ${SRC_STORAGE})
 endif()
 
 set_target_properties(storage PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})

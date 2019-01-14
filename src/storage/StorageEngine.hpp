@@ -43,7 +43,8 @@ public:
 
   bool HasMetaData(const std::string& key) const;
 
-  void AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size);
+  void Write(se::MetaData& metaData, const char* row, size_t size);
+  std::shared_ptr<se::data_t> Read(se::MetaData& metaData, size_t index, size_t size);
 
   bool Flush();
 

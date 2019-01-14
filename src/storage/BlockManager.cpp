@@ -1,18 +1,15 @@
-//
-// Created by nixtaxe on 12.11.18.
-//
-
 #include "BlockManager.hpp"
 #include "StorageEngine.hpp"
 
 namespace se {
 
-const std::string BlockManager::LoadBlockList(MetaData& metaData)
+std::shared_ptr<BlockList> BlockManager::LoadBlockList(MetaData& metaData)
 {
   auto j = metaData.data();
   std::string key = j.at("_path");
-  if (data_.find(key) != data_.end()) {
-    return key;
+  auto it = data_.find(key);
+  if (it != data_.end()) {
+    return data_[key];
   }
 
   std::string path = StorageEngine::GetRootPath() + key;
@@ -20,28 +17,30 @@ const std::string BlockManager::LoadBlockList(MetaData& metaData)
   if (!fin.is_open()) {
     std::ofstream fout(path);
     if (!fout.is_open())
-      throw std::invalid_argument("StorageError: Couldn't create file " + path);
+      throw std::invalid_argument("StorageError: Not allowed to create file " + path);
     fout.close();
   }
+  fin.close();
 
-  se::MemoryBlock::size_t size = j.at("_size");
-  MemoryBlock* memoryBlocks = new MemoryBlock[size];
-  for (auto i = 0; i < size; ++i) {
-    fin >> memoryBlocks[i];
-  }
-
-  return key;
+  data_.insert( std::make_pair(std::string(key), std::make_shared<BlockList>(path)) );
+  return data_[key];
 }
 
-void BlockManager::AddRow(MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
+void BlockManager::Write(MetaData& metaData, const data_t* row, size_t size)
 {
-  auto key = LoadBlockList(metaData);
-  auto loadedBlocks = takenBlocks_[key].get();
-  MemoryBlock memoryBlock = loadedBlocks[loadedBlocks->size() - 1];
-  auto data = memoryBlock.data();
+  auto blockList = LoadBlockList(metaData);
+  blockList->WriteData(row, size);
+}
 
-  // auto fout = data_[key]->createOutputStream();
-  // fout << "Hello\n";
+std::shared_ptr<data_t> BlockManager::Read(MetaData& metaData, size_t start, size_t size)
+{
+  // TODO: existence checking
+  auto blockList = LoadBlockList(metaData);
+  // auto head = start - start % MemoryBlock::DEFAULT_CAPACITY;
+  // for (auto& block : blockList->takenBlocks_) {
+  //   if (block->offset() == head)
+  // }
+  return blockList->takenBlocks_.back().get()->data();
 }
 
 } // namespace se

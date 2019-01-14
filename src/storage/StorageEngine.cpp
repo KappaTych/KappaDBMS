@@ -15,9 +15,9 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
 {
   auto metaPath = GetRootPath() + META_DATA_PATH;
 
-  cppfs::FileHandle dbFile = cppfs::fs::open(GetRootPath() + "database");
-  if (!dbFile.isDirectory()) {
-    dbFile.createDirectory();
+  auto dbDir = cppfs::fs::open(GetRootPath() + "database");
+  if (!dbDir.isDirectory()) {
+    dbDir.createDirectory();
   }
 
   std::cout << metaPath << std::endl;
@@ -90,13 +90,15 @@ se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
 
 bool se::StorageEngine::HasMetaData(const std::string& key) const
 {
-  if (meta_.find(key) != meta_.end()) {
-    return true;
-  }
-  return false;
+  return meta_.find(key) != meta_.end();
 }
 
-void se::StorageEngine::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
+void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t size)
 {
-  blockManager.AddRow(metaData, row, size);
+  blockManager.Write(metaData, row, size);
+}
+
+std::shared_ptr<se::data_t> se::StorageEngine::Read(se::MetaData& metaData, size_t index, size_t size)
+{
+  return blockManager.Read(metaData, index * size, size);
 }
