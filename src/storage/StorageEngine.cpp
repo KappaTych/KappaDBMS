@@ -20,7 +20,6 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
     dbDir.createDirectory();
   }
 
-  std::cout << metaPath << std::endl;
   std::ifstream fin(metaPath);
   if (!fin.is_open()) {
     std::ofstream fout(metaPath);
@@ -43,6 +42,8 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
 
 bool se::StorageEngine::Flush()
 {
+  // TODO: flush all loaded blocklists
+
   my_json j;
   std::ofstream fout( GetRootPath() + META_DATA_PATH );
 
@@ -98,7 +99,7 @@ void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t si
   blockManager.Write(metaData, row, size);
 }
 
-std::shared_ptr<se::data_t> se::StorageEngine::Read(se::MetaData& metaData, size_t index, size_t size)
+std::list<se::RawData> se::StorageEngine::Read(se::MetaData& metaData, compare_t cmp, size_t size)
 {
-  return blockManager.Read(metaData, index * size, size);
+  return std::move(blockManager.Read(metaData, cmp, size));
 }

@@ -21,21 +21,23 @@ MemoryBlock& MemoryBlock::operator<<(DataBlock&& data)
 
 } // namespace se
 
-std::ostream& operator<<(std::ostream& fout, const se::MemoryBlock& memoryBlock)
+std::fstream& operator<<(std::fstream& fout, const se::MemoryBlock& memoryBlock)
 {
   fout.seekp( memoryBlock.offset() );
   se::size_t size = memoryBlock.size();
   fout.write((const char*) &size, sizeof(se::size_t));
   fout.write(memoryBlock.data_.data, memoryBlock.capacity());
+  fout.flush();
   return fout;
 }
 
 std::istream& operator>>(std::istream& fin, se::MemoryBlock& memoryBlock)
 {
   se::size_t size;
-  fin.seekg( memoryBlock.offset() );
   fin.read((char*) &size, sizeof(se::size_t));
-  fin.read(memoryBlock.data_.data, memoryBlock.capacity());
   memoryBlock.size(size);
+  if (size > 0) {
+    fin.read(memoryBlock.data_.data, memoryBlock.capacity());
+  }
   return fin;
 }

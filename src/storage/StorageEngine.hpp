@@ -6,7 +6,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
+#include <list>
 #include <unordered_map>
 #include <json.hpp>
 #include <fifo_map.hpp>
@@ -44,7 +44,7 @@ public:
   bool HasMetaData(const std::string& key) const;
 
   void Write(se::MetaData& metaData, const char* row, size_t size);
-  std::shared_ptr<se::data_t> Read(se::MetaData& metaData, size_t index, size_t size);
+  std::list<se::RawData> Read(se::MetaData& metaData, compare_t cmp, size_t size);
 
   bool Flush();
 

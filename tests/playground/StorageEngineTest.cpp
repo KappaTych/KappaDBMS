@@ -12,6 +12,11 @@
 #include <storage/datatypes/RawData.hpp>
 
 
+const size_t se::RawData::STRING_LEN;
+
+bool compare(se::data_t* data, se::size_t size) { return true; }
+
+
 int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
@@ -19,13 +24,13 @@ int main(int argc, char *argv[])
 
   std::unordered_map<std::string, int> mapping = {
     {"INTEGER", sizeof(int32_t)},
-    {"TEXT", 256},
+    {"TEXT", se::RawData::STRING_LEN},
   };
 
   if (!storage.HasMetaData("some_table")) {
-    auto meta = storage.CreateData("some_table");
-    meta.Add("id", "INTEGER");
+    auto& meta = storage.CreateData("some_table");
     meta.Add("name", "TEXT");
+    meta.Add("id", "INTEGER");
     meta.Add("count", "INTEGER");
 
     int size = 0;
@@ -37,15 +42,21 @@ int main(int argc, char *argv[])
 
     storage.Flush();
   }
-  auto meta = storage.GetMetaData("some_table");
+  auto& meta = storage.GetMetaData("some_table");
   int size = meta.data().at("_size");
   se::RawData raw(size);
-  raw.Fill<int>(8)
-     .Fill( std::string("Hello World and fuck u, peace of shit!") )
-     .Fill<int>(255)
-     .Fill<double>(128);
+  raw.Fill( std::string("Hello World and fuck u, peace of shit!") )
+     .Fill<int32_t>(48)
+     .Fill<int32_t>(64);
   storage.Write(meta, raw.data(), raw.capacity());
-  std::cout << storage.Read(meta, 0, size) << std::endl;
+
+  auto data = storage.Read(meta, compare, size);
+  for (auto& x : data) {
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    x.Reset();
+  }
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},

@@ -3,13 +3,13 @@
 
 namespace se {
 
-std::shared_ptr<BlockList> BlockManager::LoadBlockList(MetaData& metaData)
+BlockList& BlockManager::LoadBlockList(MetaData& metaData)
 {
   auto j = metaData.data();
   std::string key = j.at("_path");
   auto it = data_.find(key);
   if (it != data_.end()) {
-    return data_[key];
+    return *data_[key];
   }
 
   std::string path = StorageEngine::GetRootPath() + key;
@@ -23,24 +23,30 @@ std::shared_ptr<BlockList> BlockManager::LoadBlockList(MetaData& metaData)
   fin.close();
 
   data_.insert( std::make_pair(std::string(key), std::make_shared<BlockList>(path)) );
-  return data_[key];
+  return *data_[key];
 }
 
 void BlockManager::Write(MetaData& metaData, const data_t* row, size_t size)
 {
-  auto blockList = LoadBlockList(metaData);
-  blockList->WriteData(row, size);
+  auto& blockList = LoadBlockList(metaData);
+  blockList.WriteData(row, size);
 }
 
-std::shared_ptr<data_t> BlockManager::Read(MetaData& metaData, size_t start, size_t size)
+std::list<RawData> BlockManager::Read(MetaData& metaData, compare_t cmp, size_t size)
 {
   // TODO: existence checking
-  auto blockList = LoadBlockList(metaData);
-  // auto head = start - start % MemoryBlock::DEFAULT_CAPACITY;
-  // for (auto& block : blockList->takenBlocks_) {
-  //   if (block->offset() == head)
-  // }
-  return blockList->takenBlocks_.back().get()->data();
+  auto& blockList = LoadBlockList(metaData);
+  std::list<RawData> result;
+  for (auto it = blockList.begin(); it != blockList.end(); ++it) {
+    auto& block = it.get();
+    auto data = block.data();
+    for (auto x = 0; x < block.size(); x += size) {
+      if (cmp(data.get() + x, size)) {
+        result.emplace_back(data.get() + x, size);
+      }
+    }
+  }
+  return std::move(result);
 }
 
 } // namespace se
