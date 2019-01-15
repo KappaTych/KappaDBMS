@@ -44,7 +44,7 @@ public:
   bool HasMetaData(const std::string& key) const;
 
   void Write(se::MetaData& metaData, const char* row, size_t size);
-  std::list<se::RawData> Read(se::MetaData& metaData, compare_t cmp, size_t size);
+  std::list<se::RawData> Read(se::MetaData& metaData, size_t size, compare_t cmp = [](RawData&& x){ return true; });
 
   bool Flush();
 

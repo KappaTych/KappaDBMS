@@ -87,7 +87,7 @@ void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t si
   blockManager.Write(metaData, row, size);
 }
 
-std::list<se::RawData> se::StorageEngine::Read(se::MetaData& metaData, compare_t cmp, size_t size)
+std::list<se::RawData> se::StorageEngine::Read(se::MetaData& metaData, size_t size, compare_t cmp)
 {
-  return std::move(blockManager.Read(metaData, cmp, size));
+  return std::move(blockManager.Read(metaData, size, cmp));
 }

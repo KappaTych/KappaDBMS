@@ -32,7 +32,7 @@ void BlockManager::Write(MetaData& metaData, const data_t* row, size_t size)
   blockList.WriteData(row, size);
 }
 
-std::list<RawData> BlockManager::Read(MetaData& metaData, compare_t cmp, size_t size)
+std::list<RawData> BlockManager::Read(MetaData& metaData, size_t size, compare_t cmp)
 {
   // TODO: existence checking
   auto& blockList = LoadBlockList(metaData);

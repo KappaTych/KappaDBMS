@@ -25,7 +25,7 @@ public:
 
   BlockList& LoadBlockList(MetaData& metaData);
   void Write(MetaData& metaData, const data_t* row, size_t size);
-  std::list<RawData> Read(MetaData& metaData, compare_t cmp, size_t size);
+  std::list<RawData> Read(MetaData& metaData, size_t size, compare_t cmp);
 
 //  void CreateIndex(std::string tableName, uint32_t columnIndex);
 

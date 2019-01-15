@@ -14,12 +14,6 @@
 
 const size_t se::RawData::STRING_LEN;
 
-bool selectAll(se::RawData&& data) { return true; }
-bool whereIdZero(se::RawData&& data) {
-  return (data.Skip<std::string>().Get<int>() == 0);
-}
-
-
 int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
@@ -66,7 +60,7 @@ int main(int argc, char *argv[])
 
   // SELECT *
   std::cout << "SELECT ALL" << std::endl;
-  auto dataAll = storage.Read(meta, selectAll, size);
+  auto dataAll = storage.Read(meta, size);
   for (auto& x : dataAll) {
     std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl;
@@ -76,7 +70,9 @@ int main(int argc, char *argv[])
 
   // SELECT * WHERE id = 0
   std::cout << "SELECT WHERE id = 0" << std::endl;
-  auto dataWhere = storage.Read(meta, whereIdZero, size);
+  auto dataWhere = storage.Read(meta, size, [](se::RawData&& raw) {
+      return (raw.Skip<std::string>().Get<int>() == 0);
+    });
   for (auto& x : dataWhere) {
     std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl;
