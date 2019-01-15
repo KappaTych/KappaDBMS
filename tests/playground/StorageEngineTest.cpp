@@ -14,7 +14,10 @@
 
 const size_t se::RawData::STRING_LEN;
 
-bool compare(se::data_t* data, se::size_t size) { return true; }
+bool selectAll(se::RawData&& data) { return true; }
+bool whereIdZero(se::RawData&& data) {
+  return (data.Skip<std::string>().Get<int>() == 0);
+}
 
 
 int main(int argc, char *argv[])
@@ -22,12 +25,14 @@ int main(int argc, char *argv[])
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
   auto& storage = se::StorageEngine::Instance();
 
+  // Supported types info
   std::unordered_map<std::string, int> mapping = {
     {"INTEGER", sizeof(int32_t)},
     {"TEXT", se::RawData::STRING_LEN},
   };
 
   if (!storage.HasMetaData("some_table")) {
+    // CREATE TABLE
     auto& meta = storage.CreateData("some_table");
     meta.Add("name", "TEXT");
     meta.Add("id", "INTEGER");
@@ -42,16 +47,37 @@ int main(int argc, char *argv[])
 
     storage.Flush();
   }
+
+  // INSERT INTO
   auto& meta = storage.GetMetaData("some_table");
   int size = meta.data().at("_size");
   se::RawData raw(size);
-  raw.Fill( std::string("Hello World and fuck u, peace of shit!") )
+
+  raw.Fill( std::string("First Line") )
      .Fill<int32_t>(48)
      .Fill<int32_t>(64);
   storage.Write(meta, raw.data(), raw.capacity());
 
-  auto data = storage.Read(meta, compare, size);
-  for (auto& x : data) {
+  raw.FullReset()
+     .Fill( std::string("Second line!") )
+     .Fill<int32_t>(0)
+     .Fill<int32_t>(16);
+  storage.Write(meta, raw.data(), raw.capacity());
+
+  // SELECT *
+  std::cout << "SELECT ALL" << std::endl;
+  auto dataAll = storage.Read(meta, selectAll, size);
+  for (auto& x : dataAll) {
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    x.Reset();
+  }
+
+  // SELECT * WHERE id = 0
+  std::cout << "SELECT WHERE id = 0" << std::endl;
+  auto dataWhere = storage.Read(meta, whereIdZero, size);
+  for (auto& x : dataWhere) {
     std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;

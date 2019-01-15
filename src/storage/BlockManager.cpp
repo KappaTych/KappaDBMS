@@ -39,10 +39,10 @@ std::list<RawData> BlockManager::Read(MetaData& metaData, compare_t cmp, size_t 
   std::list<RawData> result;
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
     auto& block = it.get();
-    auto data = block.data();
+    auto blockData = block.data();
     for (auto x = 0; x < block.size(); x += size) {
-      if (cmp(data.get() + x, size)) {
-        result.emplace_back(data.get() + x, size);
+      if (cmp( RawData(blockData->data + x, size, false) )) {
+        result.emplace_back(blockData->data + x, size);
       }
     }
   }

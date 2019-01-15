@@ -35,17 +35,17 @@ public:
   // static const size_t DEFAULT_CAPACITY = 128000;
 
 public:
-  explicit MemoryBlock(index_t offset = 0) : offset_(offset), data_(new data_t[DEFAULT_CAPACITY], 0) { }
+  explicit MemoryBlock(index_t offset = 0);
   explicit MemoryBlock(index_t offset, data_t* data, size_t size);
 
 public:
-  bool isFree(size_t size) const { return data_.size + size < capacity_; }  
-  size_t size() const { return data_.size; }
+  bool isFree(size_t size) const { return data_->size + size < capacity_; }  
+  size_t size() const { return data_->size; }
   size_t capacity() const { return capacity_; }
   index_t offset() const { return offset_; }
-  std::shared_ptr<data_t> data() const { return std::shared_ptr<data_t>(data_.data); }
+  std::shared_ptr<DataBlock> data() const { return data_; }
 
-  void size(size_t size) { data_.size = size; }
+  void size(size_t size) { data_->size = size; }
   void capacity(size_t capacity) { capacity_ = capacity; }
   void offset(index_t offset) { offset_ = offset; }
 
@@ -58,7 +58,7 @@ public:
 
 private:
   size_t capacity_ = DEFAULT_CAPACITY;
-  DataBlock data_;
+  std::shared_ptr<DataBlock> data_;
   index_t offset_;
 };
 
