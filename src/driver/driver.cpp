@@ -1,5 +1,5 @@
 #include "driver.hpp"
-
+#include <memory>
 
 
 namespace sql {
@@ -12,7 +12,9 @@ std::string Driver::RunQuery(const std::string query)
     auto instructions = parser.Process(query);
     std::vector<Table> tables;
     for (auto& instruction : instructions) {
-        tables.push_back(*instruction->Accept(*this));
+        Table* t = instruction->Accept(*this);
+        tables.push_back(*t);
+        delete(t);
     }
     json result;
     result["code"] = 1;
@@ -27,7 +29,7 @@ Table* Driver::Execute(const cmd::Instruction& instruction)
 
 Table* Driver::Execute(const cmd::Literal& instruction)
 {
-    Record record({ TextField(instruction.Value()) });
+    Record record({ std::make_shared<TextField>(TextField(instruction.Value())) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
     return new Table({ column }, { record });
 }
@@ -44,9 +46,15 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
         throw std::logic_error("DriverError: Table is already exist");
     }
     se::MetaData& meta = storage.CreateData(instruction.table_.ToString());
-    Record record({ BoolField(true) });
+    for (auto& col : instruction.columns_) {
+        meta.Add(col.name_, to_string(col.type_));
+    }
+    storage.Flush();
+
+    Record record({ std::make_shared<BoolField>(BoolField(true)) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
-    return new Table({ column }, { record });
+    cmd::TableDefinition definition("anonymous");
+    return new Table({definition}, { column }, { record });
 }
 
 Table* Driver::Execute(const cmd::DropTable& instruction)
@@ -70,7 +78,7 @@ Table* Driver::Execute(const cmd::Update& instruction)
 }
 
 Table* Driver::Execute(const cmd::Delete& instruction)
-{
+{ 
     return new Table();
 }
 
@@ -81,9 +89,20 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
         throw std::logic_error("DriverError: Table doesn't exist");
     }
     se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
-    Record record({ TextField(instruction.table_.ToString()) });
+
+    std::string result =  "CREATE TABLE " + instruction.table_.ToString() + " (";
+    for (auto& j : meta.data().items()) {
+        if (j.key()[0] == '_') continue;
+        result += j.key() + " " + std::string(j.value()) + ", ";
+    }
+    result.pop_back();
+    result.pop_back();
+    result += ");";
+
+    Record record({ std::make_shared<TextField>(TextField(result)) });
     cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
-    return new Table({ column }, { record });
+    cmd::TableDefinition definition("anonymous");
+    return new Table({definition}, { column }, { record });
 }
 
 Table* Driver::Execute(const cmd::Operation& instruction)

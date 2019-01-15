@@ -15,12 +15,11 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
 {
   auto metaPath = GetRootPath() + META_DATA_PATH;
 
-  cppfs::FileHandle dbFile = cppfs::fs::open(GetRootPath() + "database");
-  if (!dbFile.isDirectory()) {
-    dbFile.createDirectory();
+  auto dbDir = cppfs::fs::open(GetRootPath() + "database");
+  if (!dbDir.isDirectory()) {
+    dbDir.createDirectory();
   }
 
-  std::cout << metaPath << std::endl;
   std::ifstream fin(metaPath);
   if (!fin.is_open()) {
     std::ofstream fout(metaPath);
@@ -43,24 +42,14 @@ se::StorageEngine::StorageEngine() : blockManager(), meta_()
 
 bool se::StorageEngine::Flush()
 {
+  // TODO: flush all loaded blocklists
+
   my_json j;
   std::ofstream fout( GetRootPath() + META_DATA_PATH );
 
   for (auto it = meta_.begin(); it != meta_.end(); ++it) {
     j[it->first] = it->second.data();
-    // fout.open("./database/" + it.first + ".kp", std::ios_base::binary);
-    // for (auto record : it.second.records)
-    //   if (record.get() != NULL) {
-    //     fout.write(record.get(), sizeof(record.get()));
-    //   }
-    // fout.close();
   }
-
-  // std::string result = j.dump();
-  // fout.open( GetRootPath() + META_DATA_PATH );
-  // if (!fout.is_open()) {
-  //   return false;
-  // }
 
   fout << j.dump();
   fout.close();
@@ -90,13 +79,15 @@ se::MetaData& se::StorageEngine::GetMetaData(const std::string& key)
 
 bool se::StorageEngine::HasMetaData(const std::string& key) const
 {
-  if (meta_.find(key) != meta_.end()) {
-    return true;
-  }
-  return false;
+  return meta_.find(key) != meta_.end();
 }
 
-void se::StorageEngine::AddRow(se::MetaData& metaData, std::shared_ptr<uint8_t>& row, size_t size)
+void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t size, compare_t)
 {
-  blockManager.AddRow(metaData, row, size);
+  blockManager.Write(metaData, row, size);
+}
+
+std::list<se::RawData> se::StorageEngine::Read(se::MetaData& metaData, compare_t cmp, size_t size)
+{
+  return std::move(blockManager.Read(metaData, cmp, size));
 }

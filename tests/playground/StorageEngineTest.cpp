@@ -5,19 +5,84 @@
 #include <btree/safe_btree_map.h>
 #include <cppfs/FilePath.h>
 
+#include <unordered_map>
+#include <string>
+
 #include <storage/StorageEngine.hpp>
-#include <storage/datatypes/MemoryBlock.hpp>
-#include <storage/datatypes/MetaData.hpp>
+#include <storage/datatypes/RawData.hpp>
+
+
+const size_t se::RawData::STRING_LEN;
+
+bool selectAll(se::RawData&& data) { return true; }
+bool whereIdZero(se::RawData&& data) {
+  return (data.Skip<std::string>().Get<int>() == 0);
+}
 
 
 int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
   auto& storage = se::StorageEngine::Instance();
-  storage.CreateData("some_table");
 
-  // auto meta = storage.GetMetaData("some_table");
-  // storage.AddRow(meta, std::make_shared<uint8_t>(2), 1);
+  // Supported types info
+  std::unordered_map<std::string, se::size_t> mapping = {
+    {"INTEGER", sizeof(int32_t)},
+    {"TEXT", se::RawData::STRING_LEN},
+  };
+
+  if (!storage.HasMetaData("some_table")) {
+    // CREATE TABLE
+    auto& meta = storage.CreateData("some_table");
+    meta.Add("name", "TEXT");
+    meta.Add("id", "INTEGER");
+    meta.Add("count", "INTEGER");
+
+    se::size_t size = 0;
+    for (auto& row : meta.data().items()) {
+      if (row.key()[0] == '_') continue;
+      size += mapping[row.value()];
+    }
+    meta.Add("_size", size);
+
+    storage.Flush();
+  }
+
+  // INSERT INTO
+  auto& meta = storage.GetMetaData("some_table");
+  se::size_t size = meta.data().at("_size");
+  se::RawData raw(size);
+
+  raw.Fill( std::string("First Line") )
+     .Fill<int32_t>(48)
+     .Fill<int32_t>(64);
+  storage.Write(meta, raw.data(), raw.capacity());
+
+  raw.FullReset()
+     .Fill( std::string("Second line!") )
+     .Fill<int32_t>(0)
+     .Fill<int32_t>(16);
+  storage.Write(meta, raw.data(), raw.capacity());
+
+  // SELECT *
+  std::cout << "SELECT ALL" << std::endl;
+  auto dataAll = storage.Read(meta, selectAll, size);
+  for (auto& x : dataAll) {
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    x.Reset();
+  }
+
+  // SELECT * WHERE id = 0
+  std::cout << "SELECT WHERE id = 0" << std::endl;
+  auto dataWhere = storage.Read(meta, whereIdZero, size);
+  for (auto& x : dataWhere) {
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    x.Reset();
+  }
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},
