@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
   if (!storage.HasMetaData("some_table")) {
     // CREATE TABLE
     auto& meta = storage.CreateData("some_table");
-    meta.Add("name", "TEXT");
     meta.Add("id", "INTEGER");
+    meta.Add("name", "TEXT");
     meta.Add("count", "INTEGER");
 
     se::size_t size = 0;
@@ -47,14 +47,20 @@ int main(int argc, char *argv[])
   se::size_t size = meta.data().at("_size");
   se::RawData raw(size);
 
-  raw.Fill( std::string("First Line") )
-     .Fill<int32_t>(48)
+  raw.Fill<int32_t>(1)
+     .Fill<std::string>("First Line")
      .Fill<int32_t>(64);
   storage.Write(meta, raw.data(), raw.capacity());
 
   raw.FullReset()
-     .Fill( std::string("Second line!") )
-     .Fill<int32_t>(0)
+     .Fill<int32_t>(2)
+     .Fill<std::string>("Second line!")
+     .Fill<int32_t>(16);
+  storage.Write(meta, raw.data(), raw.capacity());
+
+  raw.FullReset()
+     .Fill<int32_t>(3)
+     .Fill<std::string>("Third line!")
      .Fill<int32_t>(16);
   storage.Write(meta, raw.data(), raw.capacity());
 
@@ -62,23 +68,27 @@ int main(int argc, char *argv[])
   std::cout << "SELECT ALL" << std::endl;
   auto dataAll = storage.Read(meta, size);
   for (auto& x : dataAll) {
-    std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
     x.Reset();
   }
 
-  // SELECT * WHERE id = 0
-  std::cout << "SELECT WHERE id = 0" << std::endl;
+  // SELECT * WHERE id = 2
+  std::cout << "SELECT WHERE id = 2" << std::endl;
   auto dataWhere = storage.Read(meta, size, [](se::RawData&& raw) {
-      return (raw.Skip<std::string>().Get<int>() == 0);
+      return (raw.Get<int>() == 2);
     });
   for (auto& x : dataWhere) {
-    std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
     x.Reset();
   }
+
+  // UPDATE
+
+  // DELETE
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},
