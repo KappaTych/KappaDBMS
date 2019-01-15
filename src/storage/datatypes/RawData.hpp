@@ -11,7 +11,7 @@ class RawData;
 using data_t = char;
 using size_t = uint64_t;
 using index_t = uint32_t;
-using compare_t = std::function<bool (*)(RawData&&)>;
+using compare_t = std::function<bool(RawData&&)>;
 
 
 class RawData
