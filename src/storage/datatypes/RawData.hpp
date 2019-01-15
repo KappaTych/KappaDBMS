@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <functional>
 
 namespace se {
 
@@ -10,7 +11,7 @@ class RawData;
 using data_t = char;
 using size_t = uint64_t;
 using index_t = uint32_t;
-using compare_t = bool (*)(RawData&&);
+using compare_t = std::function<bool (*)(RawData&&)>;
 
 
 class RawData
@@ -26,8 +27,8 @@ public:
   RawData(data_t* data, size_t capacity, bool copy = true) : head_(0), size_(capacity), capacity_(capacity)
   {
     if (copied = copy) {
-      data_ = new data_t[size], 
-      std::copy(data, data + size, data_);
+      data_ = new data_t[capacity], 
+      std::copy(data, data + capacity, data_);
     } else {
       data_ = data;
     }

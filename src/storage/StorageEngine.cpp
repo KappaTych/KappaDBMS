@@ -82,12 +82,12 @@ bool se::StorageEngine::HasMetaData(const std::string& key) const
   return meta_.find(key) != meta_.end();
 }
 
-void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t size, compare_t)
+void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t size)
 {
   blockManager.Write(metaData, row, size);
 }
 
-std::list<se::RawData> se::StorageEngine::Read(se::MetaData& metaData, compare_t cmp, size_t size)
+std::list<se::RawData> se::StorageEngine::Read(se::MetaData& metaData, compare_t& cmp, size_t size)
 {
   return std::move(blockManager.Read(metaData, cmp, size));
 }
