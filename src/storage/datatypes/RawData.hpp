@@ -22,8 +22,8 @@ public:
   bool copied = false;
 
 public:
-  RawData(size_t size) : data_(new data_t[size]), head_(0), size_(0), capacity_(size) { };
-  RawData(data_t* data, size_t size, bool copy = true) : head_(0), size_(size), capacity_(size)
+  RawData(size_t capacity) : data_(new data_t[capacity]), head_(0), size_(0), capacity_(capacity) { };
+  RawData(data_t* data, size_t capacity, bool copy = true) : head_(0), size_(capacity), capacity_(capacity)
   {
     if (copied = copy) {
       data_ = new data_t[size], 

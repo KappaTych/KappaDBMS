@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
   auto& storage = se::StorageEngine::Instance();
 
   // Supported types info
-  std::unordered_map<std::string, int> mapping = {
+  std::unordered_map<std::string, se::size_t> mapping = {
     {"INTEGER", sizeof(int32_t)},
     {"TEXT", se::RawData::STRING_LEN},
   };
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     meta.Add("id", "INTEGER");
     meta.Add("count", "INTEGER");
 
-    int size = 0;
+    se::size_t size = 0;
     for (auto& row : meta.data().items()) {
       if (row.key()[0] == '_') continue;
       size += mapping[row.value()];
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
   // INSERT INTO
   auto& meta = storage.GetMetaData("some_table");
-  int size = meta.data().at("_size");
+  se::size_t size = meta.data().at("_size");
   se::RawData raw(size);
 
   raw.Fill( std::string("First Line") )

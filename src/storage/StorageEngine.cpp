@@ -49,19 +49,7 @@ bool se::StorageEngine::Flush()
 
   for (auto it = meta_.begin(); it != meta_.end(); ++it) {
     j[it->first] = it->second.data();
-    // fout.open("./database/" + it.first + ".kp", std::ios_base::binary);
-    // for (auto record : it.second.records)
-    //   if (record.get() != NULL) {
-    //     fout.write(record.get(), sizeof(record.get()));
-    //   }
-    // fout.close();
   }
-
-  // std::string result = j.dump();
-  // fout.open( GetRootPath() + META_DATA_PATH );
-  // if (!fout.is_open()) {
-  //   return false;
-  // }
 
   fout << j.dump();
   fout.close();
@@ -94,7 +82,7 @@ bool se::StorageEngine::HasMetaData(const std::string& key) const
   return meta_.find(key) != meta_.end();
 }
 
-void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t size)
+void se::StorageEngine::Write(se::MetaData& metaData, const char* row, size_t size, compare_t)
 {
   blockManager.Write(metaData, row, size);
 }
