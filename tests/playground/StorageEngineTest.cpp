@@ -64,6 +64,28 @@ int main(int argc, char *argv[])
      .Fill<int32_t>(16);
   storage.Write(meta, raw.data(), raw.capacity());
 
+  // SELECT * WHERE id = 2
+  std::cout << "SELECT WHERE id = 2" << std::endl;
+  auto dataWhere = storage.Read(meta, size, [](const se::RawData& raw) {
+      return (raw.Get<int>() == 2);
+    });
+  for (auto& x : dataWhere) {
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    x.Reset();
+  }
+
+  // UPDATE WHERE id = 1
+  std::cout << "UPDATE WHERE id = 1" << std::endl;
+  storage.Filter(meta, size, [](se::RawData&& raw) {
+      if (raw.Get<int>() == 1) {
+        raw.Fill<std::string>("Updated first line!", true);
+        return true;
+      }
+      return false;
+    });
+
   // SELECT *
   std::cout << "SELECT ALL" << std::endl;
   auto dataAll = storage.Read(meta, size);
@@ -74,21 +96,9 @@ int main(int argc, char *argv[])
     x.Reset();
   }
 
-  // SELECT * WHERE id = 2
-  std::cout << "SELECT WHERE id = 2" << std::endl;
-  auto dataWhere = storage.Read(meta, size, [](se::RawData&& raw) {
-      return (raw.Get<int>() == 2);
-    });
-  for (auto& x : dataWhere) {
-    std::cout << x.Get<int32_t>() << std::endl;
-    std::cout << x.Get<std::string>() << std::endl;
-    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
-    x.Reset();
-  }
+  // DELETE WHERE count < 64
+  // std::cout << "DELETE WHERE count < 64" << std::endl;
 
-  // UPDATE
-
-  // DELETE
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},

@@ -27,12 +27,21 @@ BlockList::size_t BlockList::Count()
   return freeBlocks_.size() + takenBlocks_.size();
 }
 
+BlockList& BlockList::operator<<(const MemoryBlock& block)
+{
+  if (blocks_.find(block.offset()) == blocks_.end()) {
+    throw std::runtime_error("StorageError: Illegal block-write");
+  }
+  file << block;
+  return *this;
+}
+
 void BlockList::WriteData(const data_t* row, size_t size)
 {
   // TODO: check if size of data is greater than size of empty block
   // TODO: copy-on-write
   auto& block = GetFreeBlock(size);
-  block << DataBlock((data_t*) row, size);
+  block << RawData(const_cast<data_t*>(row), size, false);
   file << block;
 }
 
