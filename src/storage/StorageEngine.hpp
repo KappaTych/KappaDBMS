@@ -26,6 +26,9 @@ using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
 
 namespace se {
 
+using compare_t = std::function<bool(const RawData&)>;
+using update_t = std::function<bool(RawData&&)>;
+
 static std::string ROOT;
 
 class StorageEngine
@@ -36,27 +39,26 @@ public:
     static se::StorageEngine instance;
     return instance;
   }
+  void operator=(StorageEngine const &) = delete;
 
   static void SetRootPath(const std::string& path);
 
   static const std::string& GetRootPath();
 
   MetaData& CreateData(const std::string& key);
-//  void CreateIndex(std::string tableName, uint32_t columnIndex);
-
+  void RemoveData(const std::string& key);
   MetaData& GetMetaData(const std::string& key);
-
   bool HasMetaData(const std::string& key) const;
 
+//  void CreateIndex(std::string tableName, uint32_t columnIndex);
   BlockList& LoadBlockList(MetaData& metaData);
 
+  std::list<RawData> Read(MetaData& metaData, size_t size, const compare_t& func = [](const RawData& x){ return true; });
   void Write(MetaData& metaData, const char* row, size_t size);
-  void Filter(MetaData& metaData, size_t size, const filter_t& func);
-  std::list<RawData> Read(MetaData& metaData, size_t size, const compare_t& cmp = [](const RawData& x){ return true; });
+  void Update(MetaData& metaData, size_t size, const update_t& func);
+  void Delete(MetaData& metaData, size_t size, const compare_t& func);
 
   bool Flush();
-
-  void operator=(StorageEngine const &) = delete;
 
 private:
   StorageEngine();

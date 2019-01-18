@@ -86,4 +86,17 @@ MemoryBlock& BlockList::GetFreeBlock(size_t size)
   return LoadBlock(offset + MemoryBlock::OFFSET_CAPACITY);
 }
 
+void BlockList::FreeBlock(MemoryBlock& block)
+{
+  block.data().FullReset();
+  for (auto it = takenBlocks_.begin(); it != takenBlocks_.end();) {
+    if (*it == block.offset()) {
+      takenBlocks_.erase(it++);
+      freeBlocks_.push_back(block.offset());
+    } else {
+      ++it;
+    }
+  }
+}
+
 } // namespace se

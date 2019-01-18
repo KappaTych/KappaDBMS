@@ -85,7 +85,7 @@ bool StorageEngine::Flush()
 MetaData& StorageEngine::CreateData(const std::string& key)
 {
   if (meta_.find(key) != meta_.end()) {
-    throw std::invalid_argument("StorageError: Data already exists");
+    throw std::invalid_argument("StorageError: Data already exists " + key);
   }
   auto md = MetaData(key);
   LoadBlockList(md);
@@ -94,10 +94,28 @@ MetaData& StorageEngine::CreateData(const std::string& key)
   return meta_.at(key);
 }
 
+void StorageEngine::RemoveData(const std::string& key)
+{
+  auto it = meta_.find(key);
+  if (it == meta_.end()) {
+    throw std::invalid_argument("StorageError: Data does not exists " + key);
+  }
+  std::string path = it->second.data().at("_path");
+  auto dataIter = data_.find(path);
+  if (dataIter != data_.end()) {
+    data_.erase(dataIter);
+  }
+  if (!cppfs::fs::open(GetRootPath() + path).remove()) {
+    throw std::invalid_argument("StorageError: Couldn't remove data " + key);
+  }
+  meta_.erase(it);
+  Flush();
+}
+
 MetaData& StorageEngine::GetMetaData(const std::string& key)
 {
   if (meta_.find(key) == meta_.end()) {
-    throw std::range_error("StorageError: No such metadata");
+    throw std::range_error("StorageError: No such metadata " + key);
   }
   return meta_.at(key);
 }
@@ -107,13 +125,30 @@ bool StorageEngine::HasMetaData(const std::string& key) const
   return meta_.find(key) != meta_.end();
 }
 
+std::list<RawData> StorageEngine::Read(MetaData& metaData, size_t size, const compare_t& func)
+{
+  // TODO: existence checking
+  auto& blockList = LoadBlockList(metaData);
+  std::list<RawData> result;
+  for (auto it = blockList.begin(); it != blockList.end(); ++it) {
+    auto& block = it.get();
+    auto& blockData = block.data();
+    for (auto x = 0; x < block.size(); x += size) {
+      if (func( RawData(blockData.data() + x, size, false) )) {
+        result.emplace_back(blockData.data() + x, size);
+      }
+    }
+  }
+  return std::move(result);
+}
+
 void StorageEngine::Write(MetaData& metaData, const char* row, size_t size)
 {
   auto& blockList = LoadBlockList(metaData);
   blockList.WriteData(row, size);
 }
 
-void StorageEngine::Filter(MetaData& metaData, const size_t size, const filter_t& func)
+void StorageEngine::Update(MetaData& metaData, const size_t size, const update_t& func)
 {
   auto& blockList = LoadBlockList(metaData);
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
@@ -129,21 +164,27 @@ void StorageEngine::Filter(MetaData& metaData, const size_t size, const filter_t
   }
 }
 
-std::list<RawData> StorageEngine::Read(MetaData& metaData, size_t size, const compare_t& cmp)
+void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& func)
 {
-  // TODO: existence checking
   auto& blockList = LoadBlockList(metaData);
-  std::list<RawData> result;
+  RawData raw(MemoryBlock::DEFAULT_CAPACITY);
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
     auto& block = it.get();
     auto& blockData = block.data();
     for (auto x = 0; x < block.size(); x += size) {
-      if (cmp( RawData(blockData.data() + x, size, false) )) {
-        result.emplace_back(blockData.data() + x, size);
+      auto temp = RawData(blockData.data() + x, size, false);
+      if (!func(temp)) {
+        raw << temp;
       }
     }
+    if (raw.size() == 0) {
+      blockList.FreeBlock(block);
+    } else if (blockData.size() != raw.size()) {
+      block.data().FullReset();
+      block << raw;
+    }
+    raw.FullReset();
   }
-  return std::move(result);
 }
 
 } // namespace se

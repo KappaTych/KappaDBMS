@@ -13,8 +13,6 @@ class RawData;
 using data_t = char;
 using size_t = uint64_t;
 using index_t = uint32_t;
-using compare_t = std::function<bool(const RawData&)>;
-using filter_t = std::function<bool(RawData&&)>;
 
 } // namespace se
 
@@ -55,7 +53,7 @@ public:
     return *this;
   }
 
-  RawData& FullReset()
+  const RawData& FullReset() const
   {
     head_ = 0;
     size_ = 0;
@@ -70,7 +68,7 @@ private:
 
 public:
   template<typename T>
-  RawData& Fill(T value, bool relative = false, size_t len = se::RawData::STRING_LEN)
+  const RawData& Fill(T value, bool relative = false, size_t len = se::RawData::STRING_LEN) const
   {
     return Fill(value, relative, len, std::enable_if<true, T>());
   }
@@ -82,14 +80,14 @@ public:
   }
 
   template<typename T>
-  RawData& Skip(size_t count = 1)
+  const RawData& Skip(size_t count = 1) const
   {
     return Skip(count, std::enable_if<true, T>());
   }
 
 private:
   template<typename T>
-  RawData& Skip(size_t count, std::enable_if<std::is_arithmetic<T>::value, T>)
+  const RawData& Skip(size_t count, std::enable_if<std::is_arithmetic<T>::value, T>) const
   {
     if (head_ + sizeof(T) * count > size_) {
       head_ = size_;
@@ -98,7 +96,7 @@ private:
     return *this;
   }
 
-  RawData& Skip(size_t count, std::enable_if<true, std::string>)
+  const RawData& Skip(size_t count, std::enable_if<true, std::string>) const
   {
     if (head_ + count > size_) {
       head_ = size_;
@@ -108,7 +106,7 @@ private:
   }
 
   template<typename T>
-  RawData& Fill(T value, bool relative, size_t len, std::enable_if<std::is_arithmetic<T>::value, T>)
+  const RawData& Fill(T value, bool relative, size_t len, std::enable_if<std::is_arithmetic<T>::value, T>) const
   {
     size_t offset = size_;
     if (relative) {
@@ -124,7 +122,7 @@ private:
     return *this;
   }
 
-  RawData& Fill(std::string value, bool relative, size_t len, std::enable_if<true, std::string>)
+  const RawData& Fill(std::string value, bool relative, size_t len, std::enable_if<true, std::string>) const
   {
     size_t offset = size_;
     if (relative) {
