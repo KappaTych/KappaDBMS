@@ -37,7 +37,6 @@ public:
     Table* Execute(const cmd::Delete&) override;
     Table* Execute(const cmd::Column&) override;
     Table* Execute(const cmd::ColumnDefintion&) override;
-
 private:
     Driver() = default;
     ~Driver() = default;

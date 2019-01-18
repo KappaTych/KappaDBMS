@@ -1,6 +1,6 @@
 #include "driver.hpp"
 #include <memory>
-
+#include <storage/datatypes/RawData.hpp>
 
 namespace sql {
 
@@ -49,6 +49,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
     for (auto& col : instruction.columns_) {
         meta.Add(col.name_, to_string(col.type_));
     }
+    meta.Add("_columns_count", instruction.columns_.size());
     storage.Flush();
 
     Record record({ std::make_shared<BoolField>(BoolField(true)) });
@@ -69,7 +70,26 @@ Table* Driver::Execute(const cmd::Select& instruction)
 
 Table* Driver::Execute(const cmd::Insert& instruction)
 {
-    return new Table();
+    auto& storage = se::StorageEngine::Instance();
+    if (!storage.HasMetaData(instruction.table_.name_)) {
+        throw std::logic_error("DriverError: Table doesn't exist");
+    }
+    se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+    if (instruction.into_.empty()) {
+        auto& data = meta.data();
+        for (auto it = data.begin(); it != data.end(); ++it) {
+            if (it.key()[0] == '_') {
+                continue;
+            }
+            if (it.value())
+        }
+    }
+
+    Record record({ std::make_shared<BoolField>(BoolField(true)) });
+    cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
+    cmd::TableDefinition definition("anonymous");
+
+    return new Table({definition}, { column }, { record });
 }
 
 Table* Driver::Execute(const cmd::Update& instruction)
