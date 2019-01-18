@@ -396,6 +396,6 @@ __pycache__/
 
 # Sublime Text Project
 *.sublime-*
-\.vscode/settings\.json
+.vscode/
 
 cmake-build-debug/

@@ -4,44 +4,44 @@ namespace se {
 
 MemoryBlock::MemoryBlock(index_t offset)
   : offset_(offset),
-    data_(std::make_shared<DataBlock>(new data_t[DEFAULT_CAPACITY], 0)) { }
+    data_(DEFAULT_CAPACITY) { }
 
 MemoryBlock::MemoryBlock(index_t offset, data_t* data, size_t size)
   : offset_(offset),
-    data_(std::make_shared<DataBlock>(new data_t[DEFAULT_CAPACITY], size))
+    data_(data, size, DEFAULT_CAPACITY) { }
+
+MemoryBlock& MemoryBlock::operator<<(RawData& data)
 {
-  std::copy(data, data + size, data_->data);
+  data_ << data;
+  return *this;
 }
 
-MemoryBlock& MemoryBlock::operator<<(DataBlock&& data)
+MemoryBlock& MemoryBlock::operator<<(RawData&& data)
 {
-  if (data_->size + data.size > capacity_) {
-    throw std::range_error("StorageError: DataBlock overflow");
-  }
-  std::copy(data.data, data.data + data.size, data_->data + data_->size);
-  data_->size += data.size;
+  data_ << data;
   return *this;
 }
 
 } // namespace se
 
-std::fstream& operator<<(std::fstream& fout, const se::MemoryBlock& memoryBlock)
+std::ostream& operator<<(std::ostream& out, const se::MemoryBlock& memoryBlock)
 {
-  fout.seekp( memoryBlock.offset() );
+  out.seekp( memoryBlock.offset() );
   se::size_t size = memoryBlock.size();
-  fout.write((const char*) &size, sizeof(se::size_t));
-  fout.write(memoryBlock.data()->data, memoryBlock.capacity());
-  fout.flush();
-  return fout;
+  out.write((const char*) &size, sizeof(se::size_t));
+  out << memoryBlock.data();
+  return out;
 }
 
-std::istream& operator>>(std::istream& fin, se::MemoryBlock& memoryBlock)
+std::istream& operator>>(std::istream& in, se::MemoryBlock& memoryBlock)
 {
   se::size_t size;
-  fin.read((char*) &size, sizeof(se::size_t));
-  memoryBlock.size(size);
+  in.read((char*) &size, sizeof(se::size_t));
   if (size > 0) {
-    fin.read(memoryBlock.data()->data, memoryBlock.capacity());
+    in >> memoryBlock.data_;
+    memoryBlock.data_.size(size);
+  } else {
+    memoryBlock.data_.FullReset();
   }
-  return fin;
+  return in;
 }

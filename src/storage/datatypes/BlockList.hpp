@@ -43,8 +43,11 @@ public:
   iterator begin() { return iterator(takenBlocks_.begin(), *this); }
   iterator end() { return iterator(takenBlocks_.end(), *this); }
 
+  void FreeBlock(MemoryBlock& block);
   MemoryBlock& GetFreeBlock(size_t size = 0);
   MemoryBlock& LoadBlock(size_t offset = 0);
+
+  BlockList& operator<<(const MemoryBlock& block);
 
   BlockList::size_t Count();
 

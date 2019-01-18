@@ -14,12 +14,6 @@
 
 const size_t se::RawData::STRING_LEN;
 
-bool selectAll(se::RawData&& data) { return true; }
-bool whereIdZero(se::RawData&& data) {
-  return (data.Skip<std::string>().Get<int>() == 0);
-}
-
-
 int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
@@ -31,11 +25,13 @@ int main(int argc, char *argv[])
     {"TEXT", se::RawData::STRING_LEN},
   };
 
-  if (!storage.HasMetaData("some_table")) {
+  std::string tableName = "some_table";
+
+  if (!storage.HasMetaData(tableName)) {
     // CREATE TABLE
-    auto& meta = storage.CreateData("some_table");
-    meta.Add("name", "TEXT");
+    auto& meta = storage.CreateData(tableName);
     meta.Add("id", "INTEGER");
+    meta.Add("name", "TEXT");
     meta.Add("count", "INTEGER");
 
     se::size_t size = 0;
@@ -49,40 +45,78 @@ int main(int argc, char *argv[])
   }
 
   // INSERT INTO
-  auto& meta = storage.GetMetaData("some_table");
+  auto& meta = storage.GetMetaData(tableName);
   se::size_t size = meta.data().at("_size");
   se::RawData raw(size);
 
-  raw.Fill( std::string("First Line") )
-     .Fill<int32_t>(48)
+  raw.Fill<int32_t>(1)
+     .Fill<std::string>("First Line")
      .Fill<int32_t>(64);
   storage.Write(meta, raw.data(), raw.capacity());
 
   raw.FullReset()
-     .Fill( std::string("Second line!") )
-     .Fill<int32_t>(0)
+     .Fill<int32_t>(2)
+     .Fill<std::string>("Second line!")
+     .Fill<int32_t>(16);
+  storage.Write(meta, raw.data(), raw.capacity());
+
+  raw.FullReset()
+     .Fill<int32_t>(3)
+     .Fill<std::string>("Third line!")
      .Fill<int32_t>(16);
   storage.Write(meta, raw.data(), raw.capacity());
 
   // SELECT *
   std::cout << "SELECT ALL" << std::endl;
-  auto dataAll = storage.Read(meta, selectAll, size);
-  for (auto& x : dataAll) {
-    std::cout << x.Get<std::string>() << std::endl;
+  auto dataAll1 = storage.Read(meta, size);
+  for (auto& x : dataAll1) {
     std::cout << x.Get<int32_t>() << std::endl;
-    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl;
     x.Reset();
   }
 
-  // SELECT * WHERE id = 0
-  std::cout << "SELECT WHERE id = 0" << std::endl;
-  auto dataWhere = storage.Read(meta, whereIdZero, size);
+  // SELECT * WHERE id = 2
+  std::cout << "SELECT WHERE id = 2" << std::endl;
+  auto dataWhere = storage.Read(meta, size, [](const se::RawData& raw) {
+      return (raw.Get<int>() == 2);
+    });
   for (auto& x : dataWhere) {
-    std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl;
-    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl;
     x.Reset();
   }
+
+  // UPDATE WHERE id = 1
+  std::cout << "UPDATE WHERE id = 1" << std::endl << "-----------------------" << std::endl;
+  storage.Update(meta, size, [](se::RawData&& raw) {
+      if (raw.Get<int>() == 1) {
+        raw.Fill<std::string>("Updated first line!", true);
+        return true;
+      }
+      return false;
+    });
+
+  // DELETE WHERE count < 64
+  std::cout << "DELETE WHERE count < 64" << std::endl << "-----------------------" << std::endl;
+  storage.Delete(meta, size, [](const se::RawData& raw) {
+      return (raw.Skip<int>().Skip<std::string>(se::RawData::STRING_LEN).Get<int>() < 64);
+    });
+
+  // SELECT *
+  std::cout << "SELECT ALL" << std::endl;
+  auto dataAll2 = storage.Read(meta, size);
+  for (auto& x : dataAll2) {
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl;
+    x.Reset();
+  }
+
+  // DROP TABLE
+  storage.RemoveData(tableName);
+
 
 //  storage.create("test", {
 //      {"z", sql::DataType::INTEGER},
