@@ -45,7 +45,7 @@ StorageEngine::StorageEngine() : meta_()
 BlockList& StorageEngine::LoadBlockList(MetaData& metaData)
 {
   auto j = metaData.data();
-  std::string key = j.at("_path");
+  std::string key = j["private"]["path"];
   auto it = data_.find(key);
   if (it != data_.end()) {
     return *data_[key];
@@ -100,7 +100,7 @@ void StorageEngine::RemoveData(const std::string& key)
   if (it == meta_.end()) {
     throw std::invalid_argument("StorageError: Data does not exists " + key);
   }
-  std::string path = it->second.data().at("_path");
+  std::string path = it->second.data()["private"]["path"];
   auto dataIter = data_.find(path);
   if (dataIter != data_.end()) {
     data_.erase(dataIter);

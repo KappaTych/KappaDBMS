@@ -34,18 +34,17 @@ int main(int argc, char *argv[])
     meta.Add("count", "INTEGER");
 
     se::size_t size = 0;
-    for (auto& row : meta.data().items()) {
-      if (row.key()[0] == '_') continue;
+    for (auto& row : meta.data().at("public").items()) {
       size += mapping[row.value()];
     }
-    meta.Add("_size", size);
+    meta.Add("size", size, "private");
 
     storage.Flush();
   }
 
   // INSERT INTO
   auto& meta = storage.GetMetaData(tableName);
-  se::size_t size = meta.data().at("_size");
+  se::size_t size = meta.data()["private"]["size"];
   se::RawData raw(size);
 
   raw.Fill<int32_t>(1)
