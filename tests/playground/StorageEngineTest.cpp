@@ -3,7 +3,6 @@
 #include <cstdio>
 #include <cstdint>
 #include <btree/safe_btree_map.h>
-#include <cppfs/FilePath.h>
 
 #include <unordered_map>
 #include <string>
