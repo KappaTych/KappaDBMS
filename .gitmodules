@@ -8,6 +8,6 @@
 	path = src/lib/cppfs
 	url = https://github.com/abelidze/cppfs.git
 
-[submodule "src/lib/gtest"]
-	path = src/lib/gtest
+[submodule "src/lib/googletest"]
+	path = src/lib/googletest
 	url = https://github.com/abelidze/googletest.git
