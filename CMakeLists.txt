@@ -88,6 +88,7 @@ set(OPTION_BUILD_TESTS OFF)
 set(CLSOCKET_DEP_ONLY ON)
 add_subdirectory(${lib}/cppfs)
 add_subdirectory(${lib}/clsocket)
+add_subdirectory(${lib}/googletest)
 
 set(LINK_LIBS clsocket cppfs pthread)
 
