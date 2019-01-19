@@ -33,6 +33,7 @@ unset(BUILD_STORAGE_TESTS CACHE)
 
 unset(BUILD_ALL_TESTS CACHE)
 
+add_subdirectory(/src/lib/googletest)
 enable_testing()
 
 add_executable(tests_run ${SRC_TESTS} ../src/ClassToTestCodeCoverage.h)
@@ -40,7 +41,7 @@ target_link_libraries(tests_run PRIVATE gtest gtest_main ${LINK_LIBS})
 target_include_directories(tests_run PRIVATE
         /src
         /src/include
-        )
+    )
 
 if (COVERALLS)
     target_compile_options(tests_run PRIVATE --coverage)
