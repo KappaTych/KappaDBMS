@@ -37,7 +37,6 @@ set(PROJECT_BINARY_DIR ${dir})
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -ggdb3 -std=c++14") # -Wall -Wextra -Werror
-set(OPTION_BUILD_TESTS OFF)
 
 # OS and compiler checks.
 if(UNIX)
@@ -75,9 +74,9 @@ option(COVERALLS "Turn on coveralls" ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
         ${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake)
 
- set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
- set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)
- set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/cppfs)
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/cppfs)
 
 include_directories(
     ${lib}/ctpl
@@ -85,6 +84,7 @@ include_directories(
     ${lib}/cppfs/source/cppfs/include
 )
 
+set(OPTION_BUILD_TESTS OFF)
 set(CLSOCKET_DEP_ONLY ON)
 add_subdirectory(${lib}/cppfs)
 add_subdirectory(${lib}/clsocket)
@@ -111,7 +111,7 @@ unset(BUILD_DRIVER CACHE)
 
 ###############tests part <----------- VOVA, IT's URS
 if (BUILD_TESTS)
- add_subdirectory(tests)
+    add_subdirectory(tests)
 endif(BUILD_TESTS)
 unset(BUILD_TESTS CACHE)
 

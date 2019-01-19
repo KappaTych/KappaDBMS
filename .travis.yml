@@ -30,7 +30,7 @@ script:
   # switch to build directory
   - cd build
   # run cmake; here we assume that the project's top-level CMakeLists.txt is located at '..'
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCOVERALLS=ON
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DOPTION_BUILD_TESTS=OFF -DTARGET_CPU=$TARGET_CPU -DCOVERALLS=ON
   - cmake --build .
   #execute tests_run
   - ./bin/tests_run [implemented]
