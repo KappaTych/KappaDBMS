@@ -398,4 +398,4 @@ __pycache__/
 *.sublime-*
 .vscode/
 
-cmake-build-debug/
+*cmake-build-debug/

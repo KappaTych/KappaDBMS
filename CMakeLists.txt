@@ -12,6 +12,7 @@ set(CMAKE_CURRENT_SOURCE_DIR ${CMAKE_BINARY_DIR}/../src)
 set(src ${CMAKE_CURRENT_SOURCE_DIR})
 set(lib ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(dir ${CMAKE_BINARY_DIR}/bin)
+set(lib_cmake ${CMAKE_BINARY_DIR}/../cmake)
 
 set(EXECUTABLE_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
 set(LIBRARY_OUTPUT_PATH ${dir} CACHE PATH "Build directory" FORCE)
@@ -67,11 +68,16 @@ option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
 option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" ON)
-option(BUILD_TESTS "Build TESTS" OFF)
+option(BUILD_TESTS "Build TESTS" ON)
 
-# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
-# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)
-# set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/cppfs)
+option(COVERALLS "Turn on coveralls" ON)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+        ${PROJECT_SOURCE_DIR}/coveralls-cmake/cmake)
+
+ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
+ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)
+ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/cppfs)
 
 include_directories(
     ${lib}/ctpl
@@ -88,17 +94,26 @@ set(LINK_LIBS clsocket cppfs pthread)
 if (BUILD_PARSER)
     add_subdirectory(${src}/parser)
     list(APPEND LINK_LIBS parser)
-endif()
+endif(BUILD_PARSER)
+unset(BUILD_PARSER CACHE)
 
 if (BUILD_STORAGE)
     add_subdirectory(${src}/storage)
     list(APPEND LINK_LIBS storage)
-endif()
+endif(BUILD_STORAGE)
+unset(BUILD_STORAGE CACHE)
 
 if (BUILD_DRIVER)
     add_subdirectory(${src}/driver)
     list(APPEND LINK_LIBS driver)
-endif()
+endif(BUILD_DRIVER)
+unset(BUILD_DRIVER CACHE)
+
+###############tests part <----------- VOVA, IT's URS
+if (BUILD_TESTS)
+ add_subdirectory(tests)
+endif(BUILD_TESTS)
+unset(BUILD_TESTS CACHE)
 
 if (BUILD_SERVER)
     file(GLOB_RECURSE SRC_SERVER . ${src}/server/*.cpp)

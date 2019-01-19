@@ -7,13 +7,11 @@ set(BUILD_VERSION "1")
 set(BUILD_VERSION ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_VERSION})
 
 option(PARSER_SHARED "Make parser shared library" ON)
-option(PARSER_TEST "Build parser with tests" OFF)
+option(PARSER_PLAYGROUND "Build parser with tests" ON)
 
 file(GLOB_RECURSE SRC_PARSER . *.hpp *.cpp)
 
-set(SRC_TESTS
-    ../../tests/playground/ParserTest.cpp
-)
+set(SRC_PG ../../tests/playground/ParserPG.cpp)
 
 if (PARSER_SHARED)
     add_library(parser SHARED EXCLUDE_FROM_ALL ${SRC_PARSER})
@@ -27,10 +25,10 @@ target_include_directories(parser PUBLIC
 )
 set_target_properties(parser PROPERTIES VERSION ${BUILD_VERSION} SOVERSION ${BUILD_MAJOR})
 
-if (PARSER_TEST OR BUILD_TESTS)
-    add_executable(parser_test ${SRC_TESTS})
-    target_link_libraries(parser_test parser)
-    target_include_directories(parser_test PUBLIC
+if (PARSER_PLAYGROUND OR BUILD_PARSER)
+    add_executable(parser_pg ${SRC_PG})
+    target_link_libraries(parser_pg parser)
+    target_include_directories(parser_pg PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/..
         ${CMAKE_CURRENT_SOURCE_DIR}/../include
     )

@@ -1,0 +1,52 @@
+sudo: true
+dist: xenial
+language: cpp
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+
+env:
+  global:
+    - CXX=g++-5 CC=gcc-5 GCOV=gcov-5
+
+# Handle git submodules yourself
+git:
+  submodules: false
+
+# Use sed to replace the SSH URL with the public URL, then initialize submodules
+before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
+  #  installation coveralls used to send gcov to coveralls.io
+  - pip install --user cpp-coveralls
+
+script:
+  - g++ -v && cmake --version
+  - gcov -v
+  # create a build folder for the out-of-source build
+  - mkdir build
+  # switch to build directory
+  - cd build
+  # run cmake; here we assume that the project's top-level CMakeLists.txt is located at '..'
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU -DCOVERALLS=ON
+  - cmake --build .
+  #execute tests_run
+  - ./bin/tests_run [implemented]
+
+after_success:
+  - ls
+  #  - coveralls -h
+  - cd ..
+  - |
+    coveralls --build-root build --gcov-options '\-lp' \
+     -e build/src/lib \
+     -e build/CMakeFiles \
+     -e build/CMakeFiles/feature_tests.c \
+     -e build/CMakeFiles/feature_tests.cxx \
+     -e src/lib \
+     -e src/include \
+     -e tests
+     -E ".*CMakeFiles.*" \
+     -E ".*lib.*"

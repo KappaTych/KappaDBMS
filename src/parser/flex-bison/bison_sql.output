@@ -1,0 +1,2240 @@
+Терминалы не используются в грамматике
+
+   LIMIT
+   OFFSET
+   CAST
+   AS
+   ESCAPE
+   BETWEEN
+   DISTINCT
+   EXISTS
+   WHEN
+   THEN
+   ELSE
+   COLLATE
+   IS
+   IN
+   LIKE
+   GLOB
+   MATCH
+   REGEXP
+   LEFTSHIFT
+   RIGHTSHIFT
+   BINAND
+   BINOR
+
+
+Грамматика
+
+    0 $accept: input END_FILE
+
+    1 input: sql_stmt_list opt_semicolon
+
+    2 sql_stmt_list: statement
+    3              | sql_stmt_list SEMICOLON statement
+
+    4 statement: drop_statement
+    5          | show_statement
+    6          | create_statement
+    7          | select_statement
+    8          | insert_statement
+    9          | update_statement
+   10          | delete_statement
+
+   11 show_statement: SHOW TABLE table_name
+
+   12 create_statement: CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET
+
+   13 column_def_commalist: column_def
+   14                     | column_def_commalist COMMA column_def
+
+   15 column_def: IDENTIFIER column_type
+
+   16 column_type: INTEGER
+   17            | DOUBLE
+   18            | TEXT
+
+   19 drop_statement: DROP TABLE table_name
+
+   20 select_statement: SELECT select_list FROM table_name optional_where
+
+   21 select_list: MULTIPLY
+   22            | expr_list
+
+   23 optional_where: WHERE expr
+   24               | %empty
+
+   25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
+
+   26 optional_column_list: id_comma_list
+   27                     | %empty
+
+   28 update_statement: UPDATE table_name SET update_list optional_where
+
+   29 update_list: update_clause
+   30            | update_list COMMA update_clause
+
+   31 update_clause: IDENTIFIER EQUAL expr
+
+   32 delete_statement: DELETE FROM table_name optional_where
+
+   33 expr_list: expr
+   34          | expr_list COMMA expr
+
+   35 expr: operand
+   36     | logical_operator
+
+   37 operand: OPENBRACKET expr CLOSEBRACKET
+   38        | binary_operator
+   39        | scalar_expr
+   40        | unary_operator
+
+   41 unary_operator: MINUS operand
+   42               | PLUS operand
+   43               | BINNOT operand
+   44               | NOT operand
+   45               | operand ISNULL
+   46               | operand NOTNULL
+
+   47 binary_operator: operand LESS operand
+   48                | operand GREATER operand
+   49                | operand EQUAL operand
+   50                | operand NOTEQUAL operand
+   51                | operand LESSEQUAL operand
+   52                | operand GREATERQUALL operand
+   53                | operand PLUS operand
+   54                | operand MINUS operand
+   55                | operand MULTIPLY operand
+   56                | operand DIVISION operand
+   57                | operand MOD operand
+   58                | operand CONCATENATION operand
+
+   59 logical_operator: expr AND expr
+   60                 | expr OR expr
+
+   61 scalar_expr: literal_value
+   62            | column_name
+
+   63 literal_value: INTEGER_CONST
+   64              | DOUBLE_CONST
+   65              | STRING
+   66              | BLOB_STRING
+   67              | NULL_
+   68              | TRUE
+   69              | FALSE
+
+   70 column_name: IDENTIFIER
+   71            | IDENTIFIER DOT IDENTIFIER
+   72            | IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER
+
+   73 table_name: IDENTIFIER
+   74           | IDENTIFIER DOT IDENTIFIER
+
+   75 opt_semicolon: SEMICOLON
+   76              | END_FILE
+
+   77 literal_list: literal_value
+   78             | literal_list COMMA literal_value
+
+   79 id_comma_list: IDENTIFIER
+   80              | id_comma_list COMMA IDENTIFIER
+
+
+Терминальные символы с правилами, в которых они появляются
+
+END_FILE (0) 0 76
+error (256)
+IDENTIFIER <std::string> (258) 15 31 70 71 72 73 74 79 80
+STRING <std::string> (259) 65
+BLOB_STRING <std::string> (260) 66
+INTEGER_CONST <long long> (261) 63
+TRUE <bool> (262) 68
+FALSE <bool> (263) 69
+DOUBLE_CONST <long double> (264) 64
+DOUBLE (265) 17
+TEXT (266) 18
+INTEGER (267) 16
+CREATE (268) 12
+TABLE (269) 11 12 19
+DROP (270) 19
+SHOW (271) 11
+NULL_ (272) 67
+SELECT (273) 20
+VALUES (274) 25
+INTO (275) 25
+INSERT (276) 25
+FROM (277) 20 32
+UPDATE (278) 28
+SET (279) 28
+WHERE (280) 23
+LIMIT (281)
+OFFSET (282)
+DELETE (283) 32
+CAST (284)
+AS (285)
+ESCAPE (286)
+ISNULL (287) 45
+NOTNULL (288) 46
+BETWEEN (289)
+DISTINCT (290)
+EXISTS (291)
+WHEN (292)
+THEN (293)
+ELSE (294)
+NOT (295) 44
+COLLATE (296)
+IS (297)
+IN (298)
+LIKE (299)
+GLOB (300)
+MATCH (301)
+REGEXP (302)
+AND (303) 59
+OR (304) 60
+EQUAL (305) 31 49
+NOTEQUAL (306) 50
+LESSEQUAL (307) 51
+GREATERQUALL (308) 52
+LESS (309) 47
+GREATER (310) 48
+CONCATENATION (311) 58
+LEFTSHIFT (312)
+RIGHTSHIFT (313)
+BINNOT (314) 43
+BINAND (315)
+BINOR (316)
+PLUS (317) 42 53
+MINUS (318) 41 54
+MULTIPLY (319) 21 55
+DIVISION (320) 56
+MOD (321) 57
+SEMICOLON (322) 3 75
+DOT (323) 71 72 74
+COMMA (324) 14 30 34 78 80
+OPENBRACKET (325) 12 25 37
+CLOSEBRACKET (326) 12 25 37
+UMINUS (327)
+UPLUS (328)
+
+
+Нетерминальные символы с правилами, в которых они появляются
+
+$accept (74)
+    налево: 0
+input (75)
+    налево: 1, направо: 0
+sql_stmt_list (76)
+    налево: 2 3, направо: 1 3
+statement <std::shared_ptr<cmd::Instruction>> (77)
+    налево: 4 5 6 7 8 9 10, направо: 2 3
+show_statement <std::shared_ptr<cmd::Instruction>> (78)
+    налево: 11, направо: 5
+create_statement <std::shared_ptr<cmd::Instruction>> (79)
+    налево: 12, направо: 6
+column_def_commalist <std::list<cmd::ColumnDefinition>> (80)
+    налево: 13 14, направо: 12 14
+column_def <cmd::ColumnDefinition> (81)
+    налево: 15, направо: 13 14
+column_type <cmd::LiteralType> (82)
+    налево: 16 17 18, направо: 15
+drop_statement <std::shared_ptr<cmd::DropTable>> (83)
+    налево: 19, направо: 4
+select_statement <std::shared_ptr<cmd::Select>> (84)
+    налево: 20, направо: 7
+select_list <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> (85)
+    налево: 21 22, направо: 20
+optional_where <std::shared_ptr<cmd::Expression>> (86)
+    налево: 23 24, направо: 20 28 32
+insert_statement <std::shared_ptr<cmd::Insert>> (87)
+    налево: 25, направо: 8
+optional_column_list <std::shared_ptr<std::list<cmd::Column>>> (88)
+    налево: 26 27, направо: 25
+update_statement <std::shared_ptr<cmd::Update>> (89)
+    налево: 28, направо: 9
+update_list <std::list<cmd::update_clause>> (90)
+    налево: 29 30, направо: 28 30
+update_clause <cmd::update_clause> (91)
+    налево: 31, направо: 29 30
+delete_statement <std::shared_ptr<cmd::Delete>> (92)
+    налево: 32, направо: 10
+expr_list <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> (93)
+    налево: 33 34, направо: 22 34
+expr <std::shared_ptr<cmd::Expression>> (94)
+    налево: 35 36, направо: 23 31 33 34 37 59 60
+operand <std::shared_ptr<cmd::Expression>> (95)
+    налево: 37 38 39 40, направо: 35 41 42 43 44 45 46
+    47 48 49 50 51 52 53 54 55 56 57 58
+unary_operator <std::shared_ptr<cmd::Expression>> (96)
+    налево: 41 42 43 44 45 46, направо: 40
+binary_operator <std::shared_ptr<cmd::Expression>> (97)
+    налево: 47 48 49 50 51 52 53 54 55 56 57 58, направо:
+    38
+logical_operator <std::shared_ptr<cmd::Expression>> (98)
+    налево: 59 60, направо: 36
+scalar_expr <std::shared_ptr<cmd::Expression>> (99)
+    налево: 61 62, направо: 39
+literal_value <std::shared_ptr<cmd::Literal>> (100)
+    налево: 63 64 65 66 67 68 69, направо: 61 77 78
+column_name <std::shared_ptr<cmd::Column>> (101)
+    налево: 70 71 72, направо: 62
+table_name <cmd::TableDefinition> (102)
+    налево: 73 74, направо: 11 12 19 20 25 28 32
+opt_semicolon (103)
+    налево: 75 76, направо: 1
+literal_list <std::shared_ptr<std::list<cmd::Literal>>> (104)
+    налево: 77 78, направо: 25 78
+id_comma_list <std::shared_ptr<std::list<cmd::Column>>> (105)
+    налево: 79 80, направо: 26 80
+
+
+State 0
+
+    0 $accept: . input END_FILE
+
+    CREATE  сдвиг, и переход в состояние 1
+    DROP    сдвиг, и переход в состояние 2
+    SHOW    сдвиг, и переход в состояние 3
+    SELECT  сдвиг, и переход в состояние 4
+    INSERT  сдвиг, и переход в состояние 5
+    UPDATE  сдвиг, и переход в состояние 6
+    DELETE  сдвиг, и переход в состояние 7
+
+    input             переход в состояние 8
+    sql_stmt_list     переход в состояние 9
+    statement         переход в состояние 10
+    show_statement    переход в состояние 11
+    create_statement  переход в состояние 12
+    drop_statement    переход в состояние 13
+    select_statement  переход в состояние 14
+    insert_statement  переход в состояние 15
+    update_statement  переход в состояние 16
+    delete_statement  переход в состояние 17
+
+
+State 1
+
+   12 create_statement: CREATE . TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET
+
+    TABLE  сдвиг, и переход в состояние 18
+
+
+State 2
+
+   19 drop_statement: DROP . TABLE table_name
+
+    TABLE  сдвиг, и переход в состояние 19
+
+
+State 3
+
+   11 show_statement: SHOW . TABLE table_name
+
+    TABLE  сдвиг, и переход в состояние 20
+
+
+State 4
+
+   20 select_statement: SELECT . select_list FROM table_name optional_where
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    MULTIPLY       сдвиг, и переход в состояние 33
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    select_list       переход в состояние 35
+    expr_list         переход в состояние 36
+    expr              переход в состояние 37
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 5
+
+   25 insert_statement: INSERT . INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
+
+    INTO  сдвиг, и переход в состояние 45
+
+
+State 6
+
+   28 update_statement: UPDATE . table_name SET update_list optional_where
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 47
+
+
+State 7
+
+   32 delete_statement: DELETE . FROM table_name optional_where
+
+    FROM  сдвиг, и переход в состояние 48
+
+
+State 8
+
+    0 $accept: input . END_FILE
+
+    END_FILE  сдвиг, и переход в состояние 49
+
+
+State 9
+
+    1 input: sql_stmt_list . opt_semicolon
+    3 sql_stmt_list: sql_stmt_list . SEMICOLON statement
+
+    END_FILE   сдвиг, и переход в состояние 50
+    SEMICOLON  сдвиг, и переход в состояние 51
+
+    opt_semicolon  переход в состояние 52
+
+
+State 10
+
+    2 sql_stmt_list: statement .
+
+    $default  вывод с использованием правила 2 (sql_stmt_list)
+
+
+State 11
+
+    5 statement: show_statement .
+
+    $default  вывод с использованием правила 5 (statement)
+
+
+State 12
+
+    6 statement: create_statement .
+
+    $default  вывод с использованием правила 6 (statement)
+
+
+State 13
+
+    4 statement: drop_statement .
+
+    $default  вывод с использованием правила 4 (statement)
+
+
+State 14
+
+    7 statement: select_statement .
+
+    $default  вывод с использованием правила 7 (statement)
+
+
+State 15
+
+    8 statement: insert_statement .
+
+    $default  вывод с использованием правила 8 (statement)
+
+
+State 16
+
+    9 statement: update_statement .
+
+    $default  вывод с использованием правила 9 (statement)
+
+
+State 17
+
+   10 statement: delete_statement .
+
+    $default  вывод с использованием правила 10 (statement)
+
+
+State 18
+
+   12 create_statement: CREATE TABLE . table_name OPENBRACKET column_def_commalist CLOSEBRACKET
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 53
+
+
+State 19
+
+   19 drop_statement: DROP TABLE . table_name
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 54
+
+
+State 20
+
+   11 show_statement: SHOW TABLE . table_name
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 55
+
+
+State 21
+
+   70 column_name: IDENTIFIER .
+   71            | IDENTIFIER . DOT IDENTIFIER
+   72            | IDENTIFIER . DOT IDENTIFIER DOT IDENTIFIER
+
+    DOT  сдвиг, и переход в состояние 56
+
+    $default  вывод с использованием правила 70 (column_name)
+
+
+State 22
+
+   65 literal_value: STRING .
+
+    $default  вывод с использованием правила 65 (literal_value)
+
+
+State 23
+
+   66 literal_value: BLOB_STRING .
+
+    $default  вывод с использованием правила 66 (literal_value)
+
+
+State 24
+
+   63 literal_value: INTEGER_CONST .
+
+    $default  вывод с использованием правила 63 (literal_value)
+
+
+State 25
+
+   68 literal_value: TRUE .
+
+    $default  вывод с использованием правила 68 (literal_value)
+
+
+State 26
+
+   69 literal_value: FALSE .
+
+    $default  вывод с использованием правила 69 (literal_value)
+
+
+State 27
+
+   64 literal_value: DOUBLE_CONST .
+
+    $default  вывод с использованием правила 64 (literal_value)
+
+
+State 28
+
+   67 literal_value: NULL_ .
+
+    $default  вывод с использованием правила 67 (literal_value)
+
+
+State 29
+
+   44 unary_operator: NOT . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 57
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 30
+
+   43 unary_operator: BINNOT . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 58
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 31
+
+   42 unary_operator: PLUS . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 59
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 32
+
+   41 unary_operator: MINUS . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 60
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 33
+
+   21 select_list: MULTIPLY .
+
+    $default  вывод с использованием правила 21 (select_list)
+
+
+State 34
+
+   37 operand: OPENBRACKET . expr CLOSEBRACKET
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    expr              переход в состояние 61
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 35
+
+   20 select_statement: SELECT select_list . FROM table_name optional_where
+
+    FROM  сдвиг, и переход в состояние 62
+
+
+State 36
+
+   22 select_list: expr_list .
+   34 expr_list: expr_list . COMMA expr
+
+    COMMA  сдвиг, и переход в состояние 63
+
+    $default  вывод с использованием правила 22 (select_list)
+
+
+State 37
+
+   33 expr_list: expr .
+   59 logical_operator: expr . AND expr
+   60                 | expr . OR expr
+
+    AND  сдвиг, и переход в состояние 64
+    OR   сдвиг, и переход в состояние 65
+
+    $default  вывод с использованием правила 33 (expr_list)
+
+
+State 38
+
+   35 expr: operand .
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    ISNULL         сдвиг, и переход в состояние 66
+    NOTNULL        сдвиг, и переход в состояние 67
+    EQUAL          сдвиг, и переход в состояние 68
+    NOTEQUAL       сдвиг, и переход в состояние 69
+    LESSEQUAL      сдвиг, и переход в состояние 70
+    GREATERQUALL   сдвиг, и переход в состояние 71
+    LESS           сдвиг, и переход в состояние 72
+    GREATER        сдвиг, и переход в состояние 73
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    $default  вывод с использованием правила 35 (expr)
+
+
+State 39
+
+   40 operand: unary_operator .
+
+    $default  вывод с использованием правила 40 (operand)
+
+
+State 40
+
+   38 operand: binary_operator .
+
+    $default  вывод с использованием правила 38 (operand)
+
+
+State 41
+
+   36 expr: logical_operator .
+
+    $default  вывод с использованием правила 36 (expr)
+
+
+State 42
+
+   39 operand: scalar_expr .
+
+    $default  вывод с использованием правила 39 (operand)
+
+
+State 43
+
+   61 scalar_expr: literal_value .
+
+    $default  вывод с использованием правила 61 (scalar_expr)
+
+
+State 44
+
+   62 scalar_expr: column_name .
+
+    $default  вывод с использованием правила 62 (scalar_expr)
+
+
+State 45
+
+   25 insert_statement: INSERT INTO . table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 80
+
+
+State 46
+
+   73 table_name: IDENTIFIER .
+   74           | IDENTIFIER . DOT IDENTIFIER
+
+    DOT  сдвиг, и переход в состояние 81
+
+    $default  вывод с использованием правила 73 (table_name)
+
+
+State 47
+
+   28 update_statement: UPDATE table_name . SET update_list optional_where
+
+    SET  сдвиг, и переход в состояние 82
+
+
+State 48
+
+   32 delete_statement: DELETE FROM . table_name optional_where
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 83
+
+
+State 49
+
+    0 $accept: input END_FILE .
+
+    $default  принять
+
+
+State 50
+
+   76 opt_semicolon: END_FILE .
+
+    $default  вывод с использованием правила 76 (opt_semicolon)
+
+
+State 51
+
+    3 sql_stmt_list: sql_stmt_list SEMICOLON . statement
+   75 opt_semicolon: SEMICOLON .
+
+    CREATE  сдвиг, и переход в состояние 1
+    DROP    сдвиг, и переход в состояние 2
+    SHOW    сдвиг, и переход в состояние 3
+    SELECT  сдвиг, и переход в состояние 4
+    INSERT  сдвиг, и переход в состояние 5
+    UPDATE  сдвиг, и переход в состояние 6
+    DELETE  сдвиг, и переход в состояние 7
+
+    $default  вывод с использованием правила 75 (opt_semicolon)
+
+    statement         переход в состояние 84
+    show_statement    переход в состояние 11
+    create_statement  переход в состояние 12
+    drop_statement    переход в состояние 13
+    select_statement  переход в состояние 14
+    insert_statement  переход в состояние 15
+    update_statement  переход в состояние 16
+    delete_statement  переход в состояние 17
+
+
+State 52
+
+    1 input: sql_stmt_list opt_semicolon .
+
+    $default  вывод с использованием правила 1 (input)
+
+
+State 53
+
+   12 create_statement: CREATE TABLE table_name . OPENBRACKET column_def_commalist CLOSEBRACKET
+
+    OPENBRACKET  сдвиг, и переход в состояние 85
+
+
+State 54
+
+   19 drop_statement: DROP TABLE table_name .
+
+    $default  вывод с использованием правила 19 (drop_statement)
+
+
+State 55
+
+   11 show_statement: SHOW TABLE table_name .
+
+    $default  вывод с использованием правила 11 (show_statement)
+
+
+State 56
+
+   71 column_name: IDENTIFIER DOT . IDENTIFIER
+   72            | IDENTIFIER DOT . IDENTIFIER DOT IDENTIFIER
+
+    IDENTIFIER  сдвиг, и переход в состояние 86
+
+
+State 57
+
+   44 unary_operator: NOT operand .
+   45               | operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    EQUAL          сдвиг, и переход в состояние 68
+    NOTEQUAL       сдвиг, и переход в состояние 69
+    LESSEQUAL      сдвиг, и переход в состояние 70
+    GREATERQUALL   сдвиг, и переход в состояние 71
+    LESS           сдвиг, и переход в состояние 72
+    GREATER        сдвиг, и переход в состояние 73
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    $default  вывод с использованием правила 44 (unary_operator)
+
+
+State 58
+
+   43 unary_operator: BINNOT operand .
+   45               | operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    $default  вывод с использованием правила 43 (unary_operator)
+
+
+State 59
+
+   42 unary_operator: PLUS operand .
+   45               | operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    $default  вывод с использованием правила 42 (unary_operator)
+
+
+State 60
+
+   41 unary_operator: MINUS operand .
+   45               | operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    $default  вывод с использованием правила 41 (unary_operator)
+
+
+State 61
+
+   37 operand: OPENBRACKET expr . CLOSEBRACKET
+   59 logical_operator: expr . AND expr
+   60                 | expr . OR expr
+
+    AND           сдвиг, и переход в состояние 64
+    OR            сдвиг, и переход в состояние 65
+    CLOSEBRACKET  сдвиг, и переход в состояние 87
+
+
+State 62
+
+   20 select_statement: SELECT select_list FROM . table_name optional_where
+
+    IDENTIFIER  сдвиг, и переход в состояние 46
+
+    table_name  переход в состояние 88
+
+
+State 63
+
+   34 expr_list: expr_list COMMA . expr
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    expr              переход в состояние 89
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 64
+
+   59 logical_operator: expr AND . expr
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    expr              переход в состояние 90
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 65
+
+   60 logical_operator: expr OR . expr
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    expr              переход в состояние 91
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 66
+
+   45 unary_operator: operand ISNULL .
+
+    $default  вывод с использованием правила 45 (unary_operator)
+
+
+State 67
+
+   46 unary_operator: operand NOTNULL .
+
+    $default  вывод с использованием правила 46 (unary_operator)
+
+
+State 68
+
+   49 binary_operator: operand EQUAL . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 92
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 69
+
+   50 binary_operator: operand NOTEQUAL . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 93
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 70
+
+   51 binary_operator: operand LESSEQUAL . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 94
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 71
+
+   52 binary_operator: operand GREATERQUALL . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 95
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 72
+
+   47 binary_operator: operand LESS . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 96
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 73
+
+   48 binary_operator: operand GREATER . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 97
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 74
+
+   58 binary_operator: operand CONCATENATION . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 98
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 75
+
+   53 binary_operator: operand PLUS . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 99
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 76
+
+   54 binary_operator: operand MINUS . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 100
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 77
+
+   55 binary_operator: operand MULTIPLY . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 101
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 78
+
+   56 binary_operator: operand DIVISION . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 102
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 79
+
+   57 binary_operator: operand MOD . operand
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    operand          переход в состояние 103
+    unary_operator   переход в состояние 39
+    binary_operator  переход в состояние 40
+    scalar_expr      переход в состояние 42
+    literal_value    переход в состояние 43
+    column_name      переход в состояние 44
+
+
+State 80
+
+   25 insert_statement: INSERT INTO table_name . optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
+
+    IDENTIFIER  сдвиг, и переход в состояние 104
+
+    $default  вывод с использованием правила 27 (optional_column_list)
+
+    optional_column_list  переход в состояние 105
+    id_comma_list         переход в состояние 106
+
+
+State 81
+
+   74 table_name: IDENTIFIER DOT . IDENTIFIER
+
+    IDENTIFIER  сдвиг, и переход в состояние 107
+
+
+State 82
+
+   28 update_statement: UPDATE table_name SET . update_list optional_where
+
+    IDENTIFIER  сдвиг, и переход в состояние 108
+
+    update_list    переход в состояние 109
+    update_clause  переход в состояние 110
+
+
+State 83
+
+   32 delete_statement: DELETE FROM table_name . optional_where
+
+    WHERE  сдвиг, и переход в состояние 111
+
+    $default  вывод с использованием правила 24 (optional_where)
+
+    optional_where  переход в состояние 112
+
+
+State 84
+
+    3 sql_stmt_list: sql_stmt_list SEMICOLON statement .
+
+    $default  вывод с использованием правила 3 (sql_stmt_list)
+
+
+State 85
+
+   12 create_statement: CREATE TABLE table_name OPENBRACKET . column_def_commalist CLOSEBRACKET
+
+    IDENTIFIER  сдвиг, и переход в состояние 113
+
+    column_def_commalist  переход в состояние 114
+    column_def            переход в состояние 115
+
+
+State 86
+
+   71 column_name: IDENTIFIER DOT IDENTIFIER .
+   72            | IDENTIFIER DOT IDENTIFIER . DOT IDENTIFIER
+
+    DOT  сдвиг, и переход в состояние 116
+
+    $default  вывод с использованием правила 71 (column_name)
+
+
+State 87
+
+   37 operand: OPENBRACKET expr CLOSEBRACKET .
+
+    $default  вывод с использованием правила 37 (operand)
+
+
+State 88
+
+   20 select_statement: SELECT select_list FROM table_name . optional_where
+
+    WHERE  сдвиг, и переход в состояние 111
+
+    $default  вывод с использованием правила 24 (optional_where)
+
+    optional_where  переход в состояние 117
+
+
+State 89
+
+   34 expr_list: expr_list COMMA expr .
+   59 logical_operator: expr . AND expr
+   60                 | expr . OR expr
+
+    AND  сдвиг, и переход в состояние 64
+    OR   сдвиг, и переход в состояние 65
+
+    $default  вывод с использованием правила 34 (expr_list)
+
+
+State 90
+
+   59 logical_operator: expr . AND expr
+   59                 | expr AND expr .
+   60                 | expr . OR expr
+
+    $default  вывод с использованием правила 59 (logical_operator)
+
+
+State 91
+
+   59 logical_operator: expr . AND expr
+   60                 | expr . OR expr
+   60                 | expr OR expr .
+
+    AND  сдвиг, и переход в состояние 64
+
+    $default  вывод с использованием правила 60 (logical_operator)
+
+
+State 92
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   49                | operand EQUAL operand .
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    LESSEQUAL      сдвиг, и переход в состояние 70
+    GREATERQUALL   сдвиг, и переход в состояние 71
+    LESS           сдвиг, и переход в состояние 72
+    GREATER        сдвиг, и переход в состояние 73
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    EQUAL     ошибка (неассоциативная)
+    NOTEQUAL  ошибка (неассоциативная)
+
+    $default  вывод с использованием правила 49 (binary_operator)
+
+
+State 93
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   50                | operand NOTEQUAL operand .
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    LESSEQUAL      сдвиг, и переход в состояние 70
+    GREATERQUALL   сдвиг, и переход в состояние 71
+    LESS           сдвиг, и переход в состояние 72
+    GREATER        сдвиг, и переход в состояние 73
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    EQUAL     ошибка (неассоциативная)
+    NOTEQUAL  ошибка (неассоциативная)
+
+    $default  вывод с использованием правила 50 (binary_operator)
+
+
+State 94
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   51                | operand LESSEQUAL operand .
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    LESSEQUAL     ошибка (неассоциативная)
+    GREATERQUALL  ошибка (неассоциативная)
+    LESS          ошибка (неассоциативная)
+    GREATER       ошибка (неассоциативная)
+
+    $default  вывод с использованием правила 51 (binary_operator)
+
+
+State 95
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   52                | operand GREATERQUALL operand .
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    LESSEQUAL     ошибка (неассоциативная)
+    GREATERQUALL  ошибка (неассоциативная)
+    LESS          ошибка (неассоциативная)
+    GREATER       ошибка (неассоциативная)
+
+    $default  вывод с использованием правила 52 (binary_operator)
+
+
+State 96
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   47                | operand LESS operand .
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    LESSEQUAL     ошибка (неассоциативная)
+    GREATERQUALL  ошибка (неассоциативная)
+    LESS          ошибка (неассоциативная)
+    GREATER       ошибка (неассоциативная)
+
+    $default  вывод с использованием правила 47 (binary_operator)
+
+
+State 97
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   48                | operand GREATER operand .
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+    PLUS           сдвиг, и переход в состояние 75
+    MINUS          сдвиг, и переход в состояние 76
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    LESSEQUAL     ошибка (неассоциативная)
+    GREATERQUALL  ошибка (неассоциативная)
+    LESS          ошибка (неассоциативная)
+    GREATER       ошибка (неассоциативная)
+
+    $default  вывод с использованием правила 48 (binary_operator)
+
+
+State 98
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+   58                | operand CONCATENATION operand .
+
+    $default  вывод с использованием правила 58 (binary_operator)
+
+
+State 99
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   53                | operand PLUS operand .
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    $default  вывод с использованием правила 53 (binary_operator)
+
+
+State 100
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   54                | operand MINUS operand .
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+    MULTIPLY       сдвиг, и переход в состояние 77
+    DIVISION       сдвиг, и переход в состояние 78
+    MOD            сдвиг, и переход в состояние 79
+
+    $default  вывод с использованием правила 54 (binary_operator)
+
+
+State 101
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   55                | operand MULTIPLY operand .
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+
+    $default  вывод с использованием правила 55 (binary_operator)
+
+
+State 102
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   56                | operand DIVISION operand .
+   57                | operand . MOD operand
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+
+    $default  вывод с использованием правила 56 (binary_operator)
+
+
+State 103
+
+   45 unary_operator: operand . ISNULL
+   46               | operand . NOTNULL
+   47 binary_operator: operand . LESS operand
+   48                | operand . GREATER operand
+   49                | operand . EQUAL operand
+   50                | operand . NOTEQUAL operand
+   51                | operand . LESSEQUAL operand
+   52                | operand . GREATERQUALL operand
+   53                | operand . PLUS operand
+   54                | operand . MINUS operand
+   55                | operand . MULTIPLY operand
+   56                | operand . DIVISION operand
+   57                | operand . MOD operand
+   57                | operand MOD operand .
+   58                | operand . CONCATENATION operand
+
+    CONCATENATION  сдвиг, и переход в состояние 74
+
+    $default  вывод с использованием правила 57 (binary_operator)
+
+
+State 104
+
+   79 id_comma_list: IDENTIFIER .
+
+    $default  вывод с использованием правила 79 (id_comma_list)
+
+
+State 105
+
+   25 insert_statement: INSERT INTO table_name optional_column_list . VALUES OPENBRACKET literal_list CLOSEBRACKET
+
+    VALUES  сдвиг, и переход в состояние 118
+
+
+State 106
+
+   26 optional_column_list: id_comma_list .
+   80 id_comma_list: id_comma_list . COMMA IDENTIFIER
+
+    COMMA  сдвиг, и переход в состояние 119
+
+    $default  вывод с использованием правила 26 (optional_column_list)
+
+
+State 107
+
+   74 table_name: IDENTIFIER DOT IDENTIFIER .
+
+    $default  вывод с использованием правила 74 (table_name)
+
+
+State 108
+
+   31 update_clause: IDENTIFIER . EQUAL expr
+
+    EQUAL  сдвиг, и переход в состояние 120
+
+
+State 109
+
+   28 update_statement: UPDATE table_name SET update_list . optional_where
+   30 update_list: update_list . COMMA update_clause
+
+    WHERE  сдвиг, и переход в состояние 111
+    COMMA  сдвиг, и переход в состояние 121
+
+    $default  вывод с использованием правила 24 (optional_where)
+
+    optional_where  переход в состояние 122
+
+
+State 110
+
+   29 update_list: update_clause .
+
+    $default  вывод с использованием правила 29 (update_list)
+
+
+State 111
+
+   23 optional_where: WHERE . expr
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    expr              переход в состояние 123
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 112
+
+   32 delete_statement: DELETE FROM table_name optional_where .
+
+    $default  вывод с использованием правила 32 (delete_statement)
+
+
+State 113
+
+   15 column_def: IDENTIFIER . column_type
+
+    DOUBLE   сдвиг, и переход в состояние 124
+    TEXT     сдвиг, и переход в состояние 125
+    INTEGER  сдвиг, и переход в состояние 126
+
+    column_type  переход в состояние 127
+
+
+State 114
+
+   12 create_statement: CREATE TABLE table_name OPENBRACKET column_def_commalist . CLOSEBRACKET
+   14 column_def_commalist: column_def_commalist . COMMA column_def
+
+    COMMA         сдвиг, и переход в состояние 128
+    CLOSEBRACKET  сдвиг, и переход в состояние 129
+
+
+State 115
+
+   13 column_def_commalist: column_def .
+
+    $default  вывод с использованием правила 13 (column_def_commalist)
+
+
+State 116
+
+   72 column_name: IDENTIFIER DOT IDENTIFIER DOT . IDENTIFIER
+
+    IDENTIFIER  сдвиг, и переход в состояние 130
+
+
+State 117
+
+   20 select_statement: SELECT select_list FROM table_name optional_where .
+
+    $default  вывод с использованием правила 20 (select_statement)
+
+
+State 118
+
+   25 insert_statement: INSERT INTO table_name optional_column_list VALUES . OPENBRACKET literal_list CLOSEBRACKET
+
+    OPENBRACKET  сдвиг, и переход в состояние 131
+
+
+State 119
+
+   80 id_comma_list: id_comma_list COMMA . IDENTIFIER
+
+    IDENTIFIER  сдвиг, и переход в состояние 132
+
+
+State 120
+
+   31 update_clause: IDENTIFIER EQUAL . expr
+
+    IDENTIFIER     сдвиг, и переход в состояние 21
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+    NOT            сдвиг, и переход в состояние 29
+    BINNOT         сдвиг, и переход в состояние 30
+    PLUS           сдвиг, и переход в состояние 31
+    MINUS          сдвиг, и переход в состояние 32
+    OPENBRACKET    сдвиг, и переход в состояние 34
+
+    expr              переход в состояние 133
+    operand           переход в состояние 38
+    unary_operator    переход в состояние 39
+    binary_operator   переход в состояние 40
+    logical_operator  переход в состояние 41
+    scalar_expr       переход в состояние 42
+    literal_value     переход в состояние 43
+    column_name       переход в состояние 44
+
+
+State 121
+
+   30 update_list: update_list COMMA . update_clause
+
+    IDENTIFIER  сдвиг, и переход в состояние 108
+
+    update_clause  переход в состояние 134
+
+
+State 122
+
+   28 update_statement: UPDATE table_name SET update_list optional_where .
+
+    $default  вывод с использованием правила 28 (update_statement)
+
+
+State 123
+
+   23 optional_where: WHERE expr .
+   59 logical_operator: expr . AND expr
+   60                 | expr . OR expr
+
+    AND  сдвиг, и переход в состояние 64
+    OR   сдвиг, и переход в состояние 65
+
+    $default  вывод с использованием правила 23 (optional_where)
+
+
+State 124
+
+   17 column_type: DOUBLE .
+
+    $default  вывод с использованием правила 17 (column_type)
+
+
+State 125
+
+   18 column_type: TEXT .
+
+    $default  вывод с использованием правила 18 (column_type)
+
+
+State 126
+
+   16 column_type: INTEGER .
+
+    $default  вывод с использованием правила 16 (column_type)
+
+
+State 127
+
+   15 column_def: IDENTIFIER column_type .
+
+    $default  вывод с использованием правила 15 (column_def)
+
+
+State 128
+
+   14 column_def_commalist: column_def_commalist COMMA . column_def
+
+    IDENTIFIER  сдвиг, и переход в состояние 113
+
+    column_def  переход в состояние 135
+
+
+State 129
+
+   12 create_statement: CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET .
+
+    $default  вывод с использованием правила 12 (create_statement)
+
+
+State 130
+
+   72 column_name: IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER .
+
+    $default  вывод с использованием правила 72 (column_name)
+
+
+State 131
+
+   25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET . literal_list CLOSEBRACKET
+
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+
+    literal_value  переход в состояние 136
+    literal_list   переход в состояние 137
+
+
+State 132
+
+   80 id_comma_list: id_comma_list COMMA IDENTIFIER .
+
+    $default  вывод с использованием правила 80 (id_comma_list)
+
+
+State 133
+
+   31 update_clause: IDENTIFIER EQUAL expr .
+   59 logical_operator: expr . AND expr
+   60                 | expr . OR expr
+
+    AND  сдвиг, и переход в состояние 64
+    OR   сдвиг, и переход в состояние 65
+
+    $default  вывод с использованием правила 31 (update_clause)
+
+
+State 134
+
+   30 update_list: update_list COMMA update_clause .
+
+    $default  вывод с использованием правила 30 (update_list)
+
+
+State 135
+
+   14 column_def_commalist: column_def_commalist COMMA column_def .
+
+    $default  вывод с использованием правила 14 (column_def_commalist)
+
+
+State 136
+
+   77 literal_list: literal_value .
+
+    $default  вывод с использованием правила 77 (literal_list)
+
+
+State 137
+
+   25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list . CLOSEBRACKET
+   78 literal_list: literal_list . COMMA literal_value
+
+    COMMA         сдвиг, и переход в состояние 138
+    CLOSEBRACKET  сдвиг, и переход в состояние 139
+
+
+State 138
+
+   78 literal_list: literal_list COMMA . literal_value
+
+    STRING         сдвиг, и переход в состояние 22
+    BLOB_STRING    сдвиг, и переход в состояние 23
+    INTEGER_CONST  сдвиг, и переход в состояние 24
+    TRUE           сдвиг, и переход в состояние 25
+    FALSE          сдвиг, и переход в состояние 26
+    DOUBLE_CONST   сдвиг, и переход в состояние 27
+    NULL_          сдвиг, и переход в состояние 28
+
+    literal_value  переход в состояние 140
+
+
+State 139
+
+   25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET .
+
+    $default  вывод с использованием правила 25 (insert_statement)
+
+
+State 140
+
+   78 literal_list: literal_list COMMA literal_value .
+
+    $default  вывод с использованием правила 78 (literal_list)
