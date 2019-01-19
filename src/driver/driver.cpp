@@ -1,10 +1,24 @@
 #include "driver.hpp"
 #include <memory>
 #include <storage/datatypes/RawData.hpp>
+#include <parser/sql-stmt/Literal.hpp>
 
 namespace sql {
 
 using json = nlohmann::json;
+
+cmd::LiteralType LiteralTypeFromStr(const std::string str) {
+    if (str == "INTEGER")
+        return cmd::LiteralType::INTEGER;
+    else if (str == "DOUBLE")
+        return cmd::LiteralType::DOUBLE;
+    else if (str == "TEXT")
+        return cmd::LiteralType::TEXT;
+    else if (str == "BOOL")
+        return cmd::LiteralType::BOOL;
+    else
+        return cmd::LiteralType::NONE;
+}
 
 std::string Driver::RunQuery(const std::string query)
 {
@@ -88,11 +102,21 @@ Table* Driver::Execute(const cmd::Insert& instruction)
     se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
     if (instruction.into_.empty()) {
         auto& data = meta.data();
-        for (auto it = data.begin(); it != data.end(); ++it) {
-            if (it.key()[0] == '_') {
-                continue;
-            }
-            if (it.value())
+        int count = data.at("_columns_count");
+        if (count != instruction.values_.size()) {
+            throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
+        }
+        //shit code. refactor this later
+        auto d = data.begin();
+        for (auto l = instruction.values_.begin(); d != data.end() && l != instruction.values_.end(); ++d, ++l) {
+//            while (d.key()[0] == '_' && d != data.end()) {
+//                d++;
+//            }
+            std::string str = data.at(d.key());
+//            if (LiteralTypeFromStr(str) != l->ValueType()) {
+//                throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
+//            }
+            std::cout << std::endl << "META:" << str << " INSERT:" << to_string(l->ValueType()) << std::endl;
         }
     }
 
