@@ -63,10 +63,6 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
   for (auto& col : instruction.columns_) {
       meta.Add(col.name_, to_string(col.type_));
   }
-  std::unordered_map<std::string, se::size_t> mapping = {
-      {"INTEGER", sizeof(int32_t)},
-      {"TEXT", 256},
-  };
 
   se::size_t size = 0;
   for (auto& row : meta.data().at("public").items()) {
@@ -110,23 +106,33 @@ Table* Driver::Execute(const cmd::Insert& instruction)
     }
     se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
     if (instruction.into_.empty()) {
-//        auto& data = meta.data();
-//        int count = data.at("_columns_count");
-//        if (count != instruction.values_.size()) {
-//            throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
-//        }
-//        //shit code. refactor this later
-//        auto d = data.begin();
-//        for (auto l = instruction.values_.begin(); d != data.end() && l != instruction.values_.end(); ++d, ++l) {
-//            while (d.key()[0] == '_' && d != data.end()) {
-//                d++;
-//           }
-//            std::string str = data.at(d.key());
-//           if (LiteralTypeFromStr(str) != l->ValueType()) {
-//               throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
-//           }
-//            std::cout << std::endl << "META:" << str << " INSERT:" << to_string(l->ValueType()) << std::endl;
-//        }
+        auto &data = meta.data().at("public");
+        if (data.size() != instruction.values_.size()) {
+            throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
+        }
+        auto d = data.items().begin();
+        se::RawData raw(meta.data()["private"]["size"]);
+        for (auto l = instruction.values_.begin(); d != data.items().end() && l != instruction.values_.end(); ++d, ++l) {
+            std::string str = data.at(d.key());
+            if (LiteralTypeFromStr(str) != l->ValueType()) {
+               throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
+            }
+            switch (l->ValueType()) {
+                case cmd::LiteralType::INTEGER:
+                    raw.Fill<int32_t >( std::stoi(l->Value()));
+                    break;
+                case cmd::LiteralType::DOUBLE:
+                    raw.Fill<double>( std::stod(l->Value()));
+                    break;
+                case cmd::LiteralType::BOOL:
+                    raw.Fill<bool>( (bool) std::stoi(l->Value()));
+                    break;
+                case cmd::LiteralType::TEXT:
+                    raw.Fill<std::string>( l->Value());
+                    break;
+            }
+        }
+        storage.Write(meta, raw.data(), raw.capacity());
     }
 
     Record record({ std::make_shared<BoolField>(BoolField(true)) });

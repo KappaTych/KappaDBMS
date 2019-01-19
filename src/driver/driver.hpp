@@ -28,6 +28,13 @@ public:
     return instance;
   }
 
+public:
+  std::unordered_map<std::string, se::size_t> mapping = {
+    {"INTEGER", sizeof(int32_t)},
+    {"TEXT", 256},
+    {"DOUBLE", sizeof(double)},
+  };
+
   std::string RunQuery(const std::string);
 
   Table* Execute(const cmd::Instruction&) override;

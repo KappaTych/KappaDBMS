@@ -9,16 +9,16 @@ int main(int argc, char *argv[])
   auto& instance = sql::Driver::Instance();
 
   try {
-    std::string create_query = "CREATE TABLE my_table (id INTEGER, price DOUBLE, description TEXT)";
+    std::string create_query = "CREATE TABLE goods (id INTEGER, price DOUBLE, description TEXT)";
     std::cout << instance.RunQuery(create_query) << std::endl;
   } catch (std::exception& ex) {
     std::cout << ex.what() << std::endl;
   }
 
-  std::string show_query = "SHOW TABLE my_table";
+  std::string show_query = "SHOW TABLE goods";
   std::cout << instance.RunQuery(show_query) << std::endl;
 
-  std::string insert_query( "INSERT INTO my_table VALUES (123, 'test', 12.1)");
+  std::string insert_query( "INSERT INTO goods VALUES (123, 12.1, 'test')");
   std::cout << instance.RunQuery(insert_query) << std::endl;
 
 //  std::string select_query = "SELECT * FROM my_table";
