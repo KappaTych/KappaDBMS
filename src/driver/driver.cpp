@@ -1,7 +1,4 @@
 #include "driver.hpp"
-#include <memory>
-#include <storage/datatypes/RawData.hpp>
-#include <parser/sql-stmt/Literal.hpp>
 
 namespace sql {
 
@@ -22,6 +19,8 @@ cmd::LiteralType LiteralTypeFromStr(const std::string str) {
 
 std::string Driver::RunQuery(const std::string query)
 {
+
+
   auto& parser = Parser::Instance();
   auto instructions = parser.Process(query);
   std::vector<Table> tables;
@@ -58,12 +57,22 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
   auto& storage = se::StorageEngine::Instance();
   std::string name = instruction.table_.ToString();
   if (storage.HasMetaData(name)) {
-    throw std::logic_error("DriverError: Table already exist");
+      throw std::logic_error("DriverError: Table already exist");
   }
   se::MetaData& meta = storage.CreateData(name);
   for (auto& col : instruction.columns_) {
-    meta.Add(col.name_, to_string(col.type_));
+      meta.Add(col.name_, to_string(col.type_));
   }
+  std::unordered_map<std::string, se::size_t> mapping = {
+      {"INTEGER", sizeof(int32_t)},
+      {"TEXT", 256},
+  };
+
+  se::size_t size = 0;
+  for (auto& row : meta.data().at("public").items()) {
+      size += mapping[row.value()];
+  }
+  meta.Add("size", size, "private");
   storage.Flush();
 
   Record record({ std::make_shared<BoolField>(BoolField(true)) });
@@ -101,23 +110,23 @@ Table* Driver::Execute(const cmd::Insert& instruction)
     }
     se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
     if (instruction.into_.empty()) {
-        auto& data = meta.data();
-        int count = data.at("_columns_count");
-        if (count != instruction.values_.size()) {
-            throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
-        }
-        //shit code. refactor this later
-        auto d = data.begin();
-        for (auto l = instruction.values_.begin(); d != data.end() && l != instruction.values_.end(); ++d, ++l) {
+//        auto& data = meta.data();
+//        int count = data.at("_columns_count");
+//        if (count != instruction.values_.size()) {
+//            throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
+//        }
+//        //shit code. refactor this later
+//        auto d = data.begin();
+//        for (auto l = instruction.values_.begin(); d != data.end() && l != instruction.values_.end(); ++d, ++l) {
 //            while (d.key()[0] == '_' && d != data.end()) {
 //                d++;
-//            }
-            std::string str = data.at(d.key());
-//            if (LiteralTypeFromStr(str) != l->ValueType()) {
-//                throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
-//            }
-            std::cout << std::endl << "META:" << str << " INSERT:" << to_string(l->ValueType()) << std::endl;
-        }
+//           }
+//            std::string str = data.at(d.key());
+//           if (LiteralTypeFromStr(str) != l->ValueType()) {
+//               throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
+//           }
+//            std::cout << std::endl << "META:" << str << " INSERT:" << to_string(l->ValueType()) << std::endl;
+//        }
     }
 
     Record record({ std::make_shared<BoolField>(BoolField(true)) });
@@ -146,8 +155,7 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
   se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
 
   std::string result =  "CREATE TABLE " + instruction.table_.ToString() + " (";
-  for (auto& j : meta.data().items()) {
-    if (j.key()[0] == '_') continue;
+  for (auto& j : meta.data().at("public").items()) {
     result += j.key() + " " + std::string(j.value()) + ", ";
   }
   result.pop_back();

@@ -21,10 +21,10 @@ std::istream& operator>>(std::istream& in, se::RawData& raw);
 
 namespace se {
 
+const size_t STRING_LEN = 256;
+
 class RawData
 {
-public:
-  static const size_t STRING_LEN = 256;
 
 public:
   bool copied = false;
@@ -68,13 +68,13 @@ private:
 
 public:
   template<typename T>
-  const RawData& Fill(T value, bool relative = false, size_t len = se::RawData::STRING_LEN) const
+  const RawData& Fill(T value, bool relative = false, size_t len = se::STRING_LEN) const
   {
     return Fill(value, relative, len, std::enable_if<true, T>());
   }
 
   template<typename T>
-  T Get(size_t len = se::RawData::STRING_LEN) const
+  T Get(size_t len = se::STRING_LEN) const
   {
     return Get(len, std::enable_if<true, T>());
   }

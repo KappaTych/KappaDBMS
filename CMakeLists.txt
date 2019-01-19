@@ -67,7 +67,7 @@ option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
 option(BUILD_DRIVER "Build DRIVER" ON)
 option(BUILD_SERVER "Build SERVER" OFF)
-option(BUILD_TESTS "Build TESTS" OFF)
+option(BUILD_TESTS "Build TESTS" ON)
 
 # set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})
 # set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${lib}/clsocket)
