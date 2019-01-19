@@ -25,15 +25,15 @@ public:
   void Read(std::istream& fin);
   void Write(std::ostream& fout);
 
-  void Add(std::string key, int32_t value);
-  void Add(std::string key, std::string value);
+  void Add(std::string key, int32_t value, std::string group = "public");
+  void Add(std::string key, std::string value, std::string group = "public");
   // TODO: operator[]
 
 public:
-  my_json& data() { return *data_; }
+  my_json& data() { return data_; }
 
 private:
-  std::shared_ptr<my_json> data_;
+  my_json data_;
 };
 
 } //namespace se

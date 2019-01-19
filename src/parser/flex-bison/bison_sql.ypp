@@ -108,13 +108,13 @@ sql_stmt_list:
 
 %type <std::shared_ptr<cmd::Instruction>> statement;
 statement:
-        drop_statement
-    |   show_statement
-    |   create_statement
-    |   select_statement
-    |   insert_statement
-    |   update_statement
-    |   delete_statement
+        drop_statement { $$ = $1; }
+    |   show_statement { $$ = $1; }
+    |   create_statement { $$ = $1; }
+    |   select_statement { $$ = $1; }
+    |   insert_statement { $$ = $1; }
+    |   update_statement { $$ = $1; }
+    |   delete_statement { $$ = $1; }
     ;
 
 
@@ -200,7 +200,7 @@ optional_where:
     ;   
 
 
-// Inser Statement
+// Insert Statement
 %type <std::shared_ptr<cmd::Insert>> insert_statement;
 insert_statement:
         INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET 

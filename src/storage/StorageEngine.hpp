@@ -13,6 +13,7 @@
 #include <fifo_map.hpp>
 #include <cppfs/fs.h>
 #include <cppfs/FileHandle.h>
+#include <cppfs/FilePath.h>
 // #include <btree/btree_map.h>
 
 #include "datatypes/MemoryBlock.hpp"

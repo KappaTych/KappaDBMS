@@ -11,6 +11,7 @@
 #pragma once
 
 #include <iostream>
+#include <exception>
 #include <string>
 #include <thread>
 #include <memory>
@@ -18,12 +19,11 @@
 #include <map>
 
 #include <ctpl_stl.h>
+#include <driver/driver.hpp>
+#include <protocol.hpp>
+
 #include <ActiveSocket.h>
 #include <PassiveSocket.h>
-
-#include "protocol.hpp"
-#include "../parser/parser.hpp"
-
 
 namespace kappa
 {

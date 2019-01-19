@@ -10,12 +10,14 @@
 
 #include <iostream>
 
-#include "include/cxxopts.hpp"
-#include "server/server.hpp"
-
+#include <cxxopts.hpp>
+#include <storage/StorageEngine.hpp>
+#include <server/server.hpp>
 
 int main(int argc, char *argv[])
 {
+  se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
+
   try {
     cxxopts::Options options(argv[0], "Server Application for Kappa Database Management System");
     options

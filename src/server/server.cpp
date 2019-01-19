@@ -10,7 +10,6 @@
 
 #include "server.hpp"
 
-
 namespace kappa {
 
 Server::Server(int port, int size)
@@ -96,12 +95,13 @@ void Server::ProcessClient(client_s client)
       std::cout << "Received: " << payload << std::endl;
 
       try {
-        sql::sqliteParse(payload);
-        result = "Okay, SQL accepted";
+        result = sql::Driver::Instance().RunQuery(payload);
       } catch (std::string ex) {
-        result = ex;
+        result = "{\"code\":0,\"result\":\"" + ex + "\"}";
+      } catch (std::exception& ex) {
+        result = "{\"code\":0,\"result\":\"" + std::string(ex.what()) + "\"}";
       } catch (...) {
-        result = "Unexpected error";
+        result = "{\"code\":0,\"result\":\"Unexpected error\"}";
       }
       client->Send((const uint8*) result.c_str(), result.length());
       break;

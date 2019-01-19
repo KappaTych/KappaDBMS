@@ -63,7 +63,7 @@ public:
 
   cmd::TableDefinition name_;
 
-private:
+public:
   std::list<cmd::ColumnDefinition> columns_;
   std::list<Record> records_;
 

@@ -66,7 +66,7 @@ endif()
 option(BUILD_PARSER "Build PARSER" ON)
 option(BUILD_STORAGE "Build STORAGE" ON)
 option(BUILD_DRIVER "Build DRIVER" ON)
-option(BUILD_SERVER "Build SERVER" OFF)
+option(BUILD_SERVER "Build SERVER" ON)
 option(BUILD_TESTS "Build TESTS" OFF)
 
 # set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}:${dir})

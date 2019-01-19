@@ -9,11 +9,11 @@ se::MetaData::MetaData(std::istream& fin)
   // this->read(fin);
 }
 
-se::MetaData::MetaData(my_json j) : data_(std::make_shared<my_json>(j)) { }
+se::MetaData::MetaData(my_json j) : data_(j) { }
 
-se::MetaData::MetaData(const std::string name) : data_(std::make_shared<my_json>())
+se::MetaData::MetaData(const std::string name) : data_()
 {
-  (*data_)["_path"] = "database/" + name + ".kp";
+  data_["private"]["path"] = "database/" + name + ".kp";
 }
 
 void se::MetaData::Read(std::istream& fin)
@@ -22,20 +22,20 @@ void se::MetaData::Read(std::istream& fin)
   fin >> j;
   if (j.is_null())
     throw std::invalid_argument("StorageError: Couldn't read metaData-file");
-  data_ = std::make_shared<my_json>(j);
+  data_ = j;
 }
 
 void se::MetaData::Write(std::ostream& fout)
 {
-  fout << data_.get()->dump();
+  fout << data_.dump();
 }
 
-void se::MetaData::Add(std::string key, int32_t value)
+void se::MetaData::Add(std::string key, int32_t value, std::string group)
 {
-  data_.get()->push_back({key, value});
+  data_[group][key] = value;
 }
 
-void se::MetaData::Add(std::string key, std::string value)
+void se::MetaData::Add(std::string key, std::string value, std::string group)
 {
-  data_.get()->push_back({key, value});
+  data_[group][key] = value;
 }
