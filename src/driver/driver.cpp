@@ -146,8 +146,7 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
   se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
 
   std::string result =  "CREATE TABLE " + instruction.table_.ToString() + " (";
-  for (auto& j : meta.data().items()) {
-    if (j.key()[0] == '_') continue;
+  for (auto& j : meta.data().at("public").items()) {
     result += j.key() + " " + std::string(j.value()) + ", ";
   }
   result.pop_back();
