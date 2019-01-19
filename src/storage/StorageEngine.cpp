@@ -173,6 +173,7 @@ void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& fun
   m_writer.lock();
   auto& blockList = LoadBlockList(metaData);
   RawData raw(MemoryBlock::DEFAULT_CAPACITY);
+  std::vector<std::reference_wrapper<se::MemoryBlock>> block_delete;
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
     auto& block = it.get();
     auto& blockData = block.data();
@@ -183,12 +184,15 @@ void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& fun
       }
     }
     if (raw.size() == 0) {
-      blockList.FreeBlock(block);
+      block_delete.emplace_back(block);
     } else if (blockData.size() != raw.size()) {
       block.data().FullReset();
       block << raw;
     }
     raw.FullReset();
+  }
+  for (auto block : block_delete) {
+    blockList.FreeBlock(block);
   }
   m_writer.unlock();
 }
