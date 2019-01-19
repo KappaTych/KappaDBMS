@@ -144,12 +144,15 @@ std::list<RawData> StorageEngine::Read(MetaData& metaData, size_t size, const co
 
 void StorageEngine::Write(MetaData& metaData, const char* row, size_t size)
 {
+  m_writer.lock();
   auto& blockList = LoadBlockList(metaData);
   blockList.WriteData(row, size);
+  m_writer.unlock();
 }
 
 void StorageEngine::Update(MetaData& metaData, const size_t size, const update_t& func)
 {
+  m_writer.lock();
   auto& blockList = LoadBlockList(metaData);
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
     auto& block = it.get();
@@ -162,10 +165,12 @@ void StorageEngine::Update(MetaData& metaData, const size_t size, const update_t
       blockList << block;
     }
   }
+  m_writer.unlock();
 }
 
 void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& func)
 {
+  m_writer.lock();
   auto& blockList = LoadBlockList(metaData);
   RawData raw(MemoryBlock::DEFAULT_CAPACITY);
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
@@ -185,6 +190,7 @@ void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& fun
     }
     raw.FullReset();
   }
+  m_writer.unlock();
 }
 
 } // namespace se

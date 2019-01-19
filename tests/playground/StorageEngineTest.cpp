@@ -2,6 +2,7 @@
 #include <fstream>
 #include <cstdio>
 #include <cstdint>
+#include <future>
 #include <btree/safe_btree_map.h>
 
 #include <unordered_map>
@@ -106,6 +107,39 @@ int main(int argc, char *argv[])
   std::cout << "SELECT ALL" << std::endl;
   auto dataAll2 = storage.Read(meta, size);
   for (auto& x : dataAll2) {
+    std::cout << x.Get<int32_t>() << std::endl;
+    std::cout << x.Get<std::string>() << std::endl;
+    std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl;
+    x.Reset();
+  }
+
+  // THREAD SAFE
+  auto updater = [&storage, &meta, &size](std::string fill) {
+    std::cout << "UPDATE WHERE id = 1" << std::endl << "-----------------------" << std::endl;
+    storage.Update(meta, size, [=](se::RawData &&raw) {
+        if (raw.Get<int>() == 1) {
+          raw.Fill<std::string>(fill, true);
+          return true;
+        }
+        return false;
+    });
+  };
+  auto task1 = std::async(std::launch::async,
+                          updater, "Update first task");
+  auto task2 = std::async(std::launch::async,
+                          updater, "Update second task");
+  auto task3 = std::async(std::launch::async,
+                          updater, "Update third task");
+  auto task4 = std::async(std::launch::async,
+                          updater, "Update fourth task");
+  task1.wait();
+  task2.wait();
+  task3.wait();
+  task4.wait();
+
+  std::cout << "SELECT ALL" << std::endl;
+  auto dataAll3 = storage.Read(meta, size);
+  for (auto& x : dataAll3) {
     std::cout << x.Get<int32_t>() << std::endl;
     std::cout << x.Get<std::string>() << std::endl;
     std::cout << x.Get<int32_t>() << std::endl << "-----------------------" << std::endl;
