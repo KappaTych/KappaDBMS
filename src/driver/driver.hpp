@@ -24,7 +24,7 @@ class Driver : public DriverBase {
 public:
   static Driver& Instance()
   {
-    static Driver instance;
+    static thread_local Driver instance;
     return instance;
   }
 
