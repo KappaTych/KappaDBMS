@@ -133,7 +133,7 @@ INTEGER     return yy::BisonParser::make_INTEGER(loc);
 }
 
 . { 
-    throw "[SQL-Lexer-Error] Unknown Character: " +  yytext[0];
+    throw std::logical_error("[SQL-Lexer-Error] Unknown Character: " +  yytext[0])z;
 }
 
 %%
