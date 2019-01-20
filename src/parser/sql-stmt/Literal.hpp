@@ -36,8 +36,8 @@ public:
     switch (valueType_) {
       case LiteralType::NONE:   return "";
       case LiteralType::BOOL:   return (bval_ ? "true" : "false");
-      case LiteralType::INTEGER:    return std::to_string(fval_);
-      case LiteralType::DOUBLE: return std::to_string(ival_);
+      case LiteralType::INTEGER:    return std::to_string(ival_);
+      case LiteralType::DOUBLE: return std::to_string(fval_);
       case LiteralType::TEXT: return strval_;
     }
     return "";

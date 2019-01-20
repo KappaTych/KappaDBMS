@@ -112,7 +112,7 @@ Table* Driver::Execute(const cmd::Select& instruction)
       for (auto& column : columns_def) {
         switch(column.type_) {
           case cmd::LiteralType::INTEGER:
-            fields.emplace_back(std::make_shared<DoubleField>(x.Get<int32_t>()));
+            fields.emplace_back(std::make_shared<IntField>(x.Get<int32_t>()));
             break;
           case cmd::LiteralType::DOUBLE:
             fields.emplace_back(std::make_shared<DoubleField>(x.Get<double>()));
