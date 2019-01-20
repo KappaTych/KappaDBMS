@@ -9,7 +9,7 @@ addons:
 
 env:
   global:
-    - CXX=g++-5 CC=gcc-5 GCOV=gcov-5
+    - CXX=g++-7 CC=gcc-7 GCOV=gcov-7 GSL_CXX_STANDARD=14
 
 # Handle git submodules yourself
 git:
