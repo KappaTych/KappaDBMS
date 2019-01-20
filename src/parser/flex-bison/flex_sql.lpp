@@ -121,7 +121,7 @@ INTEGER     return yy::BisonParser::make_INTEGER(loc);
 }
 
 \"[^\"\n]+\" {
-    return yy::BisonParser::make_IDENTIFIER(std::string(yytext + 1, yyleng - 1), loc);
+    return yy::BisonParser::make_IDENTIFIER(std::string(yytext + 1, yyleng - 2), loc);
 }
 
 {Letter}({Letter}|{Digit})* {
@@ -129,11 +129,11 @@ INTEGER     return yy::BisonParser::make_INTEGER(loc);
 }
 
 \'([^'\n]|\'\')*\' {
-    return yy::BisonParser::make_STRING(std::string(yytext + 1, yyleng - 1), loc);
+    return yy::BisonParser::make_STRING(std::string(yytext + 1, yyleng - 2), loc);
 }
 
 . { 
-    throw std::logical_error("[SQL-Lexer-Error] Unknown Character: " +  yytext[0])z;
+    throw std::logic_error("[SQL-Lexer-Error] Unknown Character: " +  yytext[0]);
 }
 
 %%
