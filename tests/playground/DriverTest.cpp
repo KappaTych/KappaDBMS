@@ -18,13 +18,13 @@ int main(int argc, char *argv[])
   std::string show_query = "SHOW TABLE goods";
   std::cout << instance.RunQuery(show_query) << std::endl;
 
-  std::string insert_query( "INSERT INTO goods VALUES (123, 12.1, 'test')");
+  std::string insert_query( "INSERT INTO goods VALUES (123, 12.1, 'asd')");
   std::cout << instance.RunQuery(insert_query) << std::endl;
 
 //  std::string select_query = "SELECT * FROM my_table";
 //  std::cout << instance.RunQuery(select_query) << std::endl;
 //
-//  std::string drop_query = "DROP TABLE my_table";
-//  std::cout << instance.RunQuery(drop_query) << std::endl;
+  std::string drop_query = "DROP TABLE goods";
+  std::cout << instance.RunQuery(drop_query) << std::endl;
   return 0;
 }

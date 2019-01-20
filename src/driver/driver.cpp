@@ -19,8 +19,6 @@ cmd::LiteralType LiteralTypeFromStr(const std::string str) {
 
 std::string Driver::RunQuery(const std::string query)
 {
-
-
   auto& parser = Parser::Instance();
   auto instructions = parser.Process(query);
   std::vector<Table> tables;
@@ -85,7 +83,6 @@ Table* Driver::Execute(const cmd::DropTable& instruction)
     throw std::logic_error("DriverError: Table doesn't exist");
   }
   storage.RemoveData(name);
-  // storage.Flush();
 
   Record record({ std::make_shared<BoolField>(BoolField(true)) });
   cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
@@ -133,6 +130,9 @@ Table* Driver::Execute(const cmd::Insert& instruction)
             }
         }
         storage.Write(meta, raw.data(), raw.capacity());
+    }
+    else {
+        throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
     }
 
     Record record({ std::make_shared<BoolField>(BoolField(true)) });
