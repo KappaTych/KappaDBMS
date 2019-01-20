@@ -42,7 +42,19 @@ enum class OperationType
 
 using ptr_Expression = std::shared_ptr<Expression>;
 using ptr_update_clause = std::shared_ptr<std::pair<cmd::Column, ptr_Expression>>;
-using update_clause = std::pair<cmd::Column, cmd::ptr_Expression>;
+using column_type = std::pair<cmd::LiteralType, std::string>;
+
+// for parser only
+class UpdateClause {
+public:
+    UpdateClause(cmd::Column c, cmd::ptr_Expression e, std::string r)
+        : update_clause(std::make_pair(c, e)), raw(r) {}
+    UpdateClause() = default;
+    UpdateClause& operator=(const UpdateClause &) = default;
+
+    std::pair<cmd::Column, cmd::ptr_Expression> update_clause;
+    std::string raw;
+};
 
 class Operation : public Expression
 {

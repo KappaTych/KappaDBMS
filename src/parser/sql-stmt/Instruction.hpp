@@ -57,9 +57,12 @@ public:
   const InstructionType type() const { return type_; }
 
   virtual sql::Table* Accept(sql::DriverBase&) = 0;
+  void SetRaw(std::string s) { raw = std::move(s); }
+  std::string& GetRaw() { return raw; }
 
 private:
   InstructionType type_;
+  std::string raw;
 };
 
 } // namespace cmd
