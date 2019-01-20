@@ -48,7 +48,7 @@ void BlockList::WriteData(const data_t* row, size_t size)
 MemoryBlock& BlockList::LoadBlock(size_t offset)
 {
   // NOTE: due to map rehashing it would be dangerous to return iterator
-  auto result = blocks_.emplace(std::make_pair(offset, offset));
+  auto result = blocks_.emplace(offset, offset);
   if (!result.second) {
     return blocks_[offset];
   }
