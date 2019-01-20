@@ -20,9 +20,9 @@ class Literal : public Expression
 {
 public:
   Literal() : Expression(LITERAL), valueType_(LiteralType::NONE) {}
-  explicit Literal(bool v) : Expression(LITERAL), valueType_(LiteralType::BOOL), ival_(v) {}
-  explicit Literal(long long v) : Expression(LITERAL), valueType_(LiteralType::INTEGER), fval_(v) {}
-  explicit Literal(long double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), bval_(v) {}
+  explicit Literal(bool v) : Expression(LITERAL), valueType_(LiteralType::BOOL), bval_(v) {}
+  explicit Literal(long long v) : Expression(LITERAL), valueType_(LiteralType::INTEGER), ival_(v) {}
+  explicit Literal(long double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), fval_(v) {}
   explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::TEXT), strval_(v) {}
 
   ~Literal() = default;
