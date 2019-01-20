@@ -52,6 +52,17 @@ private:
   std::string value_;
 };
 
+class IntField : public Field
+{
+public:
+  IntField(int32_t value) : value_(value) {}
+  int32_t GetValue() { return value_; }
+  void SetValue(int32_t value) { value_ = value; }
+  std::string ToString() const override { return std::to_string(value_); }
+private:
+  int32_t value_;
+};
+
 void to_json(json& j, const Field&);
 void from_json(const json& j, Field&);
 using FieldSPtr = std::shared_ptr<Field>;

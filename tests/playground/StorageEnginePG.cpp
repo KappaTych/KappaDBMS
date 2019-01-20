@@ -11,8 +11,6 @@
 #include <storage/datatypes/RawData.hpp>
 
 
-const size_t se::RawData::STRING_LEN;
-
 int main(int argc, char *argv[])
 {
   se::StorageEngine::SetRootPath( cppfs::FilePath(argv[0]).directoryPath() );
@@ -21,7 +19,7 @@ int main(int argc, char *argv[])
   // Supported types info
   std::unordered_map<std::string, se::size_t> mapping = {
     {"INTEGER", sizeof(int32_t)},
-    {"TEXT", se::RawData::STRING_LEN},
+    {"TEXT", se::STRING_LEN},
   };
 
   std::string tableName = "some_table";
@@ -99,7 +97,7 @@ int main(int argc, char *argv[])
   // DELETE WHERE count < 64
   std::cout << "DELETE WHERE count < 64" << std::endl << "-----------------------" << std::endl;
   storage.Delete(meta, size, [](const se::RawData& raw) {
-      return (raw.Skip<int>().Skip<std::string>(se::RawData::STRING_LEN).Get<int>() < 64);
+      return (raw.Skip<int>().Skip<std::string>(se::STRING_LEN).Get<int>() < 64);
     });
 
   // SELECT *

@@ -16,7 +16,7 @@ class Parser
 public:
   static Parser& Instance()
   {
-    static Parser instance;
+    static thread_local Parser instance;
     return instance;
   }
 
