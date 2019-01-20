@@ -14,6 +14,7 @@
 #include <cppfs/fs.h>
 #include <cppfs/FileHandle.h>
 #include <cppfs/FilePath.h>
+#include <mutex>
 // #include <btree/btree_map.h>
 
 #include "datatypes/MemoryBlock.hpp"
@@ -69,6 +70,7 @@ private:
   std::unordered_map<std::string, MetaData> meta_;
   std::unordered_map<std::string, std::shared_ptr<BlockList>> data_;
   // std::map< std::string, btree::btree_map<uint32_t, se::RawData> > indexes_;
+  std::mutex m_writer;
 };
 
 } // namespace se
