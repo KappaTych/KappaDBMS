@@ -10,12 +10,11 @@ addons:
     packages:
       - gcc-7
       - g++-7
-      - gcov-7
       - cmake
 
-env:
-  global:
-    - CXX=g++-7 CC=gcc-7 GCOV=gcov-7 GSL_CXX_STANDARD=14
+# env:
+#   global:
+#     - CXX=g++-7 CC=gcc-7 GCOV=gcov-7 GSL_CXX_STANDARD=14
 
 # Handle git submodules yourself
 git:
@@ -29,6 +28,9 @@ before_install:
   - pip install --user cpp-coveralls
 
 script:
+  - export CC=gcc-7
+  - export CXX=g++-7
+  - export GCOV=gcov-7
   - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
   - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
   - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
@@ -49,7 +51,7 @@ after_success:
   #  - coveralls -h
   - cd ..
   - |
-    coveralls --build-root build --gcov-options '\-lp' \
+    coveralls --build-root build --gcov gcov-7 --gcov-options '\-lp' \
      -e build/src/lib \
      -e build/CMakeFiles \
      -e build/CMakeFiles/feature_tests.c \
