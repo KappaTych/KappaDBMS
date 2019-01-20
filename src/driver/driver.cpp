@@ -92,54 +92,91 @@ Table* Driver::Execute(const cmd::DropTable& instruction)
 
 Table* Driver::Execute(const cmd::Select& instruction)
 {
-  return new Table();
+  auto& storage = se::StorageEngine::Instance();
+  if (!storage.HasMetaData(instruction.table_.name_)) {
+    throw std::logic_error("DriverError: Table doesn't exist");
+  }
+  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  auto& columns_meta = meta.data().at("public");
+  std::list<cmd::ColumnDefinition> columns_def;
+  for (auto d = columns_meta.items().begin(); d != columns_meta.items().end(); ++d) {
+    columns_def.emplace_back(d.key(), LiteralTypeFromStr(d.value()));
+  }
+
+  std::list<Record> records;
+  if (instruction.type() == cmd::InstructionType::SELECT_ALL) {
+    size_t size = meta.data()["private"]["size"];
+    auto dataAll = storage.Read(meta, size);
+    for (auto& x : dataAll) {
+      std::list<FieldSPtr> fields;
+      for (auto& column : columns_def) {
+        switch(column.type_) {
+          case cmd::LiteralType::INTEGER:
+            fields.emplace_back(std::make_shared<DoubleField>(x.Get<int32_t>()));
+            break;
+          case cmd::LiteralType::DOUBLE:
+            fields.emplace_back(std::make_shared<DoubleField>(x.Get<double>()));
+            break;
+          case cmd::LiteralType::BOOL:
+            fields.emplace_back(std::make_shared<BoolField>(x.Get<bool>()));
+            break;
+          case cmd::LiteralType::TEXT:
+            fields.emplace_back(std::make_shared<TextField>(x.Get<std::string>()));
+            break;
+        }
+      }
+      records.push_back(Record(fields));
+    }
+    return new Table(instruction.table_, std::move(columns_def), std::move(records));
+  }
+  return  new Table();
 }
 
 Table* Driver::Execute(const cmd::Insert& instruction)
 {
-    auto& storage = se::StorageEngine::Instance();
-    if (!storage.HasMetaData(instruction.table_.name_)) {
-        throw std::logic_error("DriverError: Table doesn't exist");
+  auto& storage = se::StorageEngine::Instance();
+  if (!storage.HasMetaData(instruction.table_.name_)) {
+    throw std::logic_error("DriverError: Table doesn't exist");
+  }
+  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  if (instruction.into_.empty()) {
+    auto &data = meta.data().at("public");
+    if (data.size() != instruction.values_.size()) {
+      throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
     }
-    se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
-    if (instruction.into_.empty()) {
-        auto &data = meta.data().at("public");
-        if (data.size() != instruction.values_.size()) {
-            throw std::logic_error("DriverError: The number of values doesn't match the number of columns");
-        }
-        auto d = data.items().begin();
-        se::RawData raw(meta.data()["private"]["size"]);
-        for (auto l = instruction.values_.begin(); d != data.items().end() && l != instruction.values_.end(); ++d, ++l) {
-            std::string str = data.at(d.key());
-            if (LiteralTypeFromStr(str) != l->ValueType()) {
-               throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
-            }
-            switch (l->ValueType()) {
-                case cmd::LiteralType::INTEGER:
-                    raw.Fill<int32_t >( std::stoi(l->Value()));
-                    break;
-                case cmd::LiteralType::DOUBLE:
-                    raw.Fill<double>( std::stod(l->Value()));
-                    break;
-                case cmd::LiteralType::BOOL:
-                    raw.Fill<bool>( (bool) std::stoi(l->Value()));
-                    break;
-                case cmd::LiteralType::TEXT:
-                    raw.Fill<std::string>( l->Value());
-                    break;
-            }
-        }
-        storage.Write(meta, raw.data(), raw.capacity());
+    auto d = data.items().begin();
+    se::RawData raw(meta.data()["private"]["size"]);
+    for (auto l = instruction.values_.begin(); d != data.items().end() && l != instruction.values_.end(); ++d, ++l) {
+      std::string str = data.at(d.key());
+      if (LiteralTypeFromStr(str) != l->ValueType()) {
+        throw std::logic_error("DriverError: Type of value " + l->Value() + " and type of column " + str + " doesnt't match");
+      }
+      switch (l->ValueType()) {
+        case cmd::LiteralType::INTEGER:
+          raw.Fill<int32_t >( std::stoi(l->Value()));
+          break;
+        case cmd::LiteralType::DOUBLE:
+          raw.Fill<double>( std::stod(l->Value()));
+          break;
+        case cmd::LiteralType::BOOL:
+          raw.Fill<bool>( (bool) std::stoi(l->Value()));
+          break;
+        case cmd::LiteralType::TEXT:
+          raw.Fill<std::string>( l->Value());
+          break;
+      }
     }
-    else {
-        throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
-    }
+    storage.Write(meta, raw.data(), raw.capacity());
+  }
+  else {
+    throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
+  }
 
-    Record record({ std::make_shared<BoolField>(BoolField(true)) });
-    cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
-    cmd::TableDefinition definition("anonymous");
+  Record record({ std::make_shared<BoolField>(BoolField(true)) });
+  cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
+  cmd::TableDefinition definition("anonymous");
 
-    return new Table({definition}, { column }, { record });
+  return new Table({definition}, { column }, { record });
 }
 
 Table* Driver::Execute(const cmd::Update& instruction)

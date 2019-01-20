@@ -33,6 +33,7 @@ public:
     {"INTEGER", sizeof(int32_t)},
     {"TEXT", 256},
     {"DOUBLE", sizeof(double)},
+    {"BOOL", sizeof(bool)},
   };
 
   std::string RunQuery(const std::string);
