@@ -464,42 +464,32 @@ namespace yy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // TRUE
-      // FALSE
-      char dummy1[sizeof (bool)];
-
       // column_def
-      char dummy2[sizeof (cmd::ColumnDefinition)];
-
-      // column_type
-      char dummy3[sizeof (cmd::LiteralType)];
+      char dummy1[sizeof (cmd::ColumnDefinition)];
 
       // table_name
-      char dummy4[sizeof (cmd::TableDefinition)];
+      char dummy2[sizeof (cmd::TableDefinition)];
 
       // update_clause
-      char dummy5[sizeof (cmd::update_clause)];
+      char dummy3[sizeof (cmd::UpdateClause)];
 
-      // DOUBLE_CONST
-      char dummy6[sizeof (long double)];
-
-      // INTEGER_CONST
-      char dummy7[sizeof (long long)];
+      // column_type
+      char dummy4[sizeof (cmd::column_type)];
 
       // column_def_commalist
-      char dummy8[sizeof (std::list<cmd::ColumnDefinition>)];
+      char dummy5[sizeof (std::list<cmd::ColumnDefinition>)];
 
       // update_list
-      char dummy9[sizeof (std::list<cmd::update_clause>)];
+      char dummy6[sizeof (std::list<cmd::UpdateClause>)];
 
       // column_name
-      char dummy10[sizeof (std::shared_ptr<cmd::Column>)];
+      char dummy7[sizeof (std::shared_ptr<cmd::Column>)];
 
       // delete_statement
-      char dummy11[sizeof (std::shared_ptr<cmd::Delete>)];
+      char dummy8[sizeof (std::shared_ptr<cmd::Delete>)];
 
       // drop_statement
-      char dummy12[sizeof (std::shared_ptr<cmd::DropTable>)];
+      char dummy9[sizeof (std::shared_ptr<cmd::DropTable>)];
 
       // optional_where
       // expr
@@ -508,40 +498,105 @@ namespace yy {
       // binary_operator
       // logical_operator
       // scalar_expr
-      char dummy13[sizeof (std::shared_ptr<cmd::Expression>)];
+      char dummy10[sizeof (std::shared_ptr<cmd::Expression>)];
 
       // insert_statement
-      char dummy14[sizeof (std::shared_ptr<cmd::Insert>)];
+      char dummy11[sizeof (std::shared_ptr<cmd::Insert>)];
 
       // statement
       // show_statement
       // create_statement
-      char dummy15[sizeof (std::shared_ptr<cmd::Instruction>)];
+      char dummy12[sizeof (std::shared_ptr<cmd::Instruction>)];
 
       // literal_value
-      char dummy16[sizeof (std::shared_ptr<cmd::Literal>)];
+      char dummy13[sizeof (std::shared_ptr<cmd::Literal>)];
 
       // select_statement
-      char dummy17[sizeof (std::shared_ptr<cmd::Select>)];
+      char dummy14[sizeof (std::shared_ptr<cmd::Select>)];
 
       // update_statement
-      char dummy18[sizeof (std::shared_ptr<cmd::Update>)];
+      char dummy15[sizeof (std::shared_ptr<cmd::Update>)];
 
       // optional_column_list
       // id_comma_list
-      char dummy19[sizeof (std::shared_ptr<std::list<cmd::Column>>)];
+      char dummy16[sizeof (std::shared_ptr<std::list<cmd::Column>>)];
 
       // literal_list
-      char dummy20[sizeof (std::shared_ptr<std::list<cmd::Literal>>)];
+      char dummy17[sizeof (std::shared_ptr<std::list<cmd::Literal>>)];
 
       // select_list
       // expr_list
-      char dummy21[sizeof (std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>)];
+      char dummy18[sizeof (std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>)];
 
       // IDENTIFIER
       // STRING
-      // BLOB_STRING
-      char dummy22[sizeof (std::string)];
+      // INTEGER_CONST
+      // DOUBLE_CONST
+      // TRUE
+      // FALSE
+      // DOUBLE
+      // TEXT
+      // INTEGER
+      // CREATE
+      // TABLE
+      // DROP
+      // SHOW
+      // NULL_
+      // SELECT
+      // VALUES
+      // INTO
+      // INSERT
+      // FROM
+      // UPDATE
+      // SET
+      // WHERE
+      // LIMIT
+      // OFFSET
+      // DELETE
+      // CAST
+      // AS
+      // ESCAPE
+      // ISNULL
+      // NOTNULL
+      // BETWEEN
+      // DISTINCT
+      // EXISTS
+      // WHEN
+      // THEN
+      // ELSE
+      // NOT
+      // COLLATE
+      // IS
+      // IN
+      // LIKE
+      // GLOB
+      // MATCH
+      // REGEXP
+      // AND
+      // OR
+      // EQUAL
+      // NOTEQUAL
+      // LESSEQUAL
+      // GREATERQUALL
+      // LESS
+      // GREATER
+      // CONCATENATION
+      // LEFTSHIFT
+      // RIGHTSHIFT
+      // BINNOT
+      // BINAND
+      // BINOR
+      // PLUS
+      // MINUS
+      // MULTIPLY
+      // DIVISION
+      // MOD
+      // SEMICOLON
+      // DOT
+      // COMMA
+      // OPENBRACKET
+      // CLOSEBRACKET
+      char dummy19[sizeof (std::string)];
 };
 
     /// Symbol semantic values.
@@ -567,75 +622,74 @@ namespace yy {
         END_FILE = 0,
         IDENTIFIER = 258,
         STRING = 259,
-        BLOB_STRING = 260,
-        INTEGER_CONST = 261,
+        INTEGER_CONST = 260,
+        DOUBLE_CONST = 261,
         TRUE = 262,
         FALSE = 263,
-        DOUBLE_CONST = 264,
-        DOUBLE = 265,
-        TEXT = 266,
-        INTEGER = 267,
-        CREATE = 268,
-        TABLE = 269,
-        DROP = 270,
-        SHOW = 271,
-        NULL_ = 272,
-        SELECT = 273,
-        VALUES = 274,
-        INTO = 275,
-        INSERT = 276,
-        FROM = 277,
-        UPDATE = 278,
-        SET = 279,
-        WHERE = 280,
-        LIMIT = 281,
-        OFFSET = 282,
-        DELETE = 283,
-        CAST = 284,
-        AS = 285,
-        ESCAPE = 286,
-        ISNULL = 287,
-        NOTNULL = 288,
-        BETWEEN = 289,
-        DISTINCT = 290,
-        EXISTS = 291,
-        WHEN = 292,
-        THEN = 293,
-        ELSE = 294,
-        NOT = 295,
-        COLLATE = 296,
-        IS = 297,
-        IN = 298,
-        LIKE = 299,
-        GLOB = 300,
-        MATCH = 301,
-        REGEXP = 302,
-        AND = 303,
-        OR = 304,
-        EQUAL = 305,
-        NOTEQUAL = 306,
-        LESSEQUAL = 307,
-        GREATERQUALL = 308,
-        LESS = 309,
-        GREATER = 310,
-        CONCATENATION = 311,
-        LEFTSHIFT = 312,
-        RIGHTSHIFT = 313,
-        BINNOT = 314,
-        BINAND = 315,
-        BINOR = 316,
-        PLUS = 317,
-        MINUS = 318,
-        MULTIPLY = 319,
-        DIVISION = 320,
-        MOD = 321,
-        SEMICOLON = 322,
-        DOT = 323,
-        COMMA = 324,
-        OPENBRACKET = 325,
-        CLOSEBRACKET = 326,
-        UMINUS = 327,
-        UPLUS = 328
+        DOUBLE = 264,
+        TEXT = 265,
+        INTEGER = 266,
+        CREATE = 267,
+        TABLE = 268,
+        DROP = 269,
+        SHOW = 270,
+        NULL_ = 271,
+        SELECT = 272,
+        VALUES = 273,
+        INTO = 274,
+        INSERT = 275,
+        FROM = 276,
+        UPDATE = 277,
+        SET = 278,
+        WHERE = 279,
+        LIMIT = 280,
+        OFFSET = 281,
+        DELETE = 282,
+        CAST = 283,
+        AS = 284,
+        ESCAPE = 285,
+        ISNULL = 286,
+        NOTNULL = 287,
+        BETWEEN = 288,
+        DISTINCT = 289,
+        EXISTS = 290,
+        WHEN = 291,
+        THEN = 292,
+        ELSE = 293,
+        NOT = 294,
+        COLLATE = 295,
+        IS = 296,
+        IN = 297,
+        LIKE = 298,
+        GLOB = 299,
+        MATCH = 300,
+        REGEXP = 301,
+        AND = 302,
+        OR = 303,
+        EQUAL = 304,
+        NOTEQUAL = 305,
+        LESSEQUAL = 306,
+        GREATERQUALL = 307,
+        LESS = 308,
+        GREATER = 309,
+        CONCATENATION = 310,
+        LEFTSHIFT = 311,
+        RIGHTSHIFT = 312,
+        BINNOT = 313,
+        BINAND = 314,
+        BINOR = 315,
+        PLUS = 316,
+        MINUS = 317,
+        MULTIPLY = 318,
+        DIVISION = 319,
+        MOD = 320,
+        SEMICOLON = 321,
+        DOT = 322,
+        COMMA = 323,
+        OPENBRACKET = 324,
+        CLOSEBRACKET = 325,
+        UMINUS = 326,
+        UPLUS = 327
       };
     };
 
@@ -672,15 +726,12 @@ namespace yy {
 
       /// Constructor for valueless symbols, and symbols from each type.
       basic_symbol (typename Base::kind_type t, YY_RVREF (location_type) l);
-      basic_symbol (typename Base::kind_type t, YY_RVREF (bool) v, YY_RVREF (location_type) l);
       basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::ColumnDefinition) v, YY_RVREF (location_type) l);
-      basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::LiteralType) v, YY_RVREF (location_type) l);
       basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::TableDefinition) v, YY_RVREF (location_type) l);
-      basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::update_clause) v, YY_RVREF (location_type) l);
-      basic_symbol (typename Base::kind_type t, YY_RVREF (long double) v, YY_RVREF (location_type) l);
-      basic_symbol (typename Base::kind_type t, YY_RVREF (long long) v, YY_RVREF (location_type) l);
+      basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::UpdateClause) v, YY_RVREF (location_type) l);
+      basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::column_type) v, YY_RVREF (location_type) l);
       basic_symbol (typename Base::kind_type t, YY_RVREF (std::list<cmd::ColumnDefinition>) v, YY_RVREF (location_type) l);
-      basic_symbol (typename Base::kind_type t, YY_RVREF (std::list<cmd::update_clause>) v, YY_RVREF (location_type) l);
+      basic_symbol (typename Base::kind_type t, YY_RVREF (std::list<cmd::UpdateClause>) v, YY_RVREF (location_type) l);
       basic_symbol (typename Base::kind_type t, YY_RVREF (std::shared_ptr<cmd::Column>) v, YY_RVREF (location_type) l);
       basic_symbol (typename Base::kind_type t, YY_RVREF (std::shared_ptr<cmd::Delete>) v, YY_RVREF (location_type) l);
       basic_symbol (typename Base::kind_type t, YY_RVREF (std::shared_ptr<cmd::DropTable>) v, YY_RVREF (location_type) l);
@@ -807,271 +858,267 @@ namespace yy {
 
     static
     symbol_type
-    make_BLOB_STRING (YY_COPY (std::string) v, YY_COPY (location_type) l);
+    make_INTEGER_CONST (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_INTEGER_CONST (YY_COPY (long long) v, YY_COPY (location_type) l);
+    make_DOUBLE_CONST (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_TRUE (YY_COPY (bool) v, YY_COPY (location_type) l);
+    make_TRUE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_FALSE (YY_COPY (bool) v, YY_COPY (location_type) l);
+    make_FALSE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DOUBLE_CONST (YY_COPY (long double) v, YY_COPY (location_type) l);
+    make_DOUBLE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DOUBLE (YY_COPY (location_type) l);
+    make_TEXT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_TEXT (YY_COPY (location_type) l);
+    make_INTEGER (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_INTEGER (YY_COPY (location_type) l);
+    make_CREATE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_CREATE (YY_COPY (location_type) l);
+    make_TABLE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_TABLE (YY_COPY (location_type) l);
+    make_DROP (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DROP (YY_COPY (location_type) l);
+    make_SHOW (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_SHOW (YY_COPY (location_type) l);
+    make_NULL_ (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_NULL_ (YY_COPY (location_type) l);
+    make_SELECT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_SELECT (YY_COPY (location_type) l);
+    make_VALUES (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_VALUES (YY_COPY (location_type) l);
+    make_INTO (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_INTO (YY_COPY (location_type) l);
+    make_INSERT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_INSERT (YY_COPY (location_type) l);
+    make_FROM (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_FROM (YY_COPY (location_type) l);
+    make_UPDATE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_UPDATE (YY_COPY (location_type) l);
+    make_SET (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_SET (YY_COPY (location_type) l);
+    make_WHERE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_WHERE (YY_COPY (location_type) l);
+    make_LIMIT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_LIMIT (YY_COPY (location_type) l);
+    make_OFFSET (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_OFFSET (YY_COPY (location_type) l);
+    make_DELETE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DELETE (YY_COPY (location_type) l);
+    make_CAST (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_CAST (YY_COPY (location_type) l);
+    make_AS (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_AS (YY_COPY (location_type) l);
+    make_ESCAPE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_ESCAPE (YY_COPY (location_type) l);
+    make_ISNULL (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_ISNULL (YY_COPY (location_type) l);
+    make_NOTNULL (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_NOTNULL (YY_COPY (location_type) l);
+    make_BETWEEN (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_BETWEEN (YY_COPY (location_type) l);
+    make_DISTINCT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DISTINCT (YY_COPY (location_type) l);
+    make_EXISTS (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_EXISTS (YY_COPY (location_type) l);
+    make_WHEN (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_WHEN (YY_COPY (location_type) l);
+    make_THEN (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_THEN (YY_COPY (location_type) l);
+    make_ELSE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_ELSE (YY_COPY (location_type) l);
+    make_NOT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_NOT (YY_COPY (location_type) l);
+    make_COLLATE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_COLLATE (YY_COPY (location_type) l);
+    make_IS (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_IS (YY_COPY (location_type) l);
+    make_IN (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_IN (YY_COPY (location_type) l);
+    make_LIKE (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_LIKE (YY_COPY (location_type) l);
+    make_GLOB (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_GLOB (YY_COPY (location_type) l);
+    make_MATCH (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_MATCH (YY_COPY (location_type) l);
+    make_REGEXP (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_REGEXP (YY_COPY (location_type) l);
+    make_AND (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_AND (YY_COPY (location_type) l);
+    make_OR (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_OR (YY_COPY (location_type) l);
+    make_EQUAL (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_EQUAL (YY_COPY (location_type) l);
+    make_NOTEQUAL (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_NOTEQUAL (YY_COPY (location_type) l);
+    make_LESSEQUAL (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_LESSEQUAL (YY_COPY (location_type) l);
+    make_GREATERQUALL (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_GREATERQUALL (YY_COPY (location_type) l);
+    make_LESS (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_LESS (YY_COPY (location_type) l);
+    make_GREATER (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_GREATER (YY_COPY (location_type) l);
+    make_CONCATENATION (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_CONCATENATION (YY_COPY (location_type) l);
+    make_LEFTSHIFT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_LEFTSHIFT (YY_COPY (location_type) l);
+    make_RIGHTSHIFT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_RIGHTSHIFT (YY_COPY (location_type) l);
+    make_BINNOT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_BINNOT (YY_COPY (location_type) l);
+    make_BINAND (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_BINAND (YY_COPY (location_type) l);
+    make_BINOR (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_BINOR (YY_COPY (location_type) l);
+    make_PLUS (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_PLUS (YY_COPY (location_type) l);
+    make_MINUS (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_MINUS (YY_COPY (location_type) l);
+    make_MULTIPLY (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_MULTIPLY (YY_COPY (location_type) l);
+    make_DIVISION (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DIVISION (YY_COPY (location_type) l);
+    make_MOD (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_MOD (YY_COPY (location_type) l);
+    make_SEMICOLON (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_SEMICOLON (YY_COPY (location_type) l);
+    make_DOT (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_DOT (YY_COPY (location_type) l);
+    make_COMMA (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_COMMA (YY_COPY (location_type) l);
+    make_OPENBRACKET (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
-    make_OPENBRACKET (YY_COPY (location_type) l);
-
-    static
-    symbol_type
-    make_CLOSEBRACKET (YY_COPY (location_type) l);
+    make_CLOSEBRACKET (YY_COPY (std::string) v, YY_COPY (location_type) l);
 
     static
     symbol_type
@@ -1259,12 +1306,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 173,     ///< Last index in yytable_.
+      yylast_ = 180,     ///< Last index in yytable_.
       yynnts_ = 32,  ///< Number of nonterminal symbols.
-      yyfinal_ = 49, ///< Termination state number.
+      yyfinal_ = 48, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 74  ///< Number of tokens.
+      yyntokens_ = 73  ///< Number of tokens.
     };
 
 
@@ -1314,9 +1361,9 @@ namespace yy {
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
       45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
       55,    56,    57,    58,    59,    60,    61,    62,    63,    64,
-      65,    66,    67,    68,    69,    70,    71,    72,    73
+      65,    66,    67,    68,    69,    70,    71,    72
     };
-    const unsigned user_token_number_max_ = 328;
+    const unsigned user_token_number_max_ = 327;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int> (t) <= yyeof_)
@@ -1348,104 +1395,156 @@ namespace yy {
   {
     switch (other.type_get ())
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        value.YY_MOVE_OR_COPY< bool > (YY_MOVE (other.value));
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         value.YY_MOVE_OR_COPY< cmd::ColumnDefinition > (YY_MOVE (other.value));
         break;
 
-      case 82: // column_type
-        value.YY_MOVE_OR_COPY< cmd::LiteralType > (YY_MOVE (other.value));
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         value.YY_MOVE_OR_COPY< cmd::TableDefinition > (YY_MOVE (other.value));
         break;
 
-      case 91: // update_clause
-        value.YY_MOVE_OR_COPY< cmd::update_clause > (YY_MOVE (other.value));
+      case 90: // update_clause
+        value.YY_MOVE_OR_COPY< cmd::UpdateClause > (YY_MOVE (other.value));
         break;
 
-      case 9: // DOUBLE_CONST
-        value.YY_MOVE_OR_COPY< long double > (YY_MOVE (other.value));
+      case 81: // column_type
+        value.YY_MOVE_OR_COPY< cmd::column_type > (YY_MOVE (other.value));
         break;
 
-      case 6: // INTEGER_CONST
-        value.YY_MOVE_OR_COPY< long long > (YY_MOVE (other.value));
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         value.YY_MOVE_OR_COPY< std::list<cmd::ColumnDefinition> > (YY_MOVE (other.value));
         break;
 
-      case 90: // update_list
-        value.YY_MOVE_OR_COPY< std::list<cmd::update_clause> > (YY_MOVE (other.value));
+      case 89: // update_list
+        value.YY_MOVE_OR_COPY< std::list<cmd::UpdateClause> > (YY_MOVE (other.value));
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Column> > (YY_MOVE (other.value));
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Delete> > (YY_MOVE (other.value));
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::DropTable> > (YY_MOVE (other.value));
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Expression> > (YY_MOVE (other.value));
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Insert> > (YY_MOVE (other.value));
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Instruction> > (YY_MOVE (other.value));
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Literal> > (YY_MOVE (other.value));
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Select> > (YY_MOVE (other.value));
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Update> > (YY_MOVE (other.value));
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         value.YY_MOVE_OR_COPY< std::shared_ptr<std::list<cmd::Column>> > (YY_MOVE (other.value));
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         value.YY_MOVE_OR_COPY< std::shared_ptr<std::list<cmd::Literal>> > (YY_MOVE (other.value));
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         value.YY_MOVE_OR_COPY< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (YY_MOVE (other.value));
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (other.value));
         break;
 
@@ -1464,21 +1563,7 @@ namespace yy {
   {}
 
   template <typename Base>
-   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (bool) v, YY_RVREF (location_type) l)
-    : Base (t)
-    , value (YY_MOVE (v))
-    , location (YY_MOVE (l))
-  {}
-
-  template <typename Base>
    BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::ColumnDefinition) v, YY_RVREF (location_type) l)
-    : Base (t)
-    , value (YY_MOVE (v))
-    , location (YY_MOVE (l))
-  {}
-
-  template <typename Base>
-   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::LiteralType) v, YY_RVREF (location_type) l)
     : Base (t)
     , value (YY_MOVE (v))
     , location (YY_MOVE (l))
@@ -1492,21 +1577,14 @@ namespace yy {
   {}
 
   template <typename Base>
-   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::update_clause) v, YY_RVREF (location_type) l)
+   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::UpdateClause) v, YY_RVREF (location_type) l)
     : Base (t)
     , value (YY_MOVE (v))
     , location (YY_MOVE (l))
   {}
 
   template <typename Base>
-   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (long double) v, YY_RVREF (location_type) l)
-    : Base (t)
-    , value (YY_MOVE (v))
-    , location (YY_MOVE (l))
-  {}
-
-  template <typename Base>
-   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (long long) v, YY_RVREF (location_type) l)
+   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (cmd::column_type) v, YY_RVREF (location_type) l)
     : Base (t)
     , value (YY_MOVE (v))
     , location (YY_MOVE (l))
@@ -1520,7 +1598,7 @@ namespace yy {
   {}
 
   template <typename Base>
-   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (std::list<cmd::update_clause>) v, YY_RVREF (location_type) l)
+   BisonParser ::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (std::list<cmd::UpdateClause>) v, YY_RVREF (location_type) l)
     : Base (t)
     , value (YY_MOVE (v))
     , location (YY_MOVE (l))
@@ -1642,104 +1720,156 @@ namespace yy {
     // Type destructor.
   switch (yytype)
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        value.template destroy< bool > ();
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         value.template destroy< cmd::ColumnDefinition > ();
         break;
 
-      case 82: // column_type
-        value.template destroy< cmd::LiteralType > ();
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         value.template destroy< cmd::TableDefinition > ();
         break;
 
-      case 91: // update_clause
-        value.template destroy< cmd::update_clause > ();
+      case 90: // update_clause
+        value.template destroy< cmd::UpdateClause > ();
         break;
 
-      case 9: // DOUBLE_CONST
-        value.template destroy< long double > ();
+      case 81: // column_type
+        value.template destroy< cmd::column_type > ();
         break;
 
-      case 6: // INTEGER_CONST
-        value.template destroy< long long > ();
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         value.template destroy< std::list<cmd::ColumnDefinition> > ();
         break;
 
-      case 90: // update_list
-        value.template destroy< std::list<cmd::update_clause> > ();
+      case 89: // update_list
+        value.template destroy< std::list<cmd::UpdateClause> > ();
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         value.template destroy< std::shared_ptr<cmd::Column> > ();
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         value.template destroy< std::shared_ptr<cmd::Delete> > ();
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         value.template destroy< std::shared_ptr<cmd::DropTable> > ();
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         value.template destroy< std::shared_ptr<cmd::Expression> > ();
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         value.template destroy< std::shared_ptr<cmd::Insert> > ();
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         value.template destroy< std::shared_ptr<cmd::Instruction> > ();
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         value.template destroy< std::shared_ptr<cmd::Literal> > ();
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         value.template destroy< std::shared_ptr<cmd::Select> > ();
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         value.template destroy< std::shared_ptr<cmd::Update> > ();
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         value.template destroy< std::shared_ptr<std::list<cmd::Column>> > ();
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         value.template destroy< std::shared_ptr<std::list<cmd::Literal>> > ();
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         value.template destroy< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ();
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         value.template destroy< std::string > ();
         break;
 
@@ -1764,104 +1894,156 @@ namespace yy {
     super_type::move (s);
     switch (this->type_get ())
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        value.move< bool > (YY_MOVE (s.value));
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         value.move< cmd::ColumnDefinition > (YY_MOVE (s.value));
         break;
 
-      case 82: // column_type
-        value.move< cmd::LiteralType > (YY_MOVE (s.value));
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         value.move< cmd::TableDefinition > (YY_MOVE (s.value));
         break;
 
-      case 91: // update_clause
-        value.move< cmd::update_clause > (YY_MOVE (s.value));
+      case 90: // update_clause
+        value.move< cmd::UpdateClause > (YY_MOVE (s.value));
         break;
 
-      case 9: // DOUBLE_CONST
-        value.move< long double > (YY_MOVE (s.value));
+      case 81: // column_type
+        value.move< cmd::column_type > (YY_MOVE (s.value));
         break;
 
-      case 6: // INTEGER_CONST
-        value.move< long long > (YY_MOVE (s.value));
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         value.move< std::list<cmd::ColumnDefinition> > (YY_MOVE (s.value));
         break;
 
-      case 90: // update_list
-        value.move< std::list<cmd::update_clause> > (YY_MOVE (s.value));
+      case 89: // update_list
+        value.move< std::list<cmd::UpdateClause> > (YY_MOVE (s.value));
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         value.move< std::shared_ptr<cmd::Column> > (YY_MOVE (s.value));
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         value.move< std::shared_ptr<cmd::Delete> > (YY_MOVE (s.value));
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         value.move< std::shared_ptr<cmd::DropTable> > (YY_MOVE (s.value));
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         value.move< std::shared_ptr<cmd::Expression> > (YY_MOVE (s.value));
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         value.move< std::shared_ptr<cmd::Insert> > (YY_MOVE (s.value));
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         value.move< std::shared_ptr<cmd::Instruction> > (YY_MOVE (s.value));
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         value.move< std::shared_ptr<cmd::Literal> > (YY_MOVE (s.value));
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         value.move< std::shared_ptr<cmd::Select> > (YY_MOVE (s.value));
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         value.move< std::shared_ptr<cmd::Update> > (YY_MOVE (s.value));
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         value.move< std::shared_ptr<std::list<cmd::Column>> > (YY_MOVE (s.value));
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         value.move< std::shared_ptr<std::list<cmd::Literal>> > (YY_MOVE (s.value));
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         value.move< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (YY_MOVE (s.value));
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         value.move< std::string > (YY_MOVE (s.value));
         break;
 
@@ -1927,7 +2109,7 @@ namespace yy {
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
      305,   306,   307,   308,   309,   310,   311,   312,   313,   314,
      315,   316,   317,   318,   319,   320,   321,   322,   323,   324,
-     325,   326,   327,   328
+     325,   326,   327
     };
     return static_cast<token_type> (yytoken_number_[type]);
   }
@@ -1956,471 +2138,464 @@ namespace yy {
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_BLOB_STRING (YY_COPY (std::string) v, YY_COPY (location_type) l)
-  {
-    return symbol_type (token::BLOB_STRING, YY_MOVE (v), YY_MOVE (l));
-  }
-
-  inline
-   BisonParser ::symbol_type
-   BisonParser ::make_INTEGER_CONST (YY_COPY (long long) v, YY_COPY (location_type) l)
+   BisonParser ::make_INTEGER_CONST (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
     return symbol_type (token::INTEGER_CONST, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_TRUE (YY_COPY (bool) v, YY_COPY (location_type) l)
-  {
-    return symbol_type (token::TRUE, YY_MOVE (v), YY_MOVE (l));
-  }
-
-  inline
-   BisonParser ::symbol_type
-   BisonParser ::make_FALSE (YY_COPY (bool) v, YY_COPY (location_type) l)
-  {
-    return symbol_type (token::FALSE, YY_MOVE (v), YY_MOVE (l));
-  }
-
-  inline
-   BisonParser ::symbol_type
-   BisonParser ::make_DOUBLE_CONST (YY_COPY (long double) v, YY_COPY (location_type) l)
+   BisonParser ::make_DOUBLE_CONST (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
     return symbol_type (token::DOUBLE_CONST, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_DOUBLE (YY_COPY (location_type) l)
+   BisonParser ::make_TRUE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::DOUBLE, YY_MOVE (l));
+    return symbol_type (token::TRUE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_TEXT (YY_COPY (location_type) l)
+   BisonParser ::make_FALSE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::TEXT, YY_MOVE (l));
+    return symbol_type (token::FALSE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_INTEGER (YY_COPY (location_type) l)
+   BisonParser ::make_DOUBLE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::INTEGER, YY_MOVE (l));
+    return symbol_type (token::DOUBLE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_CREATE (YY_COPY (location_type) l)
+   BisonParser ::make_TEXT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::CREATE, YY_MOVE (l));
+    return symbol_type (token::TEXT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_TABLE (YY_COPY (location_type) l)
+   BisonParser ::make_INTEGER (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::TABLE, YY_MOVE (l));
+    return symbol_type (token::INTEGER, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_DROP (YY_COPY (location_type) l)
+   BisonParser ::make_CREATE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::DROP, YY_MOVE (l));
+    return symbol_type (token::CREATE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_SHOW (YY_COPY (location_type) l)
+   BisonParser ::make_TABLE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::SHOW, YY_MOVE (l));
+    return symbol_type (token::TABLE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_NULL_ (YY_COPY (location_type) l)
+   BisonParser ::make_DROP (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::NULL_, YY_MOVE (l));
+    return symbol_type (token::DROP, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_SELECT (YY_COPY (location_type) l)
+   BisonParser ::make_SHOW (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::SELECT, YY_MOVE (l));
+    return symbol_type (token::SHOW, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_VALUES (YY_COPY (location_type) l)
+   BisonParser ::make_NULL_ (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::VALUES, YY_MOVE (l));
+    return symbol_type (token::NULL_, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_INTO (YY_COPY (location_type) l)
+   BisonParser ::make_SELECT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::INTO, YY_MOVE (l));
+    return symbol_type (token::SELECT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_INSERT (YY_COPY (location_type) l)
+   BisonParser ::make_VALUES (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::INSERT, YY_MOVE (l));
+    return symbol_type (token::VALUES, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_FROM (YY_COPY (location_type) l)
+   BisonParser ::make_INTO (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::FROM, YY_MOVE (l));
+    return symbol_type (token::INTO, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_UPDATE (YY_COPY (location_type) l)
+   BisonParser ::make_INSERT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::UPDATE, YY_MOVE (l));
+    return symbol_type (token::INSERT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_SET (YY_COPY (location_type) l)
+   BisonParser ::make_FROM (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::SET, YY_MOVE (l));
+    return symbol_type (token::FROM, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_WHERE (YY_COPY (location_type) l)
+   BisonParser ::make_UPDATE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::WHERE, YY_MOVE (l));
+    return symbol_type (token::UPDATE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_LIMIT (YY_COPY (location_type) l)
+   BisonParser ::make_SET (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::LIMIT, YY_MOVE (l));
+    return symbol_type (token::SET, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_OFFSET (YY_COPY (location_type) l)
+   BisonParser ::make_WHERE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::OFFSET, YY_MOVE (l));
+    return symbol_type (token::WHERE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_DELETE (YY_COPY (location_type) l)
+   BisonParser ::make_LIMIT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::DELETE, YY_MOVE (l));
+    return symbol_type (token::LIMIT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_CAST (YY_COPY (location_type) l)
+   BisonParser ::make_OFFSET (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::CAST, YY_MOVE (l));
+    return symbol_type (token::OFFSET, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_AS (YY_COPY (location_type) l)
+   BisonParser ::make_DELETE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::AS, YY_MOVE (l));
+    return symbol_type (token::DELETE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_ESCAPE (YY_COPY (location_type) l)
+   BisonParser ::make_CAST (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::ESCAPE, YY_MOVE (l));
+    return symbol_type (token::CAST, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_ISNULL (YY_COPY (location_type) l)
+   BisonParser ::make_AS (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::ISNULL, YY_MOVE (l));
+    return symbol_type (token::AS, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_NOTNULL (YY_COPY (location_type) l)
+   BisonParser ::make_ESCAPE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::NOTNULL, YY_MOVE (l));
+    return symbol_type (token::ESCAPE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_BETWEEN (YY_COPY (location_type) l)
+   BisonParser ::make_ISNULL (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::BETWEEN, YY_MOVE (l));
+    return symbol_type (token::ISNULL, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_DISTINCT (YY_COPY (location_type) l)
+   BisonParser ::make_NOTNULL (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::DISTINCT, YY_MOVE (l));
+    return symbol_type (token::NOTNULL, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_EXISTS (YY_COPY (location_type) l)
+   BisonParser ::make_BETWEEN (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::EXISTS, YY_MOVE (l));
+    return symbol_type (token::BETWEEN, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_WHEN (YY_COPY (location_type) l)
+   BisonParser ::make_DISTINCT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::WHEN, YY_MOVE (l));
+    return symbol_type (token::DISTINCT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_THEN (YY_COPY (location_type) l)
+   BisonParser ::make_EXISTS (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::THEN, YY_MOVE (l));
+    return symbol_type (token::EXISTS, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_ELSE (YY_COPY (location_type) l)
+   BisonParser ::make_WHEN (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::ELSE, YY_MOVE (l));
+    return symbol_type (token::WHEN, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_NOT (YY_COPY (location_type) l)
+   BisonParser ::make_THEN (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::NOT, YY_MOVE (l));
+    return symbol_type (token::THEN, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_COLLATE (YY_COPY (location_type) l)
+   BisonParser ::make_ELSE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::COLLATE, YY_MOVE (l));
+    return symbol_type (token::ELSE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_IS (YY_COPY (location_type) l)
+   BisonParser ::make_NOT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::IS, YY_MOVE (l));
+    return symbol_type (token::NOT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_IN (YY_COPY (location_type) l)
+   BisonParser ::make_COLLATE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::IN, YY_MOVE (l));
+    return symbol_type (token::COLLATE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_LIKE (YY_COPY (location_type) l)
+   BisonParser ::make_IS (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::LIKE, YY_MOVE (l));
+    return symbol_type (token::IS, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_GLOB (YY_COPY (location_type) l)
+   BisonParser ::make_IN (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::GLOB, YY_MOVE (l));
+    return symbol_type (token::IN, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_MATCH (YY_COPY (location_type) l)
+   BisonParser ::make_LIKE (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::MATCH, YY_MOVE (l));
+    return symbol_type (token::LIKE, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_REGEXP (YY_COPY (location_type) l)
+   BisonParser ::make_GLOB (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::REGEXP, YY_MOVE (l));
+    return symbol_type (token::GLOB, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_AND (YY_COPY (location_type) l)
+   BisonParser ::make_MATCH (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::AND, YY_MOVE (l));
+    return symbol_type (token::MATCH, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_OR (YY_COPY (location_type) l)
+   BisonParser ::make_REGEXP (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::OR, YY_MOVE (l));
+    return symbol_type (token::REGEXP, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_EQUAL (YY_COPY (location_type) l)
+   BisonParser ::make_AND (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::EQUAL, YY_MOVE (l));
+    return symbol_type (token::AND, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_NOTEQUAL (YY_COPY (location_type) l)
+   BisonParser ::make_OR (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::NOTEQUAL, YY_MOVE (l));
+    return symbol_type (token::OR, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_LESSEQUAL (YY_COPY (location_type) l)
+   BisonParser ::make_EQUAL (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::LESSEQUAL, YY_MOVE (l));
+    return symbol_type (token::EQUAL, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_GREATERQUALL (YY_COPY (location_type) l)
+   BisonParser ::make_NOTEQUAL (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::GREATERQUALL, YY_MOVE (l));
+    return symbol_type (token::NOTEQUAL, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_LESS (YY_COPY (location_type) l)
+   BisonParser ::make_LESSEQUAL (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::LESS, YY_MOVE (l));
+    return symbol_type (token::LESSEQUAL, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_GREATER (YY_COPY (location_type) l)
+   BisonParser ::make_GREATERQUALL (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::GREATER, YY_MOVE (l));
+    return symbol_type (token::GREATERQUALL, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_CONCATENATION (YY_COPY (location_type) l)
+   BisonParser ::make_LESS (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::CONCATENATION, YY_MOVE (l));
+    return symbol_type (token::LESS, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_LEFTSHIFT (YY_COPY (location_type) l)
+   BisonParser ::make_GREATER (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::LEFTSHIFT, YY_MOVE (l));
+    return symbol_type (token::GREATER, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_RIGHTSHIFT (YY_COPY (location_type) l)
+   BisonParser ::make_CONCATENATION (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::RIGHTSHIFT, YY_MOVE (l));
+    return symbol_type (token::CONCATENATION, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_BINNOT (YY_COPY (location_type) l)
+   BisonParser ::make_LEFTSHIFT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::BINNOT, YY_MOVE (l));
+    return symbol_type (token::LEFTSHIFT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_BINAND (YY_COPY (location_type) l)
+   BisonParser ::make_RIGHTSHIFT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::BINAND, YY_MOVE (l));
+    return symbol_type (token::RIGHTSHIFT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_BINOR (YY_COPY (location_type) l)
+   BisonParser ::make_BINNOT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::BINOR, YY_MOVE (l));
+    return symbol_type (token::BINNOT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_PLUS (YY_COPY (location_type) l)
+   BisonParser ::make_BINAND (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::PLUS, YY_MOVE (l));
+    return symbol_type (token::BINAND, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_MINUS (YY_COPY (location_type) l)
+   BisonParser ::make_BINOR (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::MINUS, YY_MOVE (l));
+    return symbol_type (token::BINOR, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_MULTIPLY (YY_COPY (location_type) l)
+   BisonParser ::make_PLUS (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::MULTIPLY, YY_MOVE (l));
+    return symbol_type (token::PLUS, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_DIVISION (YY_COPY (location_type) l)
+   BisonParser ::make_MINUS (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::DIVISION, YY_MOVE (l));
+    return symbol_type (token::MINUS, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_MOD (YY_COPY (location_type) l)
+   BisonParser ::make_MULTIPLY (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::MOD, YY_MOVE (l));
+    return symbol_type (token::MULTIPLY, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_SEMICOLON (YY_COPY (location_type) l)
+   BisonParser ::make_DIVISION (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::SEMICOLON, YY_MOVE (l));
+    return symbol_type (token::DIVISION, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_DOT (YY_COPY (location_type) l)
+   BisonParser ::make_MOD (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::DOT, YY_MOVE (l));
+    return symbol_type (token::MOD, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_COMMA (YY_COPY (location_type) l)
+   BisonParser ::make_SEMICOLON (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::COMMA, YY_MOVE (l));
+    return symbol_type (token::SEMICOLON, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_OPENBRACKET (YY_COPY (location_type) l)
+   BisonParser ::make_DOT (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::OPENBRACKET, YY_MOVE (l));
+    return symbol_type (token::DOT, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
    BisonParser ::symbol_type
-   BisonParser ::make_CLOSEBRACKET (YY_COPY (location_type) l)
+   BisonParser ::make_COMMA (YY_COPY (std::string) v, YY_COPY (location_type) l)
   {
-    return symbol_type (token::CLOSEBRACKET, YY_MOVE (l));
+    return symbol_type (token::COMMA, YY_MOVE (v), YY_MOVE (l));
+  }
+
+  inline
+   BisonParser ::symbol_type
+   BisonParser ::make_OPENBRACKET (YY_COPY (std::string) v, YY_COPY (location_type) l)
+  {
+    return symbol_type (token::OPENBRACKET, YY_MOVE (v), YY_MOVE (l));
+  }
+
+  inline
+   BisonParser ::symbol_type
+   BisonParser ::make_CLOSEBRACKET (YY_COPY (std::string) v, YY_COPY (location_type) l)
+  {
+    return symbol_type (token::CLOSEBRACKET, YY_MOVE (v), YY_MOVE (l));
   }
 
   inline
@@ -2440,7 +2615,7 @@ namespace yy {
 
 
 } // yy
-#line 2444 "bison_sql.hpp" // lalr1.cc:403
+#line 2619 "bison_sql.hpp" // lalr1.cc:403
 
 
 

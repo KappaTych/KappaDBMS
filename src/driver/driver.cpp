@@ -5,6 +5,8 @@
 namespace sql
 {
 
+thread_local std::unordered_map<std::string, std::pair<sql::Table::Column, sql::Table::Record>> Driver::capture = {};
+
 cmd::LiteralType LiteralTypeFromStr(const std::string str)
 {
   if (str == "INTEGER")
@@ -25,6 +27,7 @@ std::string Driver::RunQuery(const std::string query)
   std::vector<Table> tables;
   for (auto& instruction : instructions) {
     Table* t = instruction->Accept(*this);
+    t->name_ = cmd::TableDefinition(instruction->GetRaw());
     tables.push_back(*t);
     delete(t);
   }
@@ -73,8 +76,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
   meta.Add("size", size, "private");
   storage.Flush();
 
-  cmd::TableDefinition definition("anonymous");
-  return new Table({ definition }, { {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
+  return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::DropTable& instruction)
@@ -86,8 +88,7 @@ Table* Driver::Execute(const cmd::DropTable& instruction)
   }
   storage.RemoveData(name);
 
-  cmd::TableDefinition definition("anonymous");
-  return new Table({ definition }, { {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
+  return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Select& instruction)
@@ -104,10 +105,11 @@ Table* Driver::Execute(const cmd::Select& instruction)
   }
 
   std::list<sql::Table::Record> records;
+  size_t size = meta.data()["private"]["size"];
+
   if (instruction.type() == cmd::InstructionType::SELECT_ALL) {
-    size_t size = meta.data()["private"]["size"];
-    auto dataAll = storage.Read(meta, size);
-    for (auto& x : dataAll) {
+    auto data = storage.Read(meta, size);
+    for (auto& x : data) {
       sql::Table::Record record;
       for (auto& column : columns) {
         int test = 0;
@@ -130,9 +132,7 @@ Table* Driver::Execute(const cmd::Select& instruction)
     }
   } else if (!instruction.columnDef_.empty()) {
     for (auto& column : instruction.columnDef_) {
-      std::cout << ((cmd::Column*) (column.get()))->name_ << std::endl;
-      Table* t = column->Accept(*this);
-      delete t;
+      auto result = std::shared_ptr<Table>(column->Accept(*this));
     }
   } else {
     throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
@@ -178,8 +178,7 @@ Table* Driver::Execute(const cmd::Insert& instruction)
     throw std::logic_error("DriverError: Sorry, we don't working with this type of INSERT query yet");
   }
 
-  cmd::TableDefinition definition("anonymous");
-  return new Table({ definition }, { {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
+  return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Update& instruction)
@@ -208,8 +207,7 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
   result.pop_back();
   result += ");";
 
-  cmd::TableDefinition definition("anonymous");
-  return new Table({ definition }, { {"result", cmd::LiteralType::TEXT} }, { {std::make_shared<TextField>(result)} });
+  return new Table({ {"result", cmd::LiteralType::TEXT} }, { {std::make_shared<TextField>(result)} });
 }
 
 Table* Driver::Execute(const cmd::Literal& instruction)
@@ -234,13 +232,12 @@ Table* Driver::Execute(const cmd::Column& instruction)
 {
   auto data = capture.find(instruction.name_);
   if (capture.find(instruction.name_) == capture.end()) {
-    return new Table({ sql::Table::Column() }, { sql::Table::Record() });
+    return new Table(
+        { {instruction.name_, cmd::LiteralType::NONE} },
+        { {std::make_shared<Field>()} }
+      );
   }
-  return new Table(
-      { {instruction.name_, cmd::LiteralType::NONE} },
-      { {std::make_shared<Field>()} }
-    );
-  // return new Table();
+  return new Table({ data->second.first }, { data->second.second });
 }
 
 Table* Driver::Execute(const cmd::BinaryOperation& instruction)

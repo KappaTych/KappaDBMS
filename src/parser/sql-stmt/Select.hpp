@@ -3,6 +3,7 @@
 #include "Instruction.hpp"
 #include "TableDefinition.hpp"
 #include "ColumnDefinition.hpp"
+#include "Column.hpp"
 #include "Expression.hpp"
 
 namespace cmd {
@@ -21,7 +22,7 @@ class Select : public Instruction {
                   std::shared_ptr<cmd::Expression> whereExpr = nullptr)
     : Instruction(InstructionType::SELECT),
       table_(std::move(table)), columnDef_(std::move(columnDef)),
-      whereExpr_(std::move(whereExpr)) {}
+      whereExpr_(std::move(whereExpr)) { }
 
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 

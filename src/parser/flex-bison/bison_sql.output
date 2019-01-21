@@ -118,172 +118,170 @@ Grammar
    63 literal_value: INTEGER_CONST
    64              | DOUBLE_CONST
    65              | STRING
-   66              | BLOB_STRING
-   67              | NULL_
-   68              | TRUE
-   69              | FALSE
+   66              | NULL_
+   67              | TRUE
+   68              | FALSE
 
-   70 column_name: IDENTIFIER
-   71            | IDENTIFIER DOT IDENTIFIER
-   72            | IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER
+   69 column_name: IDENTIFIER
+   70            | IDENTIFIER DOT IDENTIFIER
+   71            | IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER
 
-   73 table_name: IDENTIFIER
-   74           | IDENTIFIER DOT IDENTIFIER
+   72 table_name: IDENTIFIER
+   73           | IDENTIFIER DOT IDENTIFIER
 
-   75 opt_semicolon: SEMICOLON
-   76              | END_FILE
+   74 opt_semicolon: SEMICOLON
+   75              | END_FILE
 
-   77 literal_list: literal_value
-   78             | literal_list COMMA literal_value
+   76 literal_list: literal_value
+   77             | literal_list COMMA literal_value
 
-   79 id_comma_list: IDENTIFIER
-   80              | id_comma_list COMMA IDENTIFIER
+   78 id_comma_list: IDENTIFIER
+   79              | id_comma_list COMMA IDENTIFIER
 
 
 Terminals, with rules where they appear
 
-END_FILE (0) 0 76
+END_FILE (0) 0 75
 error (256)
-IDENTIFIER <std::string> (258) 15 31 70 71 72 73 74 79 80
+IDENTIFIER <std::string> (258) 15 31 69 70 71 72 73 78 79
 STRING <std::string> (259) 65
-BLOB_STRING <std::string> (260) 66
-INTEGER_CONST <long long> (261) 63
-TRUE <bool> (262) 68
-FALSE <bool> (263) 69
-DOUBLE_CONST <long double> (264) 64
-DOUBLE (265) 17
-TEXT (266) 18
-INTEGER (267) 16
-CREATE (268) 12
-TABLE (269) 11 12 19
-DROP (270) 19
-SHOW (271) 11
-NULL_ (272) 67
-SELECT (273) 20
-VALUES (274) 25
-INTO (275) 25
-INSERT (276) 25
-FROM (277) 20 32
-UPDATE (278) 28
-SET (279) 28
-WHERE (280) 23
-LIMIT (281)
-OFFSET (282)
-DELETE (283) 32
-CAST (284)
-AS (285)
-ESCAPE (286)
-ISNULL (287) 45
-NOTNULL (288) 46
-BETWEEN (289)
-DISTINCT (290)
-EXISTS (291)
-WHEN (292)
-THEN (293)
-ELSE (294)
-NOT (295) 44
-COLLATE (296)
-IS (297)
-IN (298)
-LIKE (299)
-GLOB (300)
-MATCH (301)
-REGEXP (302)
-AND (303) 59
-OR (304) 60
-EQUAL (305) 31 49
-NOTEQUAL (306) 50
-LESSEQUAL (307) 51
-GREATERQUALL (308) 52
-LESS (309) 47
-GREATER (310) 48
-CONCATENATION (311) 58
-LEFTSHIFT (312)
-RIGHTSHIFT (313)
-BINNOT (314) 43
-BINAND (315)
-BINOR (316)
-PLUS (317) 42 53
-MINUS (318) 41 54
-MULTIPLY (319) 21 55
-DIVISION (320) 56
-MOD (321) 57
-SEMICOLON (322) 3 75
-DOT (323) 71 72 74
-COMMA (324) 14 30 34 78 80
-OPENBRACKET (325) 12 25 37
-CLOSEBRACKET (326) 12 25 37
-UMINUS (327)
-UPLUS (328)
+INTEGER_CONST <std::string> (260) 63
+DOUBLE_CONST <std::string> (261) 64
+TRUE <std::string> (262) 67
+FALSE <std::string> (263) 68
+DOUBLE <std::string> (264) 17
+TEXT <std::string> (265) 18
+INTEGER <std::string> (266) 16
+CREATE <std::string> (267) 12
+TABLE <std::string> (268) 11 12 19
+DROP <std::string> (269) 19
+SHOW <std::string> (270) 11
+NULL_ <std::string> (271) 66
+SELECT <std::string> (272) 20
+VALUES <std::string> (273) 25
+INTO <std::string> (274) 25
+INSERT <std::string> (275) 25
+FROM <std::string> (276) 20 32
+UPDATE <std::string> (277) 28
+SET <std::string> (278) 28
+WHERE <std::string> (279) 23
+LIMIT <std::string> (280)
+OFFSET <std::string> (281)
+DELETE <std::string> (282) 32
+CAST <std::string> (283)
+AS <std::string> (284)
+ESCAPE <std::string> (285)
+ISNULL <std::string> (286) 45
+NOTNULL <std::string> (287) 46
+BETWEEN <std::string> (288)
+DISTINCT <std::string> (289)
+EXISTS <std::string> (290)
+WHEN <std::string> (291)
+THEN <std::string> (292)
+ELSE <std::string> (293)
+NOT <std::string> (294) 44
+COLLATE <std::string> (295)
+IS <std::string> (296)
+IN <std::string> (297)
+LIKE <std::string> (298)
+GLOB <std::string> (299)
+MATCH <std::string> (300)
+REGEXP <std::string> (301)
+AND <std::string> (302) 59
+OR <std::string> (303) 60
+EQUAL <std::string> (304) 31 49
+NOTEQUAL <std::string> (305) 50
+LESSEQUAL <std::string> (306) 51
+GREATERQUALL <std::string> (307) 52
+LESS <std::string> (308) 47
+GREATER <std::string> (309) 48
+CONCATENATION <std::string> (310) 58
+LEFTSHIFT <std::string> (311)
+RIGHTSHIFT <std::string> (312)
+BINNOT <std::string> (313) 43
+BINAND <std::string> (314)
+BINOR <std::string> (315)
+PLUS <std::string> (316) 42 53
+MINUS <std::string> (317) 41 54
+MULTIPLY <std::string> (318) 21 55
+DIVISION <std::string> (319) 56
+MOD <std::string> (320) 57
+SEMICOLON <std::string> (321) 3 74
+DOT <std::string> (322) 70 71 73
+COMMA <std::string> (323) 14 30 34 77 79
+OPENBRACKET <std::string> (324) 12 25 37
+CLOSEBRACKET <std::string> (325) 12 25 37
+UMINUS (326)
+UPLUS (327)
 
 
 Nonterminals, with rules where they appear
 
-$accept (74)
+$accept (73)
     on left: 0
-input (75)
+input (74)
     on left: 1, on right: 0
-sql_stmt_list (76)
+sql_stmt_list (75)
     on left: 2 3, on right: 1 3
-statement <std::shared_ptr<cmd::Instruction>> (77)
+statement <std::shared_ptr<cmd::Instruction>> (76)
     on left: 4 5 6 7 8 9 10, on right: 2 3
-show_statement <std::shared_ptr<cmd::Instruction>> (78)
+show_statement <std::shared_ptr<cmd::Instruction>> (77)
     on left: 11, on right: 5
-create_statement <std::shared_ptr<cmd::Instruction>> (79)
+create_statement <std::shared_ptr<cmd::Instruction>> (78)
     on left: 12, on right: 6
-column_def_commalist <std::list<cmd::ColumnDefinition>> (80)
+column_def_commalist <std::list<cmd::ColumnDefinition>> (79)
     on left: 13 14, on right: 12 14
-column_def <cmd::ColumnDefinition> (81)
+column_def <cmd::ColumnDefinition> (80)
     on left: 15, on right: 13 14
-column_type <cmd::LiteralType> (82)
+column_type <cmd::column_type> (81)
     on left: 16 17 18, on right: 15
-drop_statement <std::shared_ptr<cmd::DropTable>> (83)
+drop_statement <std::shared_ptr<cmd::DropTable>> (82)
     on left: 19, on right: 4
-select_statement <std::shared_ptr<cmd::Select>> (84)
+select_statement <std::shared_ptr<cmd::Select>> (83)
     on left: 20, on right: 7
-select_list <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> (85)
+select_list <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> (84)
     on left: 21 22, on right: 20
-optional_where <std::shared_ptr<cmd::Expression>> (86)
+optional_where <std::shared_ptr<cmd::Expression>> (85)
     on left: 23 24, on right: 20 28 32
-insert_statement <std::shared_ptr<cmd::Insert>> (87)
+insert_statement <std::shared_ptr<cmd::Insert>> (86)
     on left: 25, on right: 8
-optional_column_list <std::shared_ptr<std::list<cmd::Column>>> (88)
+optional_column_list <std::shared_ptr<std::list<cmd::Column>>> (87)
     on left: 26 27, on right: 25
-update_statement <std::shared_ptr<cmd::Update>> (89)
+update_statement <std::shared_ptr<cmd::Update>> (88)
     on left: 28, on right: 9
-update_list <std::list<cmd::update_clause>> (90)
+update_list <std::list<cmd::UpdateClause>> (89)
     on left: 29 30, on right: 28 30
-update_clause <cmd::update_clause> (91)
+update_clause <cmd::UpdateClause> (90)
     on left: 31, on right: 29 30
-delete_statement <std::shared_ptr<cmd::Delete>> (92)
+delete_statement <std::shared_ptr<cmd::Delete>> (91)
     on left: 32, on right: 10
-expr_list <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> (93)
+expr_list <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> (92)
     on left: 33 34, on right: 22 34
-expr <std::shared_ptr<cmd::Expression>> (94)
+expr <std::shared_ptr<cmd::Expression>> (93)
     on left: 35 36, on right: 23 31 33 34 37 59 60
-operand <std::shared_ptr<cmd::Expression>> (95)
+operand <std::shared_ptr<cmd::Expression>> (94)
     on left: 37 38 39 40, on right: 35 41 42 43 44 45 46 47 48 49 50
     51 52 53 54 55 56 57 58
-unary_operator <std::shared_ptr<cmd::Expression>> (96)
+unary_operator <std::shared_ptr<cmd::Expression>> (95)
     on left: 41 42 43 44 45 46, on right: 40
-binary_operator <std::shared_ptr<cmd::Expression>> (97)
+binary_operator <std::shared_ptr<cmd::Expression>> (96)
     on left: 47 48 49 50 51 52 53 54 55 56 57 58, on right: 38
-logical_operator <std::shared_ptr<cmd::Expression>> (98)
+logical_operator <std::shared_ptr<cmd::Expression>> (97)
     on left: 59 60, on right: 36
-scalar_expr <std::shared_ptr<cmd::Expression>> (99)
+scalar_expr <std::shared_ptr<cmd::Expression>> (98)
     on left: 61 62, on right: 39
-literal_value <std::shared_ptr<cmd::Literal>> (100)
-    on left: 63 64 65 66 67 68 69, on right: 61 77 78
-column_name <std::shared_ptr<cmd::Column>> (101)
-    on left: 70 71 72, on right: 62
-table_name <cmd::TableDefinition> (102)
-    on left: 73 74, on right: 11 12 19 20 25 28 32
-opt_semicolon (103)
-    on left: 75 76, on right: 1
-literal_list <std::shared_ptr<std::list<cmd::Literal>>> (104)
-    on left: 77 78, on right: 25 78
-id_comma_list <std::shared_ptr<std::list<cmd::Column>>> (105)
-    on left: 79 80, on right: 26 80
+literal_value <std::shared_ptr<cmd::Literal>> (99)
+    on left: 63 64 65 66 67 68, on right: 61 76 77
+column_name <std::shared_ptr<cmd::Column>> (100)
+    on left: 69 70 71, on right: 62
+table_name <cmd::TableDefinition> (101)
+    on left: 72 73, on right: 11 12 19 20 25 28 32
+opt_semicolon (102)
+    on left: 74 75, on right: 1
+literal_list <std::shared_ptr<std::list<cmd::Literal>>> (103)
+    on left: 76 77, on right: 25 77
+id_comma_list <std::shared_ptr<std::list<cmd::Column>>> (104)
+    on left: 78 79, on right: 26 79
 
 
 State 0
@@ -337,59 +335,58 @@ State 4
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    MULTIPLY       shift, and go to state 33
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    MULTIPLY       shift, and go to state 32
+    OPENBRACKET    shift, and go to state 33
 
-    select_list       go to state 35
-    expr_list         go to state 36
-    expr              go to state 37
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    select_list       go to state 34
+    expr_list         go to state 35
+    expr              go to state 36
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
 
 
 State 5
 
    25 insert_statement: INSERT . INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
 
-    INTO  shift, and go to state 45
+    INTO  shift, and go to state 44
 
 
 State 6
 
    28 update_statement: UPDATE . table_name SET update_list optional_where
 
-    IDENTIFIER  shift, and go to state 46
+    IDENTIFIER  shift, and go to state 45
 
-    table_name  go to state 47
+    table_name  go to state 46
 
 
 State 7
 
    32 delete_statement: DELETE . FROM table_name optional_where
 
-    FROM  shift, and go to state 48
+    FROM  shift, and go to state 47
 
 
 State 8
 
     0 $accept: input . END_FILE
 
-    END_FILE  shift, and go to state 49
+    END_FILE  shift, and go to state 48
 
 
 State 9
@@ -397,10 +394,10 @@ State 9
     1 input: sql_stmt_list . opt_semicolon
     3 sql_stmt_list: sql_stmt_list . SEMICOLON statement
 
-    END_FILE   shift, and go to state 50
-    SEMICOLON  shift, and go to state 51
+    END_FILE   shift, and go to state 49
+    SEMICOLON  shift, and go to state 50
 
-    opt_semicolon  go to state 52
+    opt_semicolon  go to state 51
 
 
 State 10
@@ -463,38 +460,38 @@ State 18
 
    12 create_statement: CREATE TABLE . table_name OPENBRACKET column_def_commalist CLOSEBRACKET
 
-    IDENTIFIER  shift, and go to state 46
+    IDENTIFIER  shift, and go to state 45
 
-    table_name  go to state 53
+    table_name  go to state 52
 
 
 State 19
 
    19 drop_statement: DROP TABLE . table_name
 
-    IDENTIFIER  shift, and go to state 46
+    IDENTIFIER  shift, and go to state 45
 
-    table_name  go to state 54
+    table_name  go to state 53
 
 
 State 20
 
    11 show_statement: SHOW TABLE . table_name
 
-    IDENTIFIER  shift, and go to state 46
+    IDENTIFIER  shift, and go to state 45
 
-    table_name  go to state 55
+    table_name  go to state 54
 
 
 State 21
 
-   70 column_name: IDENTIFIER .
-   71            | IDENTIFIER . DOT IDENTIFIER
-   72            | IDENTIFIER . DOT IDENTIFIER DOT IDENTIFIER
+   69 column_name: IDENTIFIER .
+   70            | IDENTIFIER . DOT IDENTIFIER
+   71            | IDENTIFIER . DOT IDENTIFIER DOT IDENTIFIER
 
-    DOT  shift, and go to state 56
+    DOT  shift, and go to state 55
 
-    $default  reduce using rule 70 (column_name)
+    $default  reduce using rule 69 (column_name)
 
 
 State 22
@@ -506,215 +503,203 @@ State 22
 
 State 23
 
-   66 literal_value: BLOB_STRING .
-
-    $default  reduce using rule 66 (literal_value)
-
-
-State 24
-
    63 literal_value: INTEGER_CONST .
 
     $default  reduce using rule 63 (literal_value)
 
 
-State 25
-
-   68 literal_value: TRUE .
-
-    $default  reduce using rule 68 (literal_value)
-
-
-State 26
-
-   69 literal_value: FALSE .
-
-    $default  reduce using rule 69 (literal_value)
-
-
-State 27
+State 24
 
    64 literal_value: DOUBLE_CONST .
 
     $default  reduce using rule 64 (literal_value)
 
 
-State 28
+State 25
 
-   67 literal_value: NULL_ .
+   67 literal_value: TRUE .
 
     $default  reduce using rule 67 (literal_value)
 
 
-State 29
+State 26
+
+   68 literal_value: FALSE .
+
+    $default  reduce using rule 68 (literal_value)
+
+
+State 27
+
+   66 literal_value: NULL_ .
+
+    $default  reduce using rule 66 (literal_value)
+
+
+State 28
 
    44 unary_operator: NOT . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 57
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 56
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 30
+State 29
 
    43 unary_operator: BINNOT . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 58
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 57
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 31
+State 30
 
    42 unary_operator: PLUS . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 59
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 58
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 32
+State 31
 
    41 unary_operator: MINUS . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 60
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 59
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 33
+State 32
 
    21 select_list: MULTIPLY .
 
     $default  reduce using rule 21 (select_list)
 
 
-State 34
+State 33
 
    37 operand: OPENBRACKET . expr CLOSEBRACKET
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    expr              go to state 61
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    expr              go to state 60
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
+
+
+State 34
+
+   20 select_statement: SELECT select_list . FROM table_name optional_where
+
+    FROM  shift, and go to state 61
 
 
 State 35
 
-   20 select_statement: SELECT select_list . FROM table_name optional_where
-
-    FROM  shift, and go to state 62
-
-
-State 36
-
    22 select_list: expr_list .
    34 expr_list: expr_list . COMMA expr
 
-    COMMA  shift, and go to state 63
+    COMMA  shift, and go to state 62
 
     $default  reduce using rule 22 (select_list)
 
 
-State 37
+State 36
 
    33 expr_list: expr .
    59 logical_operator: expr . AND expr
    60                 | expr . OR expr
 
-    AND  shift, and go to state 64
-    OR   shift, and go to state 65
+    AND  shift, and go to state 63
+    OR   shift, and go to state 64
 
     $default  reduce using rule 33 (expr_list)
 
 
-State 38
+State 37
 
    35 expr: operand .
    45 unary_operator: operand . ISNULL
@@ -732,119 +717,119 @@ State 38
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    ISNULL         shift, and go to state 66
-    NOTNULL        shift, and go to state 67
-    EQUAL          shift, and go to state 68
-    NOTEQUAL       shift, and go to state 69
-    LESSEQUAL      shift, and go to state 70
-    GREATERQUALL   shift, and go to state 71
-    LESS           shift, and go to state 72
-    GREATER        shift, and go to state 73
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    ISNULL         shift, and go to state 65
+    NOTNULL        shift, and go to state 66
+    EQUAL          shift, and go to state 67
+    NOTEQUAL       shift, and go to state 68
+    LESSEQUAL      shift, and go to state 69
+    GREATERQUALL   shift, and go to state 70
+    LESS           shift, and go to state 71
+    GREATER        shift, and go to state 72
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     $default  reduce using rule 35 (expr)
 
 
-State 39
+State 38
 
    40 operand: unary_operator .
 
     $default  reduce using rule 40 (operand)
 
 
-State 40
+State 39
 
    38 operand: binary_operator .
 
     $default  reduce using rule 38 (operand)
 
 
-State 41
+State 40
 
    36 expr: logical_operator .
 
     $default  reduce using rule 36 (expr)
 
 
-State 42
+State 41
 
    39 operand: scalar_expr .
 
     $default  reduce using rule 39 (operand)
 
 
-State 43
+State 42
 
    61 scalar_expr: literal_value .
 
     $default  reduce using rule 61 (scalar_expr)
 
 
-State 44
+State 43
 
    62 scalar_expr: column_name .
 
     $default  reduce using rule 62 (scalar_expr)
 
 
-State 45
+State 44
 
    25 insert_statement: INSERT INTO . table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
 
-    IDENTIFIER  shift, and go to state 46
+    IDENTIFIER  shift, and go to state 45
 
-    table_name  go to state 80
+    table_name  go to state 79
+
+
+State 45
+
+   72 table_name: IDENTIFIER .
+   73           | IDENTIFIER . DOT IDENTIFIER
+
+    DOT  shift, and go to state 80
+
+    $default  reduce using rule 72 (table_name)
 
 
 State 46
 
-   73 table_name: IDENTIFIER .
-   74           | IDENTIFIER . DOT IDENTIFIER
+   28 update_statement: UPDATE table_name . SET update_list optional_where
 
-    DOT  shift, and go to state 81
-
-    $default  reduce using rule 73 (table_name)
+    SET  shift, and go to state 81
 
 
 State 47
 
-   28 update_statement: UPDATE table_name . SET update_list optional_where
+   32 delete_statement: DELETE FROM . table_name optional_where
 
-    SET  shift, and go to state 82
+    IDENTIFIER  shift, and go to state 45
+
+    table_name  go to state 82
 
 
 State 48
-
-   32 delete_statement: DELETE FROM . table_name optional_where
-
-    IDENTIFIER  shift, and go to state 46
-
-    table_name  go to state 83
-
-
-State 49
 
     0 $accept: input END_FILE .
 
     $default  accept
 
 
+State 49
+
+   75 opt_semicolon: END_FILE .
+
+    $default  reduce using rule 75 (opt_semicolon)
+
+
 State 50
 
-   76 opt_semicolon: END_FILE .
-
-    $default  reduce using rule 76 (opt_semicolon)
-
-
-State 51
-
     3 sql_stmt_list: sql_stmt_list SEMICOLON . statement
-   75 opt_semicolon: SEMICOLON .
+   74 opt_semicolon: SEMICOLON .
 
     CREATE  shift, and go to state 1
     DROP    shift, and go to state 2
@@ -854,9 +839,9 @@ State 51
     UPDATE  shift, and go to state 6
     DELETE  shift, and go to state 7
 
-    $default  reduce using rule 75 (opt_semicolon)
+    $default  reduce using rule 74 (opt_semicolon)
 
-    statement         go to state 84
+    statement         go to state 83
     show_statement    go to state 11
     create_statement  go to state 12
     drop_statement    go to state 13
@@ -866,43 +851,43 @@ State 51
     delete_statement  go to state 17
 
 
-State 52
+State 51
 
     1 input: sql_stmt_list opt_semicolon .
 
     $default  reduce using rule 1 (input)
 
 
-State 53
+State 52
 
    12 create_statement: CREATE TABLE table_name . OPENBRACKET column_def_commalist CLOSEBRACKET
 
-    OPENBRACKET  shift, and go to state 85
+    OPENBRACKET  shift, and go to state 84
 
 
-State 54
+State 53
 
    19 drop_statement: DROP TABLE table_name .
 
     $default  reduce using rule 19 (drop_statement)
 
 
-State 55
+State 54
 
    11 show_statement: SHOW TABLE table_name .
 
     $default  reduce using rule 11 (show_statement)
 
 
+State 55
+
+   70 column_name: IDENTIFIER DOT . IDENTIFIER
+   71            | IDENTIFIER DOT . IDENTIFIER DOT IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 85
+
+
 State 56
-
-   71 column_name: IDENTIFIER DOT . IDENTIFIER
-   72            | IDENTIFIER DOT . IDENTIFIER DOT IDENTIFIER
-
-    IDENTIFIER  shift, and go to state 86
-
-
-State 57
 
    44 unary_operator: NOT operand .
    45               | operand . ISNULL
@@ -920,23 +905,23 @@ State 57
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    EQUAL          shift, and go to state 68
-    NOTEQUAL       shift, and go to state 69
-    LESSEQUAL      shift, and go to state 70
-    GREATERQUALL   shift, and go to state 71
-    LESS           shift, and go to state 72
-    GREATER        shift, and go to state 73
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    EQUAL          shift, and go to state 67
+    NOTEQUAL       shift, and go to state 68
+    LESSEQUAL      shift, and go to state 69
+    GREATERQUALL   shift, and go to state 70
+    LESS           shift, and go to state 71
+    GREATER        shift, and go to state 72
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     $default  reduce using rule 44 (unary_operator)
 
 
-State 58
+State 57
 
    43 unary_operator: BINNOT operand .
    45               | operand . ISNULL
@@ -957,7 +942,7 @@ State 58
     $default  reduce using rule 43 (unary_operator)
 
 
-State 59
+State 58
 
    42 unary_operator: PLUS operand .
    45               | operand . ISNULL
@@ -978,7 +963,7 @@ State 59
     $default  reduce using rule 42 (unary_operator)
 
 
-State 60
+State 59
 
    41 unary_operator: MINUS operand .
    45               | operand . ISNULL
@@ -999,534 +984,519 @@ State 60
     $default  reduce using rule 41 (unary_operator)
 
 
-State 61
+State 60
 
    37 operand: OPENBRACKET expr . CLOSEBRACKET
    59 logical_operator: expr . AND expr
    60                 | expr . OR expr
 
-    AND           shift, and go to state 64
-    OR            shift, and go to state 65
-    CLOSEBRACKET  shift, and go to state 87
+    AND           shift, and go to state 63
+    OR            shift, and go to state 64
+    CLOSEBRACKET  shift, and go to state 86
 
 
-State 62
+State 61
 
    20 select_statement: SELECT select_list FROM . table_name optional_where
 
-    IDENTIFIER  shift, and go to state 46
+    IDENTIFIER  shift, and go to state 45
 
-    table_name  go to state 88
+    table_name  go to state 87
 
 
-State 63
+State 62
 
    34 expr_list: expr_list COMMA . expr
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    expr              go to state 89
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    expr              go to state 88
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
 
 
-State 64
+State 63
 
    59 logical_operator: expr AND . expr
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    expr              go to state 90
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    expr              go to state 89
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
 
 
-State 65
+State 64
 
    60 logical_operator: expr OR . expr
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    expr              go to state 91
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    expr              go to state 90
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
 
 
-State 66
+State 65
 
    45 unary_operator: operand ISNULL .
 
     $default  reduce using rule 45 (unary_operator)
 
 
-State 67
+State 66
 
    46 unary_operator: operand NOTNULL .
 
     $default  reduce using rule 46 (unary_operator)
 
 
-State 68
+State 67
 
    49 binary_operator: operand EQUAL . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 92
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 91
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 69
+State 68
 
    50 binary_operator: operand NOTEQUAL . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 93
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 92
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 70
+State 69
 
    51 binary_operator: operand LESSEQUAL . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 94
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 93
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 71
+State 70
 
    52 binary_operator: operand GREATERQUALL . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 95
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 94
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 72
+State 71
 
    47 binary_operator: operand LESS . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 96
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 95
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 73
+State 72
 
    48 binary_operator: operand GREATER . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 97
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 96
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 74
+State 73
 
    58 binary_operator: operand CONCATENATION . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 98
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 97
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 75
+State 74
 
    53 binary_operator: operand PLUS . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 99
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 98
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 76
+State 75
 
    54 binary_operator: operand MINUS . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 100
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 99
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 77
+State 76
 
    55 binary_operator: operand MULTIPLY . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 101
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 100
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 78
+State 77
 
    56 binary_operator: operand DIVISION . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 102
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 101
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
 
 
-State 79
+State 78
 
    57 binary_operator: operand MOD . operand
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    operand          go to state 103
-    unary_operator   go to state 39
-    binary_operator  go to state 40
-    scalar_expr      go to state 42
-    literal_value    go to state 43
-    column_name      go to state 44
+    operand          go to state 102
+    unary_operator   go to state 38
+    binary_operator  go to state 39
+    scalar_expr      go to state 41
+    literal_value    go to state 42
+    column_name      go to state 43
+
+
+State 79
+
+   25 insert_statement: INSERT INTO table_name . optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
+
+    IDENTIFIER  shift, and go to state 103
+
+    $default  reduce using rule 27 (optional_column_list)
+
+    optional_column_list  go to state 104
+    id_comma_list         go to state 105
 
 
 State 80
 
-   25 insert_statement: INSERT INTO table_name . optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET
+   73 table_name: IDENTIFIER DOT . IDENTIFIER
 
-    IDENTIFIER  shift, and go to state 104
-
-    $default  reduce using rule 27 (optional_column_list)
-
-    optional_column_list  go to state 105
-    id_comma_list         go to state 106
+    IDENTIFIER  shift, and go to state 106
 
 
 State 81
 
-   74 table_name: IDENTIFIER DOT . IDENTIFIER
+   28 update_statement: UPDATE table_name SET . update_list optional_where
 
     IDENTIFIER  shift, and go to state 107
+
+    update_list    go to state 108
+    update_clause  go to state 109
 
 
 State 82
 
-   28 update_statement: UPDATE table_name SET . update_list optional_where
-
-    IDENTIFIER  shift, and go to state 108
-
-    update_list    go to state 109
-    update_clause  go to state 110
-
-
-State 83
-
    32 delete_statement: DELETE FROM table_name . optional_where
 
-    WHERE  shift, and go to state 111
+    WHERE  shift, and go to state 110
 
     $default  reduce using rule 24 (optional_where)
 
-    optional_where  go to state 112
+    optional_where  go to state 111
 
 
-State 84
+State 83
 
     3 sql_stmt_list: sql_stmt_list SEMICOLON statement .
 
     $default  reduce using rule 3 (sql_stmt_list)
 
 
-State 85
+State 84
 
    12 create_statement: CREATE TABLE table_name OPENBRACKET . column_def_commalist CLOSEBRACKET
 
-    IDENTIFIER  shift, and go to state 113
+    IDENTIFIER  shift, and go to state 112
 
-    column_def_commalist  go to state 114
-    column_def            go to state 115
+    column_def_commalist  go to state 113
+    column_def            go to state 114
+
+
+State 85
+
+   70 column_name: IDENTIFIER DOT IDENTIFIER .
+   71            | IDENTIFIER DOT IDENTIFIER . DOT IDENTIFIER
+
+    DOT  shift, and go to state 115
+
+    $default  reduce using rule 70 (column_name)
 
 
 State 86
-
-   71 column_name: IDENTIFIER DOT IDENTIFIER .
-   72            | IDENTIFIER DOT IDENTIFIER . DOT IDENTIFIER
-
-    DOT  shift, and go to state 116
-
-    $default  reduce using rule 71 (column_name)
-
-
-State 87
 
    37 operand: OPENBRACKET expr CLOSEBRACKET .
 
     $default  reduce using rule 37 (operand)
 
 
-State 88
+State 87
 
    20 select_statement: SELECT select_list FROM table_name . optional_where
 
-    WHERE  shift, and go to state 111
+    WHERE  shift, and go to state 110
 
     $default  reduce using rule 24 (optional_where)
 
-    optional_where  go to state 117
+    optional_where  go to state 116
 
 
-State 89
+State 88
 
    34 expr_list: expr_list COMMA expr .
    59 logical_operator: expr . AND expr
    60                 | expr . OR expr
 
-    AND  shift, and go to state 64
-    OR   shift, and go to state 65
+    AND  shift, and go to state 63
+    OR   shift, and go to state 64
 
     $default  reduce using rule 34 (expr_list)
 
 
-State 90
+State 89
 
    59 logical_operator: expr . AND expr
    59                 | expr AND expr .
@@ -1535,18 +1505,18 @@ State 90
     $default  reduce using rule 59 (logical_operator)
 
 
-State 91
+State 90
 
    59 logical_operator: expr . AND expr
    60                 | expr . OR expr
    60                 | expr OR expr .
 
-    AND  shift, and go to state 64
+    AND  shift, and go to state 63
 
     $default  reduce using rule 60 (logical_operator)
 
 
-State 92
+State 91
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1564,16 +1534,16 @@ State 92
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    LESSEQUAL      shift, and go to state 70
-    GREATERQUALL   shift, and go to state 71
-    LESS           shift, and go to state 72
-    GREATER        shift, and go to state 73
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    LESSEQUAL      shift, and go to state 69
+    GREATERQUALL   shift, and go to state 70
+    LESS           shift, and go to state 71
+    GREATER        shift, and go to state 72
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     EQUAL     error (nonassociative)
     NOTEQUAL  error (nonassociative)
@@ -1581,7 +1551,7 @@ State 92
     $default  reduce using rule 49 (binary_operator)
 
 
-State 93
+State 92
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1599,16 +1569,16 @@ State 93
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    LESSEQUAL      shift, and go to state 70
-    GREATERQUALL   shift, and go to state 71
-    LESS           shift, and go to state 72
-    GREATER        shift, and go to state 73
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    LESSEQUAL      shift, and go to state 69
+    GREATERQUALL   shift, and go to state 70
+    LESS           shift, and go to state 71
+    GREATER        shift, and go to state 72
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     EQUAL     error (nonassociative)
     NOTEQUAL  error (nonassociative)
@@ -1616,7 +1586,7 @@ State 93
     $default  reduce using rule 50 (binary_operator)
 
 
-State 94
+State 93
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1634,12 +1604,12 @@ State 94
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     LESSEQUAL     error (nonassociative)
     GREATERQUALL  error (nonassociative)
@@ -1649,7 +1619,7 @@ State 94
     $default  reduce using rule 51 (binary_operator)
 
 
-State 95
+State 94
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1667,12 +1637,12 @@ State 95
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     LESSEQUAL     error (nonassociative)
     GREATERQUALL  error (nonassociative)
@@ -1682,7 +1652,7 @@ State 95
     $default  reduce using rule 52 (binary_operator)
 
 
-State 96
+State 95
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1700,12 +1670,12 @@ State 96
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     LESSEQUAL     error (nonassociative)
     GREATERQUALL  error (nonassociative)
@@ -1715,7 +1685,7 @@ State 96
     $default  reduce using rule 47 (binary_operator)
 
 
-State 97
+State 96
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1733,12 +1703,12 @@ State 97
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
-    PLUS           shift, and go to state 75
-    MINUS          shift, and go to state 76
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    CONCATENATION  shift, and go to state 73
+    PLUS           shift, and go to state 74
+    MINUS          shift, and go to state 75
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     LESSEQUAL     error (nonassociative)
     GREATERQUALL  error (nonassociative)
@@ -1748,7 +1718,7 @@ State 97
     $default  reduce using rule 48 (binary_operator)
 
 
-State 98
+State 97
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1769,7 +1739,7 @@ State 98
     $default  reduce using rule 58 (binary_operator)
 
 
-State 99
+State 98
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1787,15 +1757,15 @@ State 99
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    CONCATENATION  shift, and go to state 73
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     $default  reduce using rule 53 (binary_operator)
 
 
-State 100
+State 99
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1813,15 +1783,15 @@ State 100
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
-    MULTIPLY       shift, and go to state 77
-    DIVISION       shift, and go to state 78
-    MOD            shift, and go to state 79
+    CONCATENATION  shift, and go to state 73
+    MULTIPLY       shift, and go to state 76
+    DIVISION       shift, and go to state 77
+    MOD            shift, and go to state 78
 
     $default  reduce using rule 54 (binary_operator)
 
 
-State 101
+State 100
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1839,12 +1809,12 @@ State 101
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
+    CONCATENATION  shift, and go to state 73
 
     $default  reduce using rule 55 (binary_operator)
 
 
-State 102
+State 101
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1862,12 +1832,12 @@ State 102
    57                | operand . MOD operand
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
+    CONCATENATION  shift, and go to state 73
 
     $default  reduce using rule 56 (binary_operator)
 
 
-State 103
+State 102
 
    45 unary_operator: operand . ISNULL
    46               | operand . NOTNULL
@@ -1885,355 +1855,351 @@ State 103
    57                | operand MOD operand .
    58                | operand . CONCATENATION operand
 
-    CONCATENATION  shift, and go to state 74
+    CONCATENATION  shift, and go to state 73
 
     $default  reduce using rule 57 (binary_operator)
 
 
+State 103
+
+   78 id_comma_list: IDENTIFIER .
+
+    $default  reduce using rule 78 (id_comma_list)
+
+
 State 104
 
-   79 id_comma_list: IDENTIFIER .
+   25 insert_statement: INSERT INTO table_name optional_column_list . VALUES OPENBRACKET literal_list CLOSEBRACKET
 
-    $default  reduce using rule 79 (id_comma_list)
+    VALUES  shift, and go to state 117
 
 
 State 105
 
-   25 insert_statement: INSERT INTO table_name optional_column_list . VALUES OPENBRACKET literal_list CLOSEBRACKET
-
-    VALUES  shift, and go to state 118
-
-
-State 106
-
    26 optional_column_list: id_comma_list .
-   80 id_comma_list: id_comma_list . COMMA IDENTIFIER
+   79 id_comma_list: id_comma_list . COMMA IDENTIFIER
 
-    COMMA  shift, and go to state 119
+    COMMA  shift, and go to state 118
 
     $default  reduce using rule 26 (optional_column_list)
 
 
+State 106
+
+   73 table_name: IDENTIFIER DOT IDENTIFIER .
+
+    $default  reduce using rule 73 (table_name)
+
+
 State 107
 
-   74 table_name: IDENTIFIER DOT IDENTIFIER .
+   31 update_clause: IDENTIFIER . EQUAL expr
 
-    $default  reduce using rule 74 (table_name)
+    EQUAL  shift, and go to state 119
 
 
 State 108
 
-   31 update_clause: IDENTIFIER . EQUAL expr
-
-    EQUAL  shift, and go to state 120
-
-
-State 109
-
    28 update_statement: UPDATE table_name SET update_list . optional_where
    30 update_list: update_list . COMMA update_clause
 
-    WHERE  shift, and go to state 111
-    COMMA  shift, and go to state 121
+    WHERE  shift, and go to state 110
+    COMMA  shift, and go to state 120
 
     $default  reduce using rule 24 (optional_where)
 
-    optional_where  go to state 122
+    optional_where  go to state 121
 
 
-State 110
+State 109
 
    29 update_list: update_clause .
 
     $default  reduce using rule 29 (update_list)
 
 
-State 111
+State 110
 
    23 optional_where: WHERE . expr
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    expr              go to state 123
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    expr              go to state 122
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
 
 
-State 112
+State 111
 
    32 delete_statement: DELETE FROM table_name optional_where .
 
     $default  reduce using rule 32 (delete_statement)
 
 
-State 113
+State 112
 
    15 column_def: IDENTIFIER . column_type
 
-    DOUBLE   shift, and go to state 124
-    TEXT     shift, and go to state 125
-    INTEGER  shift, and go to state 126
+    DOUBLE   shift, and go to state 123
+    TEXT     shift, and go to state 124
+    INTEGER  shift, and go to state 125
 
-    column_type  go to state 127
+    column_type  go to state 126
 
 
-State 114
+State 113
 
    12 create_statement: CREATE TABLE table_name OPENBRACKET column_def_commalist . CLOSEBRACKET
    14 column_def_commalist: column_def_commalist . COMMA column_def
 
-    COMMA         shift, and go to state 128
-    CLOSEBRACKET  shift, and go to state 129
+    COMMA         shift, and go to state 127
+    CLOSEBRACKET  shift, and go to state 128
 
 
-State 115
+State 114
 
    13 column_def_commalist: column_def .
 
     $default  reduce using rule 13 (column_def_commalist)
 
 
+State 115
+
+   71 column_name: IDENTIFIER DOT IDENTIFIER DOT . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 129
+
+
 State 116
-
-   72 column_name: IDENTIFIER DOT IDENTIFIER DOT . IDENTIFIER
-
-    IDENTIFIER  shift, and go to state 130
-
-
-State 117
 
    20 select_statement: SELECT select_list FROM table_name optional_where .
 
     $default  reduce using rule 20 (select_statement)
 
 
-State 118
+State 117
 
    25 insert_statement: INSERT INTO table_name optional_column_list VALUES . OPENBRACKET literal_list CLOSEBRACKET
 
-    OPENBRACKET  shift, and go to state 131
+    OPENBRACKET  shift, and go to state 130
+
+
+State 118
+
+   79 id_comma_list: id_comma_list COMMA . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 131
 
 
 State 119
-
-   80 id_comma_list: id_comma_list COMMA . IDENTIFIER
-
-    IDENTIFIER  shift, and go to state 132
-
-
-State 120
 
    31 update_clause: IDENTIFIER EQUAL . expr
 
     IDENTIFIER     shift, and go to state 21
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-    NOT            shift, and go to state 29
-    BINNOT         shift, and go to state 30
-    PLUS           shift, and go to state 31
-    MINUS          shift, and go to state 32
-    OPENBRACKET    shift, and go to state 34
+    NULL_          shift, and go to state 27
+    NOT            shift, and go to state 28
+    BINNOT         shift, and go to state 29
+    PLUS           shift, and go to state 30
+    MINUS          shift, and go to state 31
+    OPENBRACKET    shift, and go to state 33
 
-    expr              go to state 133
-    operand           go to state 38
-    unary_operator    go to state 39
-    binary_operator   go to state 40
-    logical_operator  go to state 41
-    scalar_expr       go to state 42
-    literal_value     go to state 43
-    column_name       go to state 44
+    expr              go to state 132
+    operand           go to state 37
+    unary_operator    go to state 38
+    binary_operator   go to state 39
+    logical_operator  go to state 40
+    scalar_expr       go to state 41
+    literal_value     go to state 42
+    column_name       go to state 43
 
 
-State 121
+State 120
 
    30 update_list: update_list COMMA . update_clause
 
-    IDENTIFIER  shift, and go to state 108
+    IDENTIFIER  shift, and go to state 107
 
-    update_clause  go to state 134
+    update_clause  go to state 133
 
 
-State 122
+State 121
 
    28 update_statement: UPDATE table_name SET update_list optional_where .
 
     $default  reduce using rule 28 (update_statement)
 
 
-State 123
+State 122
 
    23 optional_where: WHERE expr .
    59 logical_operator: expr . AND expr
    60                 | expr . OR expr
 
-    AND  shift, and go to state 64
-    OR   shift, and go to state 65
+    AND  shift, and go to state 63
+    OR   shift, and go to state 64
 
     $default  reduce using rule 23 (optional_where)
 
 
-State 124
+State 123
 
    17 column_type: DOUBLE .
 
     $default  reduce using rule 17 (column_type)
 
 
-State 125
+State 124
 
    18 column_type: TEXT .
 
     $default  reduce using rule 18 (column_type)
 
 
-State 126
+State 125
 
    16 column_type: INTEGER .
 
     $default  reduce using rule 16 (column_type)
 
 
-State 127
+State 126
 
    15 column_def: IDENTIFIER column_type .
 
     $default  reduce using rule 15 (column_def)
 
 
-State 128
+State 127
 
    14 column_def_commalist: column_def_commalist COMMA . column_def
 
-    IDENTIFIER  shift, and go to state 113
+    IDENTIFIER  shift, and go to state 112
 
-    column_def  go to state 135
+    column_def  go to state 134
 
 
-State 129
+State 128
 
    12 create_statement: CREATE TABLE table_name OPENBRACKET column_def_commalist CLOSEBRACKET .
 
     $default  reduce using rule 12 (create_statement)
 
 
+State 129
+
+   71 column_name: IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER .
+
+    $default  reduce using rule 71 (column_name)
+
+
 State 130
-
-   72 column_name: IDENTIFIER DOT IDENTIFIER DOT IDENTIFIER .
-
-    $default  reduce using rule 72 (column_name)
-
-
-State 131
 
    25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET . literal_list CLOSEBRACKET
 
     STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
     TRUE           shift, and go to state 25
     FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
+    NULL_          shift, and go to state 27
 
-    literal_value  go to state 136
-    literal_list   go to state 137
+    literal_value  go to state 135
+    literal_list   go to state 136
+
+
+State 131
+
+   79 id_comma_list: id_comma_list COMMA IDENTIFIER .
+
+    $default  reduce using rule 79 (id_comma_list)
 
 
 State 132
-
-   80 id_comma_list: id_comma_list COMMA IDENTIFIER .
-
-    $default  reduce using rule 80 (id_comma_list)
-
-
-State 133
 
    31 update_clause: IDENTIFIER EQUAL expr .
    59 logical_operator: expr . AND expr
    60                 | expr . OR expr
 
-    AND  shift, and go to state 64
-    OR   shift, and go to state 65
+    AND  shift, and go to state 63
+    OR   shift, and go to state 64
 
     $default  reduce using rule 31 (update_clause)
 
 
-State 134
+State 133
 
    30 update_list: update_list COMMA update_clause .
 
     $default  reduce using rule 30 (update_list)
 
 
-State 135
+State 134
 
    14 column_def_commalist: column_def_commalist COMMA column_def .
 
     $default  reduce using rule 14 (column_def_commalist)
 
 
+State 135
+
+   76 literal_list: literal_value .
+
+    $default  reduce using rule 76 (literal_list)
+
+
 State 136
 
-   77 literal_list: literal_value .
+   25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list . CLOSEBRACKET
+   77 literal_list: literal_list . COMMA literal_value
 
-    $default  reduce using rule 77 (literal_list)
+    COMMA         shift, and go to state 137
+    CLOSEBRACKET  shift, and go to state 138
 
 
 State 137
 
-   25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list . CLOSEBRACKET
-   78 literal_list: literal_list . COMMA literal_value
+   77 literal_list: literal_list COMMA . literal_value
 
-    COMMA         shift, and go to state 138
-    CLOSEBRACKET  shift, and go to state 139
+    STRING         shift, and go to state 22
+    INTEGER_CONST  shift, and go to state 23
+    DOUBLE_CONST   shift, and go to state 24
+    TRUE           shift, and go to state 25
+    FALSE          shift, and go to state 26
+    NULL_          shift, and go to state 27
+
+    literal_value  go to state 139
 
 
 State 138
-
-   78 literal_list: literal_list COMMA . literal_value
-
-    STRING         shift, and go to state 22
-    BLOB_STRING    shift, and go to state 23
-    INTEGER_CONST  shift, and go to state 24
-    TRUE           shift, and go to state 25
-    FALSE          shift, and go to state 26
-    DOUBLE_CONST   shift, and go to state 27
-    NULL_          shift, and go to state 28
-
-    literal_value  go to state 140
-
-
-State 139
 
    25 insert_statement: INSERT INTO table_name optional_column_list VALUES OPENBRACKET literal_list CLOSEBRACKET .
 
     $default  reduce using rule 25 (insert_statement)
 
 
-State 140
+State 139
 
-   78 literal_list: literal_list COMMA literal_value .
+   77 literal_list: literal_list COMMA literal_value .
 
-    $default  reduce using rule 78 (literal_list)
+    $default  reduce using rule 77 (literal_list)

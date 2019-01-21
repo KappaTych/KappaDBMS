@@ -216,104 +216,156 @@ namespace yy {
   {
     switch (that.type_get ())
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        value.YY_MOVE_OR_COPY< bool > (YY_MOVE (that.value));
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         value.YY_MOVE_OR_COPY< cmd::ColumnDefinition > (YY_MOVE (that.value));
         break;
 
-      case 82: // column_type
-        value.YY_MOVE_OR_COPY< cmd::LiteralType > (YY_MOVE (that.value));
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         value.YY_MOVE_OR_COPY< cmd::TableDefinition > (YY_MOVE (that.value));
         break;
 
-      case 91: // update_clause
-        value.YY_MOVE_OR_COPY< cmd::update_clause > (YY_MOVE (that.value));
+      case 90: // update_clause
+        value.YY_MOVE_OR_COPY< cmd::UpdateClause > (YY_MOVE (that.value));
         break;
 
-      case 9: // DOUBLE_CONST
-        value.YY_MOVE_OR_COPY< long double > (YY_MOVE (that.value));
+      case 81: // column_type
+        value.YY_MOVE_OR_COPY< cmd::column_type > (YY_MOVE (that.value));
         break;
 
-      case 6: // INTEGER_CONST
-        value.YY_MOVE_OR_COPY< long long > (YY_MOVE (that.value));
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         value.YY_MOVE_OR_COPY< std::list<cmd::ColumnDefinition> > (YY_MOVE (that.value));
         break;
 
-      case 90: // update_list
-        value.YY_MOVE_OR_COPY< std::list<cmd::update_clause> > (YY_MOVE (that.value));
+      case 89: // update_list
+        value.YY_MOVE_OR_COPY< std::list<cmd::UpdateClause> > (YY_MOVE (that.value));
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Column> > (YY_MOVE (that.value));
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Delete> > (YY_MOVE (that.value));
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::DropTable> > (YY_MOVE (that.value));
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Expression> > (YY_MOVE (that.value));
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Insert> > (YY_MOVE (that.value));
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Instruction> > (YY_MOVE (that.value));
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Literal> > (YY_MOVE (that.value));
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Select> > (YY_MOVE (that.value));
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         value.YY_MOVE_OR_COPY< std::shared_ptr<cmd::Update> > (YY_MOVE (that.value));
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         value.YY_MOVE_OR_COPY< std::shared_ptr<std::list<cmd::Column>> > (YY_MOVE (that.value));
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         value.YY_MOVE_OR_COPY< std::shared_ptr<std::list<cmd::Literal>> > (YY_MOVE (that.value));
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         value.YY_MOVE_OR_COPY< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (YY_MOVE (that.value));
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
         break;
 
@@ -332,104 +384,156 @@ namespace yy {
   {
     switch (that.type_get ())
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        value.move< bool > (YY_MOVE (that.value));
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         value.move< cmd::ColumnDefinition > (YY_MOVE (that.value));
         break;
 
-      case 82: // column_type
-        value.move< cmd::LiteralType > (YY_MOVE (that.value));
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         value.move< cmd::TableDefinition > (YY_MOVE (that.value));
         break;
 
-      case 91: // update_clause
-        value.move< cmd::update_clause > (YY_MOVE (that.value));
+      case 90: // update_clause
+        value.move< cmd::UpdateClause > (YY_MOVE (that.value));
         break;
 
-      case 9: // DOUBLE_CONST
-        value.move< long double > (YY_MOVE (that.value));
+      case 81: // column_type
+        value.move< cmd::column_type > (YY_MOVE (that.value));
         break;
 
-      case 6: // INTEGER_CONST
-        value.move< long long > (YY_MOVE (that.value));
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         value.move< std::list<cmd::ColumnDefinition> > (YY_MOVE (that.value));
         break;
 
-      case 90: // update_list
-        value.move< std::list<cmd::update_clause> > (YY_MOVE (that.value));
+      case 89: // update_list
+        value.move< std::list<cmd::UpdateClause> > (YY_MOVE (that.value));
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         value.move< std::shared_ptr<cmd::Column> > (YY_MOVE (that.value));
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         value.move< std::shared_ptr<cmd::Delete> > (YY_MOVE (that.value));
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         value.move< std::shared_ptr<cmd::DropTable> > (YY_MOVE (that.value));
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         value.move< std::shared_ptr<cmd::Expression> > (YY_MOVE (that.value));
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         value.move< std::shared_ptr<cmd::Insert> > (YY_MOVE (that.value));
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         value.move< std::shared_ptr<cmd::Instruction> > (YY_MOVE (that.value));
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         value.move< std::shared_ptr<cmd::Literal> > (YY_MOVE (that.value));
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         value.move< std::shared_ptr<cmd::Select> > (YY_MOVE (that.value));
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         value.move< std::shared_ptr<cmd::Update> > (YY_MOVE (that.value));
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         value.move< std::shared_ptr<std::list<cmd::Column>> > (YY_MOVE (that.value));
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         value.move< std::shared_ptr<std::list<cmd::Literal>> > (YY_MOVE (that.value));
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         value.move< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (YY_MOVE (that.value));
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         value.move< std::string > (YY_MOVE (that.value));
         break;
 
@@ -448,104 +552,156 @@ namespace yy {
     state = that.state;
     switch (that.type_get ())
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        value.move< bool > (that.value);
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         value.move< cmd::ColumnDefinition > (that.value);
         break;
 
-      case 82: // column_type
-        value.move< cmd::LiteralType > (that.value);
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         value.move< cmd::TableDefinition > (that.value);
         break;
 
-      case 91: // update_clause
-        value.move< cmd::update_clause > (that.value);
+      case 90: // update_clause
+        value.move< cmd::UpdateClause > (that.value);
         break;
 
-      case 9: // DOUBLE_CONST
-        value.move< long double > (that.value);
+      case 81: // column_type
+        value.move< cmd::column_type > (that.value);
         break;
 
-      case 6: // INTEGER_CONST
-        value.move< long long > (that.value);
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         value.move< std::list<cmd::ColumnDefinition> > (that.value);
         break;
 
-      case 90: // update_list
-        value.move< std::list<cmd::update_clause> > (that.value);
+      case 89: // update_list
+        value.move< std::list<cmd::UpdateClause> > (that.value);
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         value.move< std::shared_ptr<cmd::Column> > (that.value);
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         value.move< std::shared_ptr<cmd::Delete> > (that.value);
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         value.move< std::shared_ptr<cmd::DropTable> > (that.value);
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         value.move< std::shared_ptr<cmd::Expression> > (that.value);
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         value.move< std::shared_ptr<cmd::Insert> > (that.value);
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         value.move< std::shared_ptr<cmd::Instruction> > (that.value);
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         value.move< std::shared_ptr<cmd::Literal> > (that.value);
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         value.move< std::shared_ptr<cmd::Select> > (that.value);
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         value.move< std::shared_ptr<cmd::Update> > (that.value);
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         value.move< std::shared_ptr<std::list<cmd::Column>> > (that.value);
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         value.move< std::shared_ptr<std::list<cmd::Literal>> > (that.value);
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         value.move< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (that.value);
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         value.move< std::string > (that.value);
         break;
 
@@ -788,104 +944,156 @@ namespace yy {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case 7: // TRUE
-      case 8: // FALSE
-        yylhs.value.emplace< bool > ();
-        break;
-
-      case 81: // column_def
+      case 80: // column_def
         yylhs.value.emplace< cmd::ColumnDefinition > ();
         break;
 
-      case 82: // column_type
-        yylhs.value.emplace< cmd::LiteralType > ();
-        break;
-
-      case 102: // table_name
+      case 101: // table_name
         yylhs.value.emplace< cmd::TableDefinition > ();
         break;
 
-      case 91: // update_clause
-        yylhs.value.emplace< cmd::update_clause > ();
+      case 90: // update_clause
+        yylhs.value.emplace< cmd::UpdateClause > ();
         break;
 
-      case 9: // DOUBLE_CONST
-        yylhs.value.emplace< long double > ();
+      case 81: // column_type
+        yylhs.value.emplace< cmd::column_type > ();
         break;
 
-      case 6: // INTEGER_CONST
-        yylhs.value.emplace< long long > ();
-        break;
-
-      case 80: // column_def_commalist
+      case 79: // column_def_commalist
         yylhs.value.emplace< std::list<cmd::ColumnDefinition> > ();
         break;
 
-      case 90: // update_list
-        yylhs.value.emplace< std::list<cmd::update_clause> > ();
+      case 89: // update_list
+        yylhs.value.emplace< std::list<cmd::UpdateClause> > ();
         break;
 
-      case 101: // column_name
+      case 100: // column_name
         yylhs.value.emplace< std::shared_ptr<cmd::Column> > ();
         break;
 
-      case 92: // delete_statement
+      case 91: // delete_statement
         yylhs.value.emplace< std::shared_ptr<cmd::Delete> > ();
         break;
 
-      case 83: // drop_statement
+      case 82: // drop_statement
         yylhs.value.emplace< std::shared_ptr<cmd::DropTable> > ();
         break;
 
-      case 86: // optional_where
-      case 94: // expr
-      case 95: // operand
-      case 96: // unary_operator
-      case 97: // binary_operator
-      case 98: // logical_operator
-      case 99: // scalar_expr
+      case 85: // optional_where
+      case 93: // expr
+      case 94: // operand
+      case 95: // unary_operator
+      case 96: // binary_operator
+      case 97: // logical_operator
+      case 98: // scalar_expr
         yylhs.value.emplace< std::shared_ptr<cmd::Expression> > ();
         break;
 
-      case 87: // insert_statement
+      case 86: // insert_statement
         yylhs.value.emplace< std::shared_ptr<cmd::Insert> > ();
         break;
 
-      case 77: // statement
-      case 78: // show_statement
-      case 79: // create_statement
+      case 76: // statement
+      case 77: // show_statement
+      case 78: // create_statement
         yylhs.value.emplace< std::shared_ptr<cmd::Instruction> > ();
         break;
 
-      case 100: // literal_value
+      case 99: // literal_value
         yylhs.value.emplace< std::shared_ptr<cmd::Literal> > ();
         break;
 
-      case 84: // select_statement
+      case 83: // select_statement
         yylhs.value.emplace< std::shared_ptr<cmd::Select> > ();
         break;
 
-      case 89: // update_statement
+      case 88: // update_statement
         yylhs.value.emplace< std::shared_ptr<cmd::Update> > ();
         break;
 
-      case 88: // optional_column_list
-      case 105: // id_comma_list
+      case 87: // optional_column_list
+      case 104: // id_comma_list
         yylhs.value.emplace< std::shared_ptr<std::list<cmd::Column>> > ();
         break;
 
-      case 104: // literal_list
+      case 103: // literal_list
         yylhs.value.emplace< std::shared_ptr<std::list<cmd::Literal>> > ();
         break;
 
-      case 85: // select_list
-      case 93: // expr_list
+      case 84: // select_list
+      case 92: // expr_list
         yylhs.value.emplace< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ();
         break;
 
       case 3: // IDENTIFIER
       case 4: // STRING
-      case 5: // BLOB_STRING
+      case 5: // INTEGER_CONST
+      case 6: // DOUBLE_CONST
+      case 7: // TRUE
+      case 8: // FALSE
+      case 9: // DOUBLE
+      case 10: // TEXT
+      case 11: // INTEGER
+      case 12: // CREATE
+      case 13: // TABLE
+      case 14: // DROP
+      case 15: // SHOW
+      case 16: // NULL_
+      case 17: // SELECT
+      case 18: // VALUES
+      case 19: // INTO
+      case 20: // INSERT
+      case 21: // FROM
+      case 22: // UPDATE
+      case 23: // SET
+      case 24: // WHERE
+      case 25: // LIMIT
+      case 26: // OFFSET
+      case 27: // DELETE
+      case 28: // CAST
+      case 29: // AS
+      case 30: // ESCAPE
+      case 31: // ISNULL
+      case 32: // NOTNULL
+      case 33: // BETWEEN
+      case 34: // DISTINCT
+      case 35: // EXISTS
+      case 36: // WHEN
+      case 37: // THEN
+      case 38: // ELSE
+      case 39: // NOT
+      case 40: // COLLATE
+      case 41: // IS
+      case 42: // IN
+      case 43: // LIKE
+      case 44: // GLOB
+      case 45: // MATCH
+      case 46: // REGEXP
+      case 47: // AND
+      case 48: // OR
+      case 49: // EQUAL
+      case 50: // NOTEQUAL
+      case 51: // LESSEQUAL
+      case 52: // GREATERQUALL
+      case 53: // LESS
+      case 54: // GREATER
+      case 55: // CONCATENATION
+      case 56: // LEFTSHIFT
+      case 57: // RIGHTSHIFT
+      case 58: // BINNOT
+      case 59: // BINAND
+      case 60: // BINOR
+      case 61: // PLUS
+      case 62: // MINUS
+      case 63: // MULTIPLY
+      case 64: // DIVISION
+      case 65: // MOD
+      case 66: // SEMICOLON
+      case 67: // DOT
+      case 68: // COMMA
+      case 69: // OPENBRACKET
+      case 70: // CLOSEBRACKET
         yylhs.value.emplace< std::string > ();
         break;
 
@@ -910,581 +1118,674 @@ namespace yy {
           switch (yyn)
             {
   case 3:
-#line 100 "bison_sql.ypp" // lalr1.cc:906
+#line 98 "bison_sql.ypp" // lalr1.cc:906
     {
             driver.AddInstruction(yystack_[0].value.as< std::shared_ptr<cmd::Instruction> > ());
         }
-#line 918 "bison_sql.cpp" // lalr1.cc:906
+#line 1126 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 4:
-#line 104 "bison_sql.ypp" // lalr1.cc:906
+#line 102 "bison_sql.ypp" // lalr1.cc:906
     {
             driver.AddInstruction(yystack_[0].value.as< std::shared_ptr<cmd::Instruction> > ());
         }
-#line 926 "bison_sql.cpp" // lalr1.cc:906
+#line 1134 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 5:
-#line 111 "bison_sql.ypp" // lalr1.cc:906
+#line 109 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::DropTable> > (); }
-#line 932 "bison_sql.cpp" // lalr1.cc:906
+#line 1140 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 6:
-#line 112 "bison_sql.ypp" // lalr1.cc:906
+#line 110 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Instruction> > (); }
-#line 938 "bison_sql.cpp" // lalr1.cc:906
+#line 1146 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 7:
-#line 113 "bison_sql.ypp" // lalr1.cc:906
+#line 111 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Instruction> > (); }
-#line 944 "bison_sql.cpp" // lalr1.cc:906
+#line 1152 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 8:
-#line 114 "bison_sql.ypp" // lalr1.cc:906
+#line 112 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Select> > (); }
-#line 950 "bison_sql.cpp" // lalr1.cc:906
+#line 1158 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 9:
-#line 115 "bison_sql.ypp" // lalr1.cc:906
+#line 113 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Insert> > (); }
-#line 956 "bison_sql.cpp" // lalr1.cc:906
+#line 1164 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 10:
-#line 116 "bison_sql.ypp" // lalr1.cc:906
+#line 114 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Update> > (); }
-#line 962 "bison_sql.cpp" // lalr1.cc:906
+#line 1170 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 11:
-#line 117 "bison_sql.ypp" // lalr1.cc:906
+#line 115 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Delete> > (); }
-#line 968 "bison_sql.cpp" // lalr1.cc:906
+#line 1176 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 12:
-#line 125 "bison_sql.ypp" // lalr1.cc:906
+#line 123 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = std::make_shared<cmd::ShowCreateTable>(yystack_[0].value.as< cmd::TableDefinition > ());
+            yylhs.value.as< std::shared_ptr<cmd::Instruction> > ()->SetRaw(yystack_[2].value.as< std::string > () + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< cmd::TableDefinition > ().GetRaw());
         }
-#line 976 "bison_sql.cpp" // lalr1.cc:906
+#line 1185 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 13:
-#line 134 "bison_sql.ypp" // lalr1.cc:906
+#line 133 "bison_sql.ypp" // lalr1.cc:906
     {
+            std::string raw = yystack_[5].value.as< std::string > () + " " + yystack_[4].value.as< std::string > () + " " + yystack_[3].value.as< cmd::TableDefinition > ().GetRaw() + " " + yystack_[2].value.as< std::string > ();
+            for (auto& e : yystack_[1].value.as< std::list<cmd::ColumnDefinition> > ()) {
+                raw += e.GetRaw() + ", ";
+            }
+            raw.pop_back();
+            raw.pop_back();
             yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = std::make_shared<cmd::CreateTable>(yystack_[3].value.as< cmd::TableDefinition > (), yystack_[1].value.as< std::list<cmd::ColumnDefinition> > ());
+            raw += yystack_[0].value.as< std::string > ();
+            yylhs.value.as< std::shared_ptr<cmd::Instruction> > ()->SetRaw(raw);
         }
-#line 984 "bison_sql.cpp" // lalr1.cc:906
+#line 1201 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 14:
-#line 142 "bison_sql.ypp" // lalr1.cc:906
+#line 149 "bison_sql.ypp" // lalr1.cc:906
     {
             yylhs.value.as< std::list<cmd::ColumnDefinition> > () = std::list<cmd::ColumnDefinition>({std::move(yystack_[0].value.as< cmd::ColumnDefinition > ())});
         }
-#line 992 "bison_sql.cpp" // lalr1.cc:906
+#line 1209 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 15:
-#line 146 "bison_sql.ypp" // lalr1.cc:906
+#line 153 "bison_sql.ypp" // lalr1.cc:906
     {
             yystack_[2].value.as< std::list<cmd::ColumnDefinition> > ().push_back(yystack_[0].value.as< cmd::ColumnDefinition > ());
             yylhs.value.as< std::list<cmd::ColumnDefinition> > () = std::move(yystack_[2].value.as< std::list<cmd::ColumnDefinition> > ());
         }
-#line 1001 "bison_sql.cpp" // lalr1.cc:906
+#line 1218 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 16:
-#line 155 "bison_sql.ypp" // lalr1.cc:906
+#line 162 "bison_sql.ypp" // lalr1.cc:906
     {
-            yylhs.value.as< cmd::ColumnDefinition > () = cmd::ColumnDefinition(yystack_[1].value.as< std::string > (), yystack_[0].value.as< cmd::LiteralType > ());
+            yylhs.value.as< cmd::ColumnDefinition > () = cmd::ColumnDefinition(yystack_[1].value.as< std::string > (), yystack_[0].value.as< cmd::column_type > ().first);
+            yylhs.value.as< cmd::ColumnDefinition > ().SetRaw(yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< cmd::column_type > ().second);
         }
-#line 1009 "bison_sql.cpp" // lalr1.cc:906
+#line 1227 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 17:
-#line 162 "bison_sql.ypp" // lalr1.cc:906
-    { yylhs.value.as< cmd::LiteralType > () = cmd::LiteralType::INTEGER; }
-#line 1015 "bison_sql.cpp" // lalr1.cc:906
+#line 170 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< cmd::column_type > () = std::make_pair(cmd::LiteralType::INTEGER, yystack_[0].value.as< std::string > ()); }
+#line 1233 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 18:
-#line 163 "bison_sql.ypp" // lalr1.cc:906
-    { yylhs.value.as< cmd::LiteralType > () = cmd::LiteralType::DOUBLE; }
-#line 1021 "bison_sql.cpp" // lalr1.cc:906
+#line 171 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< cmd::column_type > () = std::make_pair(cmd::LiteralType::DOUBLE, yystack_[0].value.as< std::string > ()); }
+#line 1239 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 19:
-#line 164 "bison_sql.ypp" // lalr1.cc:906
-    { yylhs.value.as< cmd::LiteralType > () = cmd::LiteralType::TEXT; }
-#line 1027 "bison_sql.cpp" // lalr1.cc:906
+#line 172 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< cmd::column_type > () = std::make_pair(cmd::LiteralType::TEXT, yystack_[0].value.as< std::string > ()); }
+#line 1245 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 20:
-#line 171 "bison_sql.ypp" // lalr1.cc:906
+#line 179 "bison_sql.ypp" // lalr1.cc:906
     {
             yylhs.value.as< std::shared_ptr<cmd::DropTable> > () = std::make_shared<cmd::DropTable>(yystack_[0].value.as< cmd::TableDefinition > ());
+            yylhs.value.as< std::shared_ptr<cmd::DropTable> > ()->SetRaw(yystack_[2].value.as< std::string > () + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< cmd::TableDefinition > ().GetRaw());
         }
-#line 1035 "bison_sql.cpp" // lalr1.cc:906
+#line 1254 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 21:
-#line 180 "bison_sql.ypp" // lalr1.cc:906
+#line 189 "bison_sql.ypp" // lalr1.cc:906
     {
+            std::string raw = yystack_[4].value.as< std::string > () + " ";
+            if (yystack_[3].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () == nullptr) {
+                raw += "*";
+            } else {
+                for (auto& e : *(yystack_[3].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ())) {
+                    raw += e->GetRaw() + ", ";
+                }
+                raw.pop_back();
+                raw.pop_back();
+            }
+            raw += " " + yystack_[2].value.as< std::string > () + " " + yystack_[1].value.as< cmd::TableDefinition > ().GetRaw() + " ";
             if (yystack_[3].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () == nullptr) {
                 yylhs.value.as< std::shared_ptr<cmd::Select> > () = std::make_shared<cmd::Select>(yystack_[1].value.as< cmd::TableDefinition > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
             } else {
                 yylhs.value.as< std::shared_ptr<cmd::Select> > () = std::make_shared<cmd::Select>(yystack_[1].value.as< cmd::TableDefinition > (), *(yystack_[3].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ()), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
             }
+            if (yystack_[0].value.as< std::shared_ptr<cmd::Expression> > () != nullptr) { raw += " where " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw(); }
+            yylhs.value.as< std::shared_ptr<cmd::Select> > ()->SetRaw(raw);
         }
-#line 1047 "bison_sql.cpp" // lalr1.cc:906
+#line 1279 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 22:
-#line 191 "bison_sql.ypp" // lalr1.cc:906
+#line 213 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = nullptr; }
-#line 1053 "bison_sql.cpp" // lalr1.cc:906
+#line 1285 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 23:
-#line 192 "bison_sql.ypp" // lalr1.cc:906
+#line 214 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = yystack_[0].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (); }
-#line 1059 "bison_sql.cpp" // lalr1.cc:906
+#line 1291 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 24:
-#line 198 "bison_sql.ypp" // lalr1.cc:906
+#line 220 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1065 "bison_sql.cpp" // lalr1.cc:906
+#line 1297 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 25:
-#line 199 "bison_sql.ypp" // lalr1.cc:906
+#line 221 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = nullptr; }
-#line 1071 "bison_sql.cpp" // lalr1.cc:906
+#line 1303 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 26:
-#line 207 "bison_sql.ypp" // lalr1.cc:906
+#line 229 "bison_sql.ypp" // lalr1.cc:906
     {
+            std::string raw = yystack_[7].value.as< std::string > () + " " + yystack_[6].value.as< std::string > () + " " + yystack_[5].value.as< cmd::TableDefinition > ().GetRaw();
+
             if (yystack_[4].value.as< std::shared_ptr<std::list<cmd::Column>> > () == nullptr) {
                 yylhs.value.as< std::shared_ptr<cmd::Insert> > () = std::make_shared<cmd::Insert>(yystack_[5].value.as< cmd::TableDefinition > (), *(yystack_[1].value.as< std::shared_ptr<std::list<cmd::Literal>> > ()));
             } else {
                 yylhs.value.as< std::shared_ptr<cmd::Insert> > () = std::make_shared<cmd::Insert>(yystack_[5].value.as< cmd::TableDefinition > (), *(yystack_[1].value.as< std::shared_ptr<std::list<cmd::Literal>> > ()), *(yystack_[4].value.as< std::shared_ptr<std::list<cmd::Column>> > ()));
+                raw += " ";
+                for (auto& e : *(yystack_[4].value.as< std::shared_ptr<std::list<cmd::Column>> > ())) {
+                    raw += e.GetRaw() + ", ";
+                }
+                raw.pop_back();
+                raw.pop_back();
             }
+            raw += " " + yystack_[3].value.as< std::string > () + " " + yystack_[2].value.as< std::string > ();
+            for (auto& e : *(yystack_[1].value.as< std::shared_ptr<std::list<cmd::Literal>> > ())) {
+                raw += e.GetRaw() + ", ";
+            }
+            raw.pop_back();
+            raw.pop_back();
+            raw +=  yystack_[0].value.as< std::string > ();
+            yylhs.value.as< std::shared_ptr<cmd::Insert> > ()->SetRaw(raw);
         }
-#line 1083 "bison_sql.cpp" // lalr1.cc:906
+#line 1331 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 27:
-#line 219 "bison_sql.ypp" // lalr1.cc:906
+#line 257 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = yystack_[0].value.as< std::shared_ptr<std::list<cmd::Column>> > (); }
-#line 1089 "bison_sql.cpp" // lalr1.cc:906
+#line 1337 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 28:
-#line 220 "bison_sql.ypp" // lalr1.cc:906
+#line 258 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = nullptr; }
-#line 1095 "bison_sql.cpp" // lalr1.cc:906
+#line 1343 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 29:
-#line 226 "bison_sql.ypp" // lalr1.cc:906
+#line 264 "bison_sql.ypp" // lalr1.cc:906
     {
-            yylhs.value.as< std::shared_ptr<cmd::Update> > () = std::make_shared<cmd::Update>(yystack_[3].value.as< cmd::TableDefinition > (), yystack_[1].value.as< std::list<cmd::update_clause> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Update> > () = std::make_shared<cmd::Update>(yystack_[3].value.as< cmd::TableDefinition > (), yystack_[1].value.as< std::list<cmd::UpdateClause> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            
+            std::string raw = yystack_[4].value.as< std::string > () + " " + yystack_[3].value.as< cmd::TableDefinition > ().GetRaw() + " " + yystack_[2].value.as< std::string > ();
+            for (auto& e : yystack_[1].value.as< std::list<cmd::UpdateClause> > ()) {
+                raw += e.raw + ", ";
+            }
+            raw.pop_back();
+            raw.pop_back();
+            if (yystack_[0].value.as< std::shared_ptr<cmd::Expression> > () != nullptr) {
+                raw += " where " +  yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw();
+            }
+            yylhs.value.as< std::shared_ptr<cmd::Update> > ()->SetRaw(raw);
         }
-#line 1103 "bison_sql.cpp" // lalr1.cc:906
+#line 1362 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 30:
-#line 234 "bison_sql.ypp" // lalr1.cc:906
+#line 283 "bison_sql.ypp" // lalr1.cc:906
     {
-            yylhs.value.as< std::list<cmd::update_clause> > ().push_back(yystack_[0].value.as< cmd::update_clause > ());
+            yylhs.value.as< std::list<cmd::UpdateClause> > ().push_back(yystack_[0].value.as< cmd::UpdateClause > ());
         }
-#line 1111 "bison_sql.cpp" // lalr1.cc:906
+#line 1370 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 31:
-#line 238 "bison_sql.ypp" // lalr1.cc:906
+#line 287 "bison_sql.ypp" // lalr1.cc:906
     {
-            yystack_[2].value.as< std::list<cmd::update_clause> > ().push_back(yystack_[0].value.as< cmd::update_clause > ());
-            yylhs.value.as< std::list<cmd::update_clause> > () = std::move(yystack_[2].value.as< std::list<cmd::update_clause> > ());
+            yystack_[2].value.as< std::list<cmd::UpdateClause> > ().push_back(yystack_[0].value.as< cmd::UpdateClause > ());
+            yylhs.value.as< std::list<cmd::UpdateClause> > () = std::move(yystack_[2].value.as< std::list<cmd::UpdateClause> > ());
         }
-#line 1120 "bison_sql.cpp" // lalr1.cc:906
+#line 1379 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 32:
-#line 247 "bison_sql.ypp" // lalr1.cc:906
+#line 296 "bison_sql.ypp" // lalr1.cc:906
     {
-            yylhs.value.as< cmd::update_clause > ().first = cmd::Column(yystack_[2].value.as< std::string > ());
-            yylhs.value.as< cmd::update_clause > ().second = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ();
+            yylhs.value.as< cmd::UpdateClause > () = cmd::UpdateClause(cmd::Column(yystack_[2].value.as< std::string > ()), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[2].value.as< std::string > () + yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1129 "bison_sql.cpp" // lalr1.cc:906
+#line 1387 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 33:
-#line 257 "bison_sql.ypp" // lalr1.cc:906
+#line 305 "bison_sql.ypp" // lalr1.cc:906
     {
             yylhs.value.as< std::shared_ptr<cmd::Delete> > () = std::make_shared<cmd::Delete>(yystack_[1].value.as< cmd::TableDefinition > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Delete> > ()->SetRaw(yystack_[3].value.as< std::string > () + " " + yystack_[2].value.as< std::string > () + " " + yystack_[1].value.as< cmd::TableDefinition > ().GetRaw() + (yystack_[0].value.as< std::shared_ptr<cmd::Expression> > () == nullptr ? "" : " where " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw()));
         }
-#line 1137 "bison_sql.cpp" // lalr1.cc:906
+#line 1396 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 34:
-#line 266 "bison_sql.ypp" // lalr1.cc:906
+#line 315 "bison_sql.ypp" // lalr1.cc:906
     {  
             yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = std::make_shared<std::list<std::shared_ptr<cmd::Expression>>>();
             yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ()->push_back(yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
         }
-#line 1146 "bison_sql.cpp" // lalr1.cc:906
+#line 1405 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 35:
-#line 271 "bison_sql.ypp" // lalr1.cc:906
+#line 320 "bison_sql.ypp" // lalr1.cc:906
     {
             yystack_[2].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ()->push_back(yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
             yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = yystack_[2].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ();
         }
-#line 1155 "bison_sql.cpp" // lalr1.cc:906
+#line 1414 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 36:
-#line 279 "bison_sql.ypp" // lalr1.cc:906
+#line 328 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1161 "bison_sql.cpp" // lalr1.cc:906
+#line 1420 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 37:
-#line 280 "bison_sql.ypp" // lalr1.cc:906
+#line 329 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1167 "bison_sql.cpp" // lalr1.cc:906
+#line 1426 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 38:
-#line 285 "bison_sql.ypp" // lalr1.cc:906
-    { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[1].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1173 "bison_sql.cpp" // lalr1.cc:906
+#line 334 "bison_sql.ypp" // lalr1.cc:906
+    { 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ();
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::string > () + yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + yystack_[0].value.as< std::string > ());
+        }
+#line 1435 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 39:
-#line 286 "bison_sql.ypp" // lalr1.cc:906
+#line 338 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1179 "bison_sql.cpp" // lalr1.cc:906
+#line 1441 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 40:
-#line 287 "bison_sql.ypp" // lalr1.cc:906
+#line 339 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1185 "bison_sql.cpp" // lalr1.cc:906
+#line 1447 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 41:
-#line 288 "bison_sql.ypp" // lalr1.cc:906
+#line 340 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1191 "bison_sql.cpp" // lalr1.cc:906
+#line 1453 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 42:
-#line 294 "bison_sql.ypp" // lalr1.cc:906
+#line 346 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::UNARY_MINUS, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1199 "bison_sql.cpp" // lalr1.cc:906
+#line 1462 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 43:
-#line 298 "bison_sql.ypp" // lalr1.cc:906
+#line 351 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::UNARY_PLUS, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1207 "bison_sql.cpp" // lalr1.cc:906
+#line 1471 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 44:
-#line 302 "bison_sql.ypp" // lalr1.cc:906
+#line 356 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::BIN_NOT, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1215 "bison_sql.cpp" // lalr1.cc:906
+#line 1480 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 45:
-#line 306 "bison_sql.ypp" // lalr1.cc:906
+#line 361 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1223 "bison_sql.cpp" // lalr1.cc:906
+#line 1489 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 46:
-#line 310 "bison_sql.ypp" // lalr1.cc:906
+#line 366 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + yystack_[0].value.as< std::string > ());
         }
-#line 1231 "bison_sql.cpp" // lalr1.cc:906
+#line 1498 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 47:
-#line 314 "bison_sql.ypp" // lalr1.cc:906
+#line 371 "bison_sql.ypp" // lalr1.cc:906
     {
             auto nodeIsNull = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ());
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, nodeIsNull);
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + yystack_[0].value.as< std::string > ());
         }
-#line 1240 "bison_sql.cpp" // lalr1.cc:906
+#line 1508 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 48:
-#line 323 "bison_sql.ypp" // lalr1.cc:906
+#line 381 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1248 "bison_sql.cpp" // lalr1.cc:906
+#line 1517 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 49:
-#line 327 "bison_sql.ypp" // lalr1.cc:906
+#line 386 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1256 "bison_sql.cpp" // lalr1.cc:906
+#line 1526 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 50:
-#line 331 "bison_sql.ypp" // lalr1.cc:906
+#line 391 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
+
         }
-#line 1264 "bison_sql.cpp" // lalr1.cc:906
+#line 1536 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 51:
-#line 335 "bison_sql.ypp" // lalr1.cc:906
+#line 397 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::NOT_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::NOT_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1272 "bison_sql.cpp" // lalr1.cc:906
+#line 1545 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 52:
-#line 339 "bison_sql.ypp" // lalr1.cc:906
+#line 402 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1280 "bison_sql.cpp" // lalr1.cc:906
+#line 1554 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 53:
-#line 343 "bison_sql.ypp" // lalr1.cc:906
+#line 407 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1288 "bison_sql.cpp" // lalr1.cc:906
+#line 1563 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 54:
-#line 347 "bison_sql.ypp" // lalr1.cc:906
+#line 412 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::PLUS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::PLUS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1296 "bison_sql.cpp" // lalr1.cc:906
+#line 1572 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 55:
-#line 351 "bison_sql.ypp" // lalr1.cc:906
+#line 417 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MINUS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1304 "bison_sql.cpp" // lalr1.cc:906
+#line 1581 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 56:
-#line 355 "bison_sql.ypp" // lalr1.cc:906
+#line 422 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MULTIPLY, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MULTIPLY, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1312 "bison_sql.cpp" // lalr1.cc:906
+#line 1590 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 57:
-#line 359 "bison_sql.ypp" // lalr1.cc:906
+#line 427 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::DIVISION, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::DIVISION, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1320 "bison_sql.cpp" // lalr1.cc:906
+#line 1599 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 58:
-#line 363 "bison_sql.ypp" // lalr1.cc:906
+#line 432 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MOD, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MOD, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1328 "bison_sql.cpp" // lalr1.cc:906
+#line 1608 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 59:
-#line 367 "bison_sql.ypp" // lalr1.cc:906
+#line 437 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::CONCATENATION, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::CONCATENATION, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1336 "bison_sql.cpp" // lalr1.cc:906
+#line 1617 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 60:
-#line 375 "bison_sql.ypp" // lalr1.cc:906
+#line 446 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::AND, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::AND, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1344 "bison_sql.cpp" // lalr1.cc:906
+#line 1626 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 61:
-#line 379 "bison_sql.ypp" // lalr1.cc:906
+#line 451 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::OR, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::OR, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[2].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
-#line 1352 "bison_sql.cpp" // lalr1.cc:906
+#line 1635 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
+  case 62:
+#line 459 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Literal> > (); }
+#line 1641 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
+  case 63:
+#line 460 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Column> > (); }
+#line 1647 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 64:
-#line 393 "bison_sql.ypp" // lalr1.cc:906
+#line 466 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< long long > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(std::stoll(yystack_[0].value.as< std::string > ()));
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > ()->SetRaw(yystack_[0].value.as< std::string > ());
+
         }
-#line 1360 "bison_sql.cpp" // lalr1.cc:906
+#line 1657 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 65:
-#line 397 "bison_sql.ypp" // lalr1.cc:906
+#line 472 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< long double > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(std::stold(yystack_[0].value.as< std::string > ()));
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > ()->SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1368 "bison_sql.cpp" // lalr1.cc:906
+#line 1666 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 66:
-#line 401 "bison_sql.ypp" // lalr1.cc:906
+#line 477 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< std::string > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< std::string > ());
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > ()->SetRaw("'" + yystack_[0].value.as< std::string > () + "'");
         }
-#line 1376 "bison_sql.cpp" // lalr1.cc:906
+#line 1675 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 67:
-#line 405 "bison_sql.ypp" // lalr1.cc:906
+#line 482 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< std::string > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>();
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > ()->SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1384 "bison_sql.cpp" // lalr1.cc:906
+#line 1684 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 68:
-#line 409 "bison_sql.ypp" // lalr1.cc:906
+#line 487 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(); 
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(true);
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > ()->SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1392 "bison_sql.cpp" // lalr1.cc:906
+#line 1693 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 69:
-#line 413 "bison_sql.ypp" // lalr1.cc:906
+#line 492 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< bool > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(false);
+            yylhs.value.as< std::shared_ptr<cmd::Literal> > ()->SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1400 "bison_sql.cpp" // lalr1.cc:906
+#line 1702 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 70:
-#line 417 "bison_sql.ypp" // lalr1.cc:906
-    { 
-            yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< bool > ()); 
+#line 501 "bison_sql.ypp" // lalr1.cc:906
+    {        
+            yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > ());
+            yylhs.value.as< std::shared_ptr<cmd::Column> > ()->SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1408 "bison_sql.cpp" // lalr1.cc:906
+#line 1711 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 71:
-#line 425 "bison_sql.ypp" // lalr1.cc:906
-    {        
-            yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > ()); 
+#line 506 "bison_sql.ypp" // lalr1.cc:906
+    { 
+            yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > ());
+            yylhs.value.as< std::shared_ptr<cmd::Column> > ()->SetRaw(yystack_[2].value.as< std::string > () + yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::string > ()); 
         }
-#line 1416 "bison_sql.cpp" // lalr1.cc:906
+#line 1720 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 72:
-#line 429 "bison_sql.ypp" // lalr1.cc:906
+#line 511 "bison_sql.ypp" // lalr1.cc:906
     { 
-            yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > ()); 
+            yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > (), yystack_[4].value.as< std::string > ());
+            yylhs.value.as< std::shared_ptr<cmd::Column> > ()->SetRaw(yystack_[4].value.as< std::string > () + yystack_[3].value.as< std::string > () + yystack_[2].value.as< std::string > () + yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::string > ());
         }
-#line 1424 "bison_sql.cpp" // lalr1.cc:906
+#line 1729 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 73:
-#line 433 "bison_sql.ypp" // lalr1.cc:906
-    { 
-            yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > (), yystack_[4].value.as< std::string > ()); 
+#line 521 "bison_sql.ypp" // lalr1.cc:906
+    {
+            yylhs.value.as< cmd::TableDefinition > () = cmd::TableDefinition(yystack_[0].value.as< std::string > ());
+            yylhs.value.as< cmd::TableDefinition > ().SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1432 "bison_sql.cpp" // lalr1.cc:906
+#line 1738 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 74:
-#line 442 "bison_sql.ypp" // lalr1.cc:906
-    {
-            yylhs.value.as< cmd::TableDefinition > () = cmd::TableDefinition(yystack_[0].value.as< std::string > ());
-        }
-#line 1440 "bison_sql.cpp" // lalr1.cc:906
-    break;
-
-  case 75:
-#line 446 "bison_sql.ypp" // lalr1.cc:906
+#line 526 "bison_sql.ypp" // lalr1.cc:906
     {
             yylhs.value.as< cmd::TableDefinition > () = cmd::TableDefinition(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > ());
+            yylhs.value.as< cmd::TableDefinition > ().SetRaw(yystack_[2].value.as< std::string > () + yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::string > ());
         }
-#line 1448 "bison_sql.cpp" // lalr1.cc:906
+#line 1747 "bison_sql.cpp" // lalr1.cc:906
     break;
 
-  case 78:
-#line 461 "bison_sql.ypp" // lalr1.cc:906
+  case 77:
+#line 542 "bison_sql.ypp" // lalr1.cc:906
     {
             yylhs.value.as< std::shared_ptr<std::list<cmd::Literal>> > () = std::make_shared<std::list<cmd::Literal>>();
             yylhs.value.as< std::shared_ptr<std::list<cmd::Literal>> > ()->push_back(*(yystack_[0].value.as< std::shared_ptr<cmd::Literal> > ()));
         }
-#line 1457 "bison_sql.cpp" // lalr1.cc:906
+#line 1756 "bison_sql.cpp" // lalr1.cc:906
     break;
 
-  case 79:
-#line 466 "bison_sql.ypp" // lalr1.cc:906
+  case 78:
+#line 547 "bison_sql.ypp" // lalr1.cc:906
     {
             yystack_[2].value.as< std::shared_ptr<std::list<cmd::Literal>> > ()->push_back(*(yystack_[0].value.as< std::shared_ptr<cmd::Literal> > ()));
             yylhs.value.as< std::shared_ptr<std::list<cmd::Literal>> > () = yystack_[2].value.as< std::shared_ptr<std::list<cmd::Literal>> > ();
         }
-#line 1466 "bison_sql.cpp" // lalr1.cc:906
+#line 1765 "bison_sql.cpp" // lalr1.cc:906
     break;
 
-  case 80:
-#line 475 "bison_sql.ypp" // lalr1.cc:906
+  case 79:
+#line 556 "bison_sql.ypp" // lalr1.cc:906
     {   
             yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = std::make_shared<std::list<cmd::Column>>();
             yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > ()->push_back(cmd::Column(yystack_[0].value.as< std::string > ())); 
+            yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > ()->back().SetRaw(yystack_[0].value.as< std::string > ());
         }
-#line 1475 "bison_sql.cpp" // lalr1.cc:906
+#line 1775 "bison_sql.cpp" // lalr1.cc:906
     break;
 
-  case 81:
-#line 480 "bison_sql.ypp" // lalr1.cc:906
+  case 80:
+#line 562 "bison_sql.ypp" // lalr1.cc:906
     {         
             yystack_[2].value.as< std::shared_ptr<std::list<cmd::Column>> > ()->push_back(cmd::Column(yystack_[0].value.as< std::string > ()));
+            yystack_[2].value.as< std::shared_ptr<std::list<cmd::Column>> > ()->back().SetRaw(yystack_[0].value.as< std::string > ());
             yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = yystack_[2].value.as< std::shared_ptr<std::list<cmd::Column>> > ();
         }
-#line 1484 "bison_sql.cpp" // lalr1.cc:906
+#line 1785 "bison_sql.cpp" // lalr1.cc:906
     break;
 
 
-#line 1488 "bison_sql.cpp" // lalr1.cc:906
+#line 1789 "bison_sql.cpp" // lalr1.cc:906
             default:
               break;
             }
@@ -1652,28 +1953,27 @@ namespace yy {
   }
 
 
-  const signed char  BisonParser ::yypact_ninf_ = -99;
+  const signed char  BisonParser ::yypact_ninf_ = -110;
 
   const signed char  BisonParser ::yytable_ninf_ = -1;
 
   const short
    BisonParser ::yypact_[] =
   {
-      51,     6,    20,    21,    -2,     1,    60,    43,    44,     8,
-     -99,   -99,   -99,   -99,   -99,   -99,   -99,   -99,    60,    60,
-      60,    12,   -99,   -99,   -99,   -99,   -99,   -99,   -99,    19,
-      19,    19,    19,   -99,    19,    48,    14,    39,    52,   -99,
-     -99,   -99,   -99,   -99,   -99,    60,    42,    85,    60,   -99,
-     -99,    51,   -99,    56,   -99,   -99,    73,    69,   -99,   -99,
-     -99,   -39,    60,    19,    19,    19,   -99,   -99,    19,    19,
-      19,    19,    19,    19,    19,    19,    19,    19,    19,    19,
-     108,   109,   110,   103,   -99,   124,    61,   -99,   103,    39,
-     -99,    82,    86,    86,    91,    91,    91,    91,   -99,   102,
-     102,   104,   104,   104,   -99,   140,    92,   -99,   112,   -14,
-     -99,    19,   -99,     7,   -28,   -99,   160,   -99,    94,   162,
-      19,   110,   -99,    39,   -99,   -99,   -99,   -99,   124,   -99,
-     -99,    41,   -99,    39,   -99,   -99,   -99,     2,    41,   -99,
-     -99
+     138,    22,    39,    40,    -2,    35,    52,    36,    74,    13,
+    -110,  -110,  -110,  -110,  -110,  -110,  -110,  -110,    52,    52,
+      52,     8,  -110,  -110,  -110,  -110,  -110,  -110,     4,     4,
+       4,     4,  -110,     4,    43,    10,    -1,    50,  -110,  -110,
+    -110,  -110,  -110,  -110,    52,     9,    60,    52,  -110,  -110,
+     138,  -110,    15,  -110,  -110,    82,    67,  -110,  -110,  -110,
+     -25,    52,     4,     4,     4,  -110,  -110,     4,     4,     4,
+       4,     4,     4,     4,     4,     4,     4,     4,     4,   103,
+     104,   105,    85,  -110,   107,    56,  -110,    85,    -1,  -110,
+      77,    84,    84,   115,   115,   115,   115,  -110,   -31,   -31,
+      70,    70,    70,  -110,   108,    59,  -110,    91,    -5,  -110,
+       4,  -110,    16,   -32,  -110,   139,  -110,    72,   140,     4,
+     105,  -110,    -1,  -110,  -110,  -110,  -110,   107,  -110,  -110,
+      64,  -110,    -1,  -110,  -110,  -110,   -28,    64,  -110,  -110
   };
 
   const unsigned char
@@ -1681,117 +1981,117 @@ namespace yy {
   {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        3,     6,     7,     5,     8,     9,    10,    11,     0,     0,
-       0,    71,    66,    67,    64,    69,    70,    65,    68,     0,
-       0,     0,     0,    22,     0,     0,    23,    34,    36,    41,
-      39,    37,    40,    62,    63,     0,    74,     0,     0,     1,
-      77,    76,     2,     0,    20,    12,     0,    45,    44,    43,
-      42,     0,     0,     0,     0,     0,    46,    47,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      28,     0,     0,    25,     4,     0,    72,    38,    25,    35,
-      60,    61,    50,    51,    52,    53,    48,    49,    59,    54,
-      55,    56,    57,    58,    80,     0,    27,    75,     0,    25,
-      30,     0,    33,     0,     0,    14,     0,    21,     0,     0,
-       0,     0,    29,    24,    18,    19,    17,    16,     0,    13,
-      73,     0,    81,    32,    31,    15,    78,     0,     0,    26,
-      79
+       0,    70,    66,    64,    65,    68,    69,    67,     0,     0,
+       0,     0,    22,     0,     0,    23,    34,    36,    41,    39,
+      37,    40,    62,    63,     0,    73,     0,     0,     1,    76,
+      75,     2,     0,    20,    12,     0,    45,    44,    43,    42,
+       0,     0,     0,     0,     0,    46,    47,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    28,
+       0,     0,    25,     4,     0,    71,    38,    25,    35,    60,
+      61,    50,    51,    52,    53,    48,    49,    59,    54,    55,
+      56,    57,    58,    79,     0,    27,    74,     0,    25,    30,
+       0,    33,     0,     0,    14,     0,    21,     0,     0,     0,
+       0,    29,    24,    18,    19,    17,    16,     0,    13,    72,
+       0,    80,    32,    31,    15,    77,     0,     0,    26,    78
   };
 
   const signed char
    BisonParser ::yypgoto_[] =
   {
-     -99,   -99,   -99,   118,   -99,   -99,   -99,    45,   -99,   -99,
-     -99,   -99,   -72,   -99,   -99,   -99,   -99,    49,   -99,   -99,
-     -34,    22,   -99,   -99,   -99,   -99,   -98,   -99,    -6,   -99,
-     -99,   -99
+    -110,  -110,  -110,    94,  -110,  -110,  -110,    24,  -110,  -110,
+    -110,  -110,   -69,  -110,  -110,  -110,  -110,    34,  -110,  -110,
+     -33,    20,  -110,  -110,  -110,  -110,  -109,  -110,    -3,  -110,
+    -110,  -110
   };
 
   const short
    BisonParser ::yydefgoto_[] =
   {
-      -1,     8,     9,    10,    11,    12,   114,   115,   127,    13,
-      14,    35,   112,    15,   105,    16,   109,   110,    17,    36,
-      37,    38,    39,    40,    41,    42,    43,    44,    47,    52,
-     137,   106
+      -1,     8,     9,    10,    11,    12,   113,   114,   126,    13,
+      14,    34,   111,    15,   104,    16,   108,   109,    17,    35,
+      36,    37,    38,    39,    40,    41,    42,    43,    46,    51,
+     136,   105
   };
 
   const short
    BisonParser ::yytable_[] =
   {
-      61,    21,    22,    23,    24,    25,    26,    27,    50,    64,
-      65,   111,    53,    54,    55,    28,   117,   124,   125,   126,
-      18,    45,    21,    22,    23,    24,    25,    26,    27,    89,
-      90,    91,    87,   136,    19,    20,    28,   122,    29,    80,
-     140,   128,    83,   129,    49,    22,    23,    24,    25,    26,
-      27,    57,    58,    59,    60,   121,    88,    30,    28,    29,
-      31,    32,    33,    46,     1,    48,     2,     3,    34,     4,
-      62,   138,     5,   139,     6,    51,    86,   123,    30,     7,
-      56,    31,    32,    63,    66,    67,   133,    64,    65,    34,
-      92,    93,    94,    95,    96,    97,    98,    99,   100,   101,
-     102,   103,    68,    69,    70,    71,    72,    73,    74,    82,
-      81,   104,   107,   108,    75,    76,    77,    78,    79,    68,
-      69,    70,    71,    72,    73,    74,    85,   113,   111,   116,
-      64,    75,    76,    77,    78,    79,    -1,    -1,    70,    71,
-      72,    73,    74,    -1,    -1,    -1,    -1,    74,    75,    76,
-      77,    78,    79,    75,    76,    77,    78,    79,    74,   118,
-      74,   119,   120,   130,   131,   132,    77,    78,    79,    84,
-     134,     0,     0,   135
+      60,    21,    22,    23,    24,    25,    26,    21,    22,    23,
+      24,    25,    26,    49,    27,    52,    53,    54,   116,   110,
+      27,   135,    63,    64,    73,   123,   124,   125,   139,    88,
+      89,    90,    76,    77,    78,    18,   127,    28,   128,   121,
+     137,    79,   138,    28,    82,    86,    63,    64,    56,    57,
+      58,    59,    19,    20,    44,    45,    29,    47,    87,    30,
+      31,    32,    29,   120,    61,    30,    31,    33,    22,    23,
+      24,    25,    26,    33,    48,    55,    80,   122,    62,    50,
+      27,    65,    66,    81,    84,    85,   132,    91,    92,    93,
+      94,    95,    96,    97,    98,    99,   100,   101,   102,    67,
+      68,    69,    70,    71,    72,    73,   103,   106,   107,   110,
+     112,    74,    75,    76,    77,    78,    67,    68,    69,    70,
+      71,    72,    73,   115,    63,    73,   117,   118,    74,    75,
+      76,    77,    78,    -1,    -1,    69,    70,    71,    72,    73,
+     119,   130,   129,   131,    83,    74,    75,    76,    77,    78,
+       1,   134,     2,     3,   133,     4,     0,     0,     5,     0,
+       6,     0,     0,     0,     0,     7,    -1,    -1,    -1,    -1,
+      73,     0,     0,     0,     0,     0,    74,    75,    76,    77,
+      78
   };
 
   const short
    BisonParser ::yycheck_[] =
   {
-      34,     3,     4,     5,     6,     7,     8,     9,     0,    48,
-      49,    25,    18,    19,    20,    17,    88,    10,    11,    12,
-      14,    20,     3,     4,     5,     6,     7,     8,     9,    63,
-      64,    65,    71,   131,    14,    14,    17,   109,    40,    45,
-     138,    69,    48,    71,     0,     4,     5,     6,     7,     8,
-       9,    29,    30,    31,    32,    69,    62,    59,    17,    40,
-      62,    63,    64,     3,    13,    22,    15,    16,    70,    18,
-      22,    69,    21,    71,    23,    67,     3,   111,    59,    28,
-      68,    62,    63,    69,    32,    33,   120,    48,    49,    70,
-      68,    69,    70,    71,    72,    73,    74,    75,    76,    77,
-      78,    79,    50,    51,    52,    53,    54,    55,    56,    24,
-      68,     3,     3,     3,    62,    63,    64,    65,    66,    50,
-      51,    52,    53,    54,    55,    56,    70,     3,    25,    68,
-      48,    62,    63,    64,    65,    66,    50,    51,    52,    53,
-      54,    55,    56,    52,    53,    54,    55,    56,    62,    63,
-      64,    65,    66,    62,    63,    64,    65,    66,    56,    19,
-      56,    69,    50,     3,    70,     3,    64,    65,    66,    51,
-     121,    -1,    -1,   128
+      33,     3,     4,     5,     6,     7,     8,     3,     4,     5,
+       6,     7,     8,     0,    16,    18,    19,    20,    87,    24,
+      16,   130,    47,    48,    55,     9,    10,    11,   137,    62,
+      63,    64,    63,    64,    65,    13,    68,    39,    70,   108,
+      68,    44,    70,    39,    47,    70,    47,    48,    28,    29,
+      30,    31,    13,    13,    19,     3,    58,    21,    61,    61,
+      62,    63,    58,    68,    21,    61,    62,    69,     4,     5,
+       6,     7,     8,    69,     0,    67,    67,   110,    68,    66,
+      16,    31,    32,    23,    69,     3,   119,    67,    68,    69,
+      70,    71,    72,    73,    74,    75,    76,    77,    78,    49,
+      50,    51,    52,    53,    54,    55,     3,     3,     3,    24,
+       3,    61,    62,    63,    64,    65,    49,    50,    51,    52,
+      53,    54,    55,    67,    47,    55,    18,    68,    61,    62,
+      63,    64,    65,    49,    50,    51,    52,    53,    54,    55,
+      49,    69,     3,     3,    50,    61,    62,    63,    64,    65,
+      12,   127,    14,    15,   120,    17,    -1,    -1,    20,    -1,
+      22,    -1,    -1,    -1,    -1,    27,    51,    52,    53,    54,
+      55,    -1,    -1,    -1,    -1,    -1,    61,    62,    63,    64,
+      65
   };
 
   const unsigned char
    BisonParser ::yystos_[] =
   {
-       0,    13,    15,    16,    18,    21,    23,    28,    75,    76,
-      77,    78,    79,    83,    84,    87,    89,    92,    14,    14,
-      14,     3,     4,     5,     6,     7,     8,     9,    17,    40,
-      59,    62,    63,    64,    70,    85,    93,    94,    95,    96,
-      97,    98,    99,   100,   101,    20,     3,   102,    22,     0,
-       0,    67,   103,   102,   102,   102,    68,    95,    95,    95,
-      95,    94,    22,    69,    48,    49,    32,    33,    50,    51,
-      52,    53,    54,    55,    56,    62,    63,    64,    65,    66,
-     102,    68,    24,   102,    77,    70,     3,    71,   102,    94,
-      94,    94,    95,    95,    95,    95,    95,    95,    95,    95,
-      95,    95,    95,    95,     3,    88,   105,     3,     3,    90,
-      91,    25,    86,     3,    80,    81,    68,    86,    19,    69,
-      50,    69,    86,    94,    10,    11,    12,    82,    69,    71,
-       3,    70,     3,    94,    91,    81,   100,   104,    69,    71,
-     100
+       0,    12,    14,    15,    17,    20,    22,    27,    74,    75,
+      76,    77,    78,    82,    83,    86,    88,    91,    13,    13,
+      13,     3,     4,     5,     6,     7,     8,    16,    39,    58,
+      61,    62,    63,    69,    84,    92,    93,    94,    95,    96,
+      97,    98,    99,   100,    19,     3,   101,    21,     0,     0,
+      66,   102,   101,   101,   101,    67,    94,    94,    94,    94,
+      93,    21,    68,    47,    48,    31,    32,    49,    50,    51,
+      52,    53,    54,    55,    61,    62,    63,    64,    65,   101,
+      67,    23,   101,    76,    69,     3,    70,   101,    93,    93,
+      93,    94,    94,    94,    94,    94,    94,    94,    94,    94,
+      94,    94,    94,     3,    87,   104,     3,     3,    89,    90,
+      24,    85,     3,    79,    80,    67,    85,    18,    68,    49,
+      68,    85,    93,     9,    10,    11,    81,    68,    70,     3,
+      69,     3,    93,    90,    80,    99,   103,    68,    70,    99
   };
 
   const unsigned char
    BisonParser ::yyr1_[] =
   {
-       0,    74,    75,    76,    76,    77,    77,    77,    77,    77,
-      77,    77,    78,    79,    80,    80,    81,    82,    82,    82,
-      83,    84,    85,    85,    86,    86,    87,    88,    88,    89,
-      90,    90,    91,    92,    93,    93,    94,    94,    95,    95,
-      95,    95,    96,    96,    96,    96,    96,    96,    97,    97,
-      97,    97,    97,    97,    97,    97,    97,    97,    97,    97,
-      98,    98,    99,    99,   100,   100,   100,   100,   100,   100,
-     100,   101,   101,   101,   102,   102,   103,   103,   104,   104,
-     105,   105
+       0,    73,    74,    75,    75,    76,    76,    76,    76,    76,
+      76,    76,    77,    78,    79,    79,    80,    81,    81,    81,
+      82,    83,    84,    84,    85,    85,    86,    87,    87,    88,
+      89,    89,    90,    91,    92,    92,    93,    93,    94,    94,
+      94,    94,    95,    95,    95,    95,    95,    95,    96,    96,
+      96,    96,    96,    96,    96,    96,    96,    96,    96,    96,
+      97,    97,    98,    98,    99,    99,    99,    99,    99,    99,
+     100,   100,   100,   101,   101,   102,   102,   103,   103,   104,
+     104
   };
 
   const unsigned char
@@ -1804,8 +2104,8 @@ namespace yy {
        1,     1,     2,     2,     2,     2,     2,     2,     3,     3,
        3,     3,     3,     3,     3,     3,     3,     3,     3,     3,
        3,     3,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     3,     5,     1,     3,     1,     1,     1,     3,
-       1,     3
+       1,     3,     5,     1,     3,     1,     1,     1,     3,     1,
+       3
   };
 
 
@@ -1816,10 +2116,10 @@ namespace yy {
   const  BisonParser ::yytname_[] =
   {
   "END_FILE", "error", "$undefined", "IDENTIFIER", "STRING",
-  "BLOB_STRING", "INTEGER_CONST", "TRUE", "FALSE", "DOUBLE_CONST",
-  "DOUBLE", "TEXT", "INTEGER", "CREATE", "TABLE", "DROP", "SHOW", "NULL_",
-  "SELECT", "VALUES", "INTO", "INSERT", "FROM", "UPDATE", "SET", "WHERE",
-  "LIMIT", "OFFSET", "DELETE", "CAST", "AS", "ESCAPE", "ISNULL", "NOTNULL",
+  "INTEGER_CONST", "DOUBLE_CONST", "TRUE", "FALSE", "DOUBLE", "TEXT",
+  "INTEGER", "CREATE", "TABLE", "DROP", "SHOW", "NULL_", "SELECT",
+  "VALUES", "INTO", "INSERT", "FROM", "UPDATE", "SET", "WHERE", "LIMIT",
+  "OFFSET", "DELETE", "CAST", "AS", "ESCAPE", "ISNULL", "NOTNULL",
   "BETWEEN", "DISTINCT", "EXISTS", "WHEN", "THEN", "ELSE", "NOT",
   "COLLATE", "IS", "IN", "LIKE", "GLOB", "MATCH", "REGEXP", "AND", "OR",
   "EQUAL", "NOTEQUAL", "LESSEQUAL", "GREATERQUALL", "LESS", "GREATER",
@@ -1840,15 +2140,15 @@ namespace yy {
   const unsigned short
    BisonParser ::yyrline_[] =
   {
-       0,    95,    95,    99,   103,   111,   112,   113,   114,   115,
-     116,   117,   124,   133,   141,   145,   154,   162,   163,   164,
-     170,   179,   191,   192,   198,   199,   206,   219,   220,   226,
-     233,   237,   246,   256,   265,   270,   279,   280,   285,   286,
-     287,   288,   293,   297,   301,   305,   309,   313,   322,   326,
-     330,   334,   338,   342,   346,   350,   354,   358,   362,   366,
-     374,   378,   386,   387,   392,   396,   400,   404,   408,   412,
-     416,   424,   428,   432,   441,   445,   454,   455,   460,   465,
-     474,   479
+       0,    93,    93,    97,   101,   109,   110,   111,   112,   113,
+     114,   115,   122,   132,   148,   152,   161,   170,   171,   172,
+     178,   188,   213,   214,   220,   221,   228,   257,   258,   264,
+     282,   286,   295,   304,   314,   319,   328,   329,   334,   338,
+     339,   340,   345,   350,   355,   360,   365,   370,   380,   385,
+     390,   396,   401,   406,   411,   416,   421,   426,   431,   436,
+     445,   450,   459,   460,   465,   471,   476,   481,   486,   491,
+     500,   505,   510,   520,   525,   535,   536,   541,   546,   555,
+     561
   };
 
   // Print the state stack on the debug stream.
@@ -1883,4 +2183,4 @@ namespace yy {
 
 
 } // yy
-#line 1887 "bison_sql.cpp" // lalr1.cc:1217
+#line 2187 "bison_sql.cpp" // lalr1.cc:1217
