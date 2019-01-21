@@ -38,86 +38,88 @@ UNSIGN_INT   {Digit}+
 [ \t]+      { loc.step(); }
 \n+         { loc.lines(yyleng); loc.step(); }
 
-CREATE      return yy::BisonParser::make_CREATE(loc);
-DROP        return yy::BisonParser::make_DROP(loc);
-SHOW        return yy::BisonParser::make_SHOW(loc);
-TABLE       return yy::BisonParser::make_TABLE(loc);
-NULL        return yy::BisonParser::make_NULL_(loc);
-SELECT      return yy::BisonParser::make_SELECT(loc);
-UPDATE      return yy::BisonParser::make_UPDATE(loc);
-SET         return yy::BisonParser::make_SET(loc);
-WHERE       return yy::BisonParser::make_WHERE(loc);
-LIMIT       return yy::BisonParser::make_LIMIT(loc);
-OFFSET      return yy::BisonParser::make_OFFSET(loc);
-VALUES      return yy::BisonParser::make_VALUES(loc);
-INTO        return yy::BisonParser::make_INTO(loc);
-INSERT      return yy::BisonParser::make_INSERT(loc);
-FROM        return yy::BisonParser::make_FROM(loc);
-CAST        return yy::BisonParser::make_CAST(loc);
-AS          return yy::BisonParser::make_AS(loc);
-ESCAPE      return yy::BisonParser::make_ESCAPE(loc);
-ISNULL      return yy::BisonParser::make_ISNULL(loc);
-NOTNULL     return yy::BisonParser::make_NOTNULL(loc);
-BETWEEN     return yy::BisonParser::make_BETWEEN(loc);
-DISTINCT    return yy::BisonParser::make_DISTINCT(loc);
-EXISTS      return yy::BisonParser::make_EXISTS(loc);
-WHEN        return yy::BisonParser::make_WHEN(loc);
-THEN        return yy::BisonParser::make_THEN(loc);
-ELSE        return yy::BisonParser::make_ELSE(loc);
-DELETE      return yy::BisonParser::make_DELETE(loc);
+CREATE      return yy::BisonParser::make_CREATE(std::string(yytext), loc);
+DROP        return yy::BisonParser::make_DROP(std::string(yytext), loc);
+SHOW        return yy::BisonParser::make_SHOW(std::string(yytext), loc);
+TABLE       return yy::BisonParser::make_TABLE(std::string(yytext), loc);
+NULL        return yy::BisonParser::make_NULL_(std::string(yytext), loc);
+SELECT      return yy::BisonParser::make_SELECT(std::string(yytext), loc);
+UPDATE      return yy::BisonParser::make_UPDATE(std::string(yytext), loc);
+SET         return yy::BisonParser::make_SET(std::string(yytext), loc);
+WHERE       return yy::BisonParser::make_WHERE(std::string(yytext), loc);
+LIMIT       return yy::BisonParser::make_LIMIT(std::string(yytext), loc);
+OFFSET      return yy::BisonParser::make_OFFSET(std::string(yytext), loc);
+VALUES      return yy::BisonParser::make_VALUES(std::string(yytext), loc);
+INTO        return yy::BisonParser::make_INTO(std::string(yytext), loc);
+INSERT      return yy::BisonParser::make_INSERT(std::string(yytext), loc);
+FROM        return yy::BisonParser::make_FROM(std::string(yytext), loc);
+CAST        return yy::BisonParser::make_CAST(std::string(yytext), loc);
+AS          return yy::BisonParser::make_AS(std::string(yytext), loc);
+ESCAPE      return yy::BisonParser::make_ESCAPE(std::string(yytext), loc);
+ISNULL      return yy::BisonParser::make_ISNULL(std::string(yytext), loc);
+NOTNULL     return yy::BisonParser::make_NOTNULL(std::string(yytext), loc);
+BETWEEN     return yy::BisonParser::make_BETWEEN(std::string(yytext), loc);
+DISTINCT    return yy::BisonParser::make_DISTINCT(std::string(yytext), loc);
+EXISTS      return yy::BisonParser::make_EXISTS(std::string(yytext), loc);
+WHEN        return yy::BisonParser::make_WHEN(std::string(yytext), loc);
+THEN        return yy::BisonParser::make_THEN(std::string(yytext), loc);
+ELSE        return yy::BisonParser::make_ELSE(std::string(yytext), loc);
+DELETE      return yy::BisonParser::make_DELETE(std::string(yytext), loc);
 
-NOT         return yy::BisonParser::make_NOT(loc);
-COLLATE     return yy::BisonParser::make_COLLATE(loc);
+NOT         return yy::BisonParser::make_NOT(std::string(yytext), loc);
+COLLATE     return yy::BisonParser::make_COLLATE(std::string(yytext), loc);
 
-IS          return yy::BisonParser::make_IS(loc);
-IN          return yy::BisonParser::make_IN(loc);
-LIKE        return yy::BisonParser::make_LIKE(loc);
-GLOB        return yy::BisonParser::make_GLOB(loc);
-MATCH       return yy::BisonParser::make_MATCH(loc);
-REGEXP      return yy::BisonParser::make_REGEXP(loc);
-AND         return yy::BisonParser::make_AND(loc);
-OR          return yy::BisonParser::make_OR(loc);
+IS          return yy::BisonParser::make_IS(std::string(yytext), loc);
+IN          return yy::BisonParser::make_IN(std::string(yytext), loc);
+LIKE        return yy::BisonParser::make_LIKE(std::string(yytext), loc);
+GLOB        return yy::BisonParser::make_GLOB(std::string(yytext), loc);
+MATCH       return yy::BisonParser::make_MATCH(std::string(yytext), loc);
+REGEXP      return yy::BisonParser::make_REGEXP(std::string(yytext), loc);
+AND         return yy::BisonParser::make_AND(std::string(yytext), loc);
+OR          return yy::BisonParser::make_OR(std::string(yytext), loc);
 
-DOUBLE      return yy::BisonParser::make_DOUBLE(loc); 
-TEXT        return yy::BisonParser::make_TEXT(loc);
-INTEGER     return yy::BisonParser::make_INTEGER(loc);
+DOUBLE      return yy::BisonParser::make_DOUBLE(std::string(yytext), loc); 
+TEXT        return yy::BisonParser::make_TEXT(std::string(yytext), loc);
+INTEGER     return yy::BisonParser::make_INTEGER(std::string(yytext), loc);
+TRUE        return yy::BisonParser::make_TRUE(std::string(yytext), loc);
+FALSE       return yy::BisonParser::make_FALSE(std::string(yytext), loc); 
 
-"=="        return yy::BisonParser::make_EQUAL(loc);
-"!="        return yy::BisonParser::make_NOTEQUAL(loc);
-"<>"        return yy::BisonParser::make_NOTEQUAL(loc);
-"<="        return yy::BisonParser::make_LESSEQUAL(loc);
-">="        return yy::BisonParser::make_GREATERQUALL(loc);
-"<"         return yy::BisonParser::make_LESS(loc);
-">"         return yy::BisonParser::make_GREATER(loc);
-"="         return yy::BisonParser::make_EQUAL(loc);
+"=="        return yy::BisonParser::make_EQUAL(std::string(yytext), loc);
+"!="        return yy::BisonParser::make_NOTEQUAL(std::string(yytext), loc);
+"<>"        return yy::BisonParser::make_NOTEQUAL(std::string(yytext), loc);
+"<="        return yy::BisonParser::make_LESSEQUAL(std::string(yytext), loc);
+">="        return yy::BisonParser::make_GREATERQUALL(std::string(yytext), loc);
+"<"         return yy::BisonParser::make_LESS(std::string(yytext), loc);
+">"         return yy::BisonParser::make_GREATER(std::string(yytext), loc);
+"="         return yy::BisonParser::make_EQUAL(std::string(yytext), loc);
 
-"||"        return yy::BisonParser::make_CONCATENATION(loc);
+"||"        return yy::BisonParser::make_CONCATENATION(std::string(yytext), loc);
 
-"~"         return yy::BisonParser::make_BINNOT(loc);
-"&"         return yy::BisonParser::make_BINAND(loc);
-"|"         return yy::BisonParser::make_BINOR(loc);
-"<<"        return yy::BisonParser::make_LEFTSHIFT(loc);
-">>"        return yy::BisonParser::make_RIGHTSHIFT(loc);
+"~"         return yy::BisonParser::make_BINNOT(std::string(yytext), loc);
+"&"         return yy::BisonParser::make_BINAND(std::string(yytext), loc);
+"|"         return yy::BisonParser::make_BINOR(std::string(yytext), loc);
+"<<"        return yy::BisonParser::make_LEFTSHIFT(std::string(yytext), loc);
+">>"        return yy::BisonParser::make_RIGHTSHIFT(std::string(yytext), loc);
 
-"+"         return yy::BisonParser::make_PLUS(loc);
-"-"         return yy::BisonParser::make_MINUS(loc);
-"*"         return yy::BisonParser::make_MULTIPLY(loc);
-"/"         return yy::BisonParser::make_DIVISION(loc);
-"%"         return yy::BisonParser::make_MOD(loc);
+"+"         return yy::BisonParser::make_PLUS(std::string(yytext), loc);
+"-"         return yy::BisonParser::make_MINUS(std::string(yytext), loc);
+"*"         return yy::BisonParser::make_MULTIPLY(std::string(yytext), loc);
+"/"         return yy::BisonParser::make_DIVISION(std::string(yytext), loc);
+"%"         return yy::BisonParser::make_MOD(std::string(yytext), loc);
 
-";"         return yy::BisonParser::make_SEMICOLON(loc);
-"."         return yy::BisonParser::make_DOT(loc);
-","         return yy::BisonParser::make_COMMA(loc);
-"("         return yy::BisonParser::make_OPENBRACKET(loc);
-")"         return yy::BisonParser::make_CLOSEBRACKET(loc);
+";"         return yy::BisonParser::make_SEMICOLON(std::string(yytext), loc);
+"."         return yy::BisonParser::make_DOT(std::string(yytext), loc);
+","         return yy::BisonParser::make_COMMA(std::string(yytext), loc);
+"("         return yy::BisonParser::make_OPENBRACKET(std::string(yytext), loc);
+")"         return yy::BisonParser::make_CLOSEBRACKET(std::string(yytext), loc);
 
 
 {UNSIGN_INT} {
-    return yy::BisonParser::make_INTEGER_CONST(std::stoll(yytext), loc);
+    return yy::BisonParser::make_INTEGER_CONST(std::string(yytext), loc);
 }
 
 ({UNSIGN_INT}\.{UNSIGN_INT}?|{UNSIGN_INT}?\.{UNSIGN_INT}){Exp}? {
-    return yy::BisonParser::make_DOUBLE_CONST(std::stold(yytext), loc);
+    return yy::BisonParser::make_DOUBLE_CONST(std::string(yytext), loc);
 }
 
 \"[^\"\n]+\" {
