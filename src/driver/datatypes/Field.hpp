@@ -4,7 +4,8 @@
 #include <json.hpp>
 #include <string>
 
-namespace sql {
+namespace sql
+{
 
 using json = nlohmann::json;
 
@@ -13,10 +14,8 @@ class Field
 public:
   Field() = default;
   virtual ~Field() = default;
-  virtual std::string ToString() const {
-      std::string res = "null";
-      return res;
-  }
+  virtual void Value(void* value) const { *((char*) value) = 0; };
+  virtual std::string ToString() const { return "null"; }
 };
 
 class DoubleField : public Field
@@ -25,7 +24,8 @@ public:
   DoubleField(double value) : value_(value) {}
   double GetValue() { return value_; }
   void SetValue(double value) { value_ = value; }
-  std::string ToString() const override { return std::to_string(value_); }
+  void Value(void* value) { *((double*) value) = value_; }
+  std::string ToString() const { return std::to_string(value_); }
 private:
   double value_;
 };
@@ -36,7 +36,8 @@ public:
   BoolField(bool value) : value_(value) {}
   bool GetValue() { return value_; }
   void SetValue(bool value) { value_ = value; }
-  std::string ToString() const override { return std::to_string(value_); }
+  void Value(void* value) { *((bool*) value) = value_; }
+  std::string ToString() const { return value_ ? "true" : "false"; }
 private:
   bool value_;
 };
@@ -47,7 +48,8 @@ public:
   TextField(std::string value) : value_(value) {}
   std::string GetValue() { return value_; }
   void SetValue(std::string value) { value_ = value; }
-  std::string ToString() const override { return value_; }
+  void Value(void* value) { *((std::string*) value) = value_; }
+  std::string ToString() const { return value_; }
 private:
   std::string value_;
 };
@@ -58,13 +60,10 @@ public:
   IntField(int32_t value) : value_(value) {}
   int32_t GetValue() { return value_; }
   void SetValue(int32_t value) { value_ = value; }
-  std::string ToString() const override { return std::to_string(value_); }
+  void Value(void* value) { *((int32_t*) value) = value_; }
+  std::string ToString() const { return std::to_string(value_); }
 private:
   int32_t value_;
 };
-
-void to_json(json& j, const Field&);
-void from_json(const json& j, Field&);
-using FieldSPtr = std::shared_ptr<Field>;
 
 } // namespace sql

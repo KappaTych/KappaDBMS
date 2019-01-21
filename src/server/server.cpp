@@ -10,7 +10,8 @@
 
 #include "server.hpp"
 
-namespace kappa {
+namespace kappa
+{
 
 Server::Server(int port, int size)
     : port_(port),

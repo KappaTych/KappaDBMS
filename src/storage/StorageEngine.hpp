@@ -26,7 +26,8 @@ template<class K, class V, class dummy_compare, class A>
 using my_workaround_fifo_map = nlohmann::fifo_map<K, V, nlohmann::fifo_map_compare<K>, A>;
 using my_json = nlohmann::basic_json<my_workaround_fifo_map>;
 
-namespace se {
+namespace se
+{
 
 using compare_t = std::function<bool(const RawData&)>;
 using update_t = std::function<bool(RawData&&)>;
@@ -57,7 +58,7 @@ public:
 
   std::list<RawData> Read(MetaData& metaData, size_t size, const compare_t& func = [](const RawData& x){ return true; });
   void Write(MetaData& metaData, const char* row, size_t size);
-  void Update(MetaData& metaData, size_t size, const update_t& func);
+  void Update(MetaData& metaData, size_t size, const update_t& func = [](RawData&& x){ return true; });
   void Delete(MetaData& metaData, size_t size, const compare_t& func);
 
   bool Flush();

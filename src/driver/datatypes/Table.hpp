@@ -7,13 +7,11 @@
 #include <fifo_map.hpp>
 #include <parser/sql.hpp>
 #include <storage/StorageEngine.hpp>
-#include "Record.hpp"
 
-namespace sql {
+#include "Field.hpp"
 
-using TabDef = cmd::TableDefinition;
-using Cols = std::vector<cmd::ColumnDefinition>;
-using Rows = std::vector<Record>;
+namespace sql
+{
 
 using json = nlohmann::json;
 
@@ -22,40 +20,41 @@ std::string to_string(cmd::LiteralType t);
 class Table
 {
 public:
-  Table() {}
+  using Column = std::pair<std::string, cmd::LiteralType>;
+  using Record = std::vector< std::shared_ptr<Field> >;
+
+public:
+  Table() { }
 
   explicit Table(
       cmd::TableDefinition name
-    ) : name_(name),
-        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
+    ) : name_(name) { }
 
   explicit Table(
       cmd::TableDefinition name,
-      std::list<cmd::ColumnDefinition> columns
+      std::list<Column> columns
     ) : name_(name),
-        columns_(columns),
-        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
+        columns_(columns) { }
 
   explicit Table(
       cmd::TableDefinition name,
-      std::list<cmd::ColumnDefinition> columns,
+      std::list<Column> columns,
       std::list<Record> records
     ) : name_(name),
         columns_(columns),
-        records_(records),
-        meta_(std::make_shared<se::MetaData>(name.ToString())) { }
+        records_(records) { }
 
   explicit Table(
-      std::list<cmd::ColumnDefinition> columns,
+      std::list<Column> columns,
       std::list<Record> records
     ) : columns_(columns),
         records_(records) { }
 
-  void AddColumn(cmd::ColumnDefinition column);
+  void AddColumn(Column column);
   void InsertRecord(Record record);
   void DeleteRecord(int index);
 
-  const std::list<cmd::ColumnDefinition>& GetColumns() const { return columns_; }
+  const std::list<Column>& GetColumns() const { return columns_; }
   const std::list<Record>& GetRecords() const { return records_; }
 
 // TODO: Make its implementation working normal:
@@ -63,12 +62,9 @@ public:
 
   cmd::TableDefinition name_;
 
-public:
-  std::list<cmd::ColumnDefinition> columns_;
+private:
+  std::list<Column> columns_;
   std::list<Record> records_;
-
-// TODO: Create it in constructor
-  std::shared_ptr<se::MetaData> meta_;
 };
 
 

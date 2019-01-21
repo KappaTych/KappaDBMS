@@ -23,7 +23,7 @@ public:
   explicit Literal(bool v) : Expression(LITERAL), valueType_(LiteralType::BOOL), bval_(v) {}
   explicit Literal(long long v) : Expression(LITERAL), valueType_(LiteralType::INTEGER), ival_(v) {}
   explicit Literal(long double v) : Expression(LITERAL), valueType_(LiteralType::DOUBLE), fval_(v) {}
-  explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::TEXT), strval_(v) {}
+  explicit Literal(std::string v) : Expression(LITERAL), valueType_(LiteralType::TEXT), sval_(v) {}
 
   ~Literal() = default;
 
@@ -34,22 +34,22 @@ public:
   std::string Value() const
   {
     switch (valueType_) {
-      case LiteralType::NONE:   return "";
-      case LiteralType::BOOL:   return (bval_ ? "true" : "false");
-      case LiteralType::INTEGER:    return std::to_string(ival_);
-      case LiteralType::DOUBLE: return std::to_string(fval_);
-      case LiteralType::TEXT: return strval_;
+      case LiteralType::NONE:    return "";
+      case LiteralType::BOOL:    return bval_ ? "true" : "false";
+      case LiteralType::INTEGER: return std::to_string(ival_);
+      case LiteralType::DOUBLE:  return std::to_string(fval_);
+      case LiteralType::TEXT:    return sval_;
     }
     return "";
   }
 
-private:
+public:
   const LiteralType valueType_;
 
   bool bval_;
   double fval_;
   long long ival_;
-  std::string strval_;
+  std::string sval_;
 };
 
 } // namespace cmd

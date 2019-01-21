@@ -18,9 +18,16 @@
 #include "DriverBase.hpp"
 
 
-namespace sql {
+namespace sql
+{
+  
+using json = nlohmann::json;
 
-class Driver : public DriverBase {
+class Driver : public DriverBase
+{
+public:
+  std::unordered_map<std::string, std::pair<sql::Table::Column, sql::Table::Record>> capture;
+
 public:
   static Driver& Instance()
   {
@@ -30,10 +37,10 @@ public:
 
 public:
   std::unordered_map<std::string, se::size_t> mapping = {
-    {"INTEGER", sizeof(int32_t)},
-    {"TEXT", 256},
-    {"DOUBLE", sizeof(double)},
-    {"BOOL", sizeof(bool)},
+    { "INTEGER", sizeof(int32_t) },
+    { "TEXT", 256 },
+    { "DOUBLE", sizeof(double) },
+    { "BOOL", sizeof(bool) },
   };
 
   std::string RunQuery(const std::string);
@@ -42,6 +49,8 @@ public:
   Table* Execute(const cmd::Literal&) override;
   Table* Execute(const cmd::Expression&) override;
   Table* Execute(const cmd::Operation&) override;
+  Table* Execute(const cmd::BinaryOperation&) override;
+  Table* Execute(const cmd::UnaryOperation&) override;
   Table* Execute(const cmd::CreateTable&) override;
   Table* Execute(const cmd::DropTable&) override;
   Table* Execute(const cmd::Select&) override;

@@ -189,7 +189,7 @@ select_statement:
 %type <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> select_list;
 select_list:
         MULTIPLY { $$ = nullptr; }
-    |   expr_list
+    |   expr_list { $$ = $1; }
     ;    
     
 

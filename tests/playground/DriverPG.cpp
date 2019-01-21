@@ -29,17 +29,20 @@ int main(int argc, char *argv[])
   std::mutex m_printf;
   std::cout << std::endl << "Thread safe " << std::endl;
   auto task = [&m_printf](std::string path, int i) {
-      auto& instance = sql::Driver::Instance();
-      auto s = instance.RunQuery("INSERT INTO goods VALUES (" + std::to_string(i) + ", 12.1, 'asd')");
-      std::lock_guard<std::mutex> lock(m_printf);
-      std::cout << s << std::endl;
+    auto& instance = sql::Driver::Instance();
+    auto s = instance.RunQuery("INSERT INTO goods VALUES (" + std::to_string(i) + ", 12.1, 'asd')");
+    std::lock_guard<std::mutex> lock(m_printf);
+    std::cout << s << std::endl;
   };
   auto t1 = std::async(std::launch::async, task, argv[0], 12);
   auto t2 = std::async(std::launch::async, task, argv[0], 13);
   t1.wait(); t2.wait();
 
-  std::string select_query = "SELECT * FROM goods";
-  std::cout << instance.RunQuery(select_query) << std::endl;
+  std::string select_query1 = "SELECT * FROM goods";
+  std::cout << instance.RunQuery(select_query1) << std::endl;
+
+  std::string select_query2 = "SELECT id FROM goods";
+  std::cout << instance.RunQuery(select_query2) << std::endl;
 
   std::string drop_query = "DROP TABLE goods";
   std::cout << instance.RunQuery(drop_query) << std::endl;

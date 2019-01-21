@@ -1547,7 +1547,7 @@ case 72:
 YY_RULE_SETUP
 #line 124 "flex_sql.lpp"
 {
-    return yy::BisonParser::make_IDENTIFIER(std::string(yytext + 1, yyleng - 1), loc);
+    return yy::BisonParser::make_IDENTIFIER(std::string(yytext + 1, yyleng - 2), loc);
 }
 	YY_BREAK
 case 73:
@@ -1561,14 +1561,14 @@ case 74:
 YY_RULE_SETUP
 #line 132 "flex_sql.lpp"
 {
-    return yy::BisonParser::make_STRING(std::string(yytext + 1, yyleng - 1), loc);
+    return yy::BisonParser::make_STRING(std::string(yytext + 1, yyleng - 2), loc);
 }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
 #line 136 "flex_sql.lpp"
 { 
-    throw "[SQL-Lexer-Error] Unknown Character: " +  yytext[0];
+    throw std::logic_error("[SQL-Lexer-Error] Unknown Character: " +  yytext[0]);
 }
 	YY_BREAK
 case 76:

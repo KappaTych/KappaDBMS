@@ -1,20 +1,21 @@
 #include "driver.hpp"
 
-namespace sql {
+// TODO: explore for memory leaks (pointers)
 
-using json = nlohmann::json;
+namespace sql
+{
 
-cmd::LiteralType LiteralTypeFromStr(const std::string str) {
-    if (str == "INTEGER")
-        return cmd::LiteralType::INTEGER;
-    else if (str == "DOUBLE")
-        return cmd::LiteralType::DOUBLE;
-    else if (str == "TEXT")
-        return cmd::LiteralType::TEXT;
-    else if (str == "BOOL")
-        return cmd::LiteralType::BOOL;
-    else
-        return cmd::LiteralType::NONE;
+cmd::LiteralType LiteralTypeFromStr(const std::string str)
+{
+  if (str == "INTEGER")
+    return cmd::LiteralType::INTEGER;
+  else if (str == "DOUBLE")
+    return cmd::LiteralType::DOUBLE;
+  else if (str == "TEXT")
+    return cmd::LiteralType::TEXT;
+  else if (str == "BOOL")
+    return cmd::LiteralType::BOOL;
+  return cmd::LiteralType::NONE;
 }
 
 std::string Driver::RunQuery(const std::string query)
@@ -35,14 +36,17 @@ std::string Driver::RunQuery(const std::string query)
 
 Table* Driver::Execute(const cmd::Instruction& instruction)
 {
-  throw std::logic_error("DriverError: Invalid instruction. Didn't find child instruction");
+  throw std::logic_error("DriverError: Invalid instruction. Couldn't find child instruction");
 }
 
-Table* Driver::Execute(const cmd::Literal& instruction)
+Table* Driver::Execute(const cmd::Expression&)
 {
-  Record record({ std::make_shared<TextField>(TextField(instruction.Value())) });
-  cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
-  return new Table({ column }, { record });
+  throw std::logic_error("DriverError: Call to base expression");
+}
+
+Table* Driver::Execute(const cmd::Operation& instruction)
+{
+  throw std::logic_error("DriverError: Call to base operation");
 }
 
 Table* Driver::Execute(const cmd::TableDefinition& instruction)
@@ -69,10 +73,8 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
   meta.Add("size", size, "private");
   storage.Flush();
 
-  Record record({ std::make_shared<BoolField>(BoolField(true)) });
-  cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
   cmd::TableDefinition definition("anonymous");
-  return new Table({definition}, { column }, { record });
+  return new Table({ definition }, { {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::DropTable& instruction)
@@ -84,10 +86,8 @@ Table* Driver::Execute(const cmd::DropTable& instruction)
   }
   storage.RemoveData(name);
 
-  Record record({ std::make_shared<BoolField>(BoolField(true)) });
-  cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
   cmd::TableDefinition definition("anonymous");
-  return new Table({definition}, { column }, { record });
+  return new Table({ definition }, { {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Select& instruction)
@@ -98,38 +98,46 @@ Table* Driver::Execute(const cmd::Select& instruction)
   }
   se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
   auto& columns_meta = meta.data().at("public");
-  std::list<cmd::ColumnDefinition> columns_def;
+  std::list<sql::Table::Column> columns;
   for (auto d = columns_meta.items().begin(); d != columns_meta.items().end(); ++d) {
-    columns_def.emplace_back(d.key(), LiteralTypeFromStr(d.value()));
+    columns.emplace_back(d.key(), LiteralTypeFromStr(d.value()));
   }
 
-  std::list<Record> records;
+  std::list<sql::Table::Record> records;
   if (instruction.type() == cmd::InstructionType::SELECT_ALL) {
     size_t size = meta.data()["private"]["size"];
     auto dataAll = storage.Read(meta, size);
     for (auto& x : dataAll) {
-      std::list<FieldSPtr> fields;
-      for (auto& column : columns_def) {
-        switch(column.type_) {
+      sql::Table::Record record;
+      for (auto& column : columns) {
+        int test = 0;
+        switch(column.second) {
           case cmd::LiteralType::INTEGER:
-            fields.emplace_back(std::make_shared<IntField>(x.Get<int32_t>()));
+            record.emplace_back(std::make_shared<IntField>(x.Get<int32_t>()));
             break;
           case cmd::LiteralType::DOUBLE:
-            fields.emplace_back(std::make_shared<DoubleField>(x.Get<double>()));
+            record.emplace_back(std::make_shared<DoubleField>(x.Get<double>()));
             break;
           case cmd::LiteralType::BOOL:
-            fields.emplace_back(std::make_shared<BoolField>(x.Get<bool>()));
+            record.emplace_back(std::make_shared<BoolField>(x.Get<bool>()));
             break;
           case cmd::LiteralType::TEXT:
-            fields.emplace_back(std::make_shared<TextField>(x.Get<std::string>()));
+            record.emplace_back(std::make_shared<TextField>(x.Get<std::string>()));
             break;
         }
       }
-      records.push_back(Record(fields));
+      records.push_back(record);
     }
-    return new Table(instruction.table_, std::move(columns_def), std::move(records));
+  } else if (!instruction.columnDef_.empty()) {
+    for (auto& column : instruction.columnDef_) {
+      std::cout << ((cmd::Column*) (column.get()))->name_ << std::endl;
+      Table* t = column->Accept(*this);
+      delete t;
+    }
+  } else {
+    throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
   }
-  return  new Table();
+  return new Table(instruction.table_, std::move(columns), std::move(records));
 }
 
 Table* Driver::Execute(const cmd::Insert& instruction)
@@ -161,22 +169,17 @@ Table* Driver::Execute(const cmd::Insert& instruction)
         case cmd::LiteralType::BOOL:
           raw.Fill<bool>( (bool) std::stoi(l->Value()));
           break;
-        case cmd::LiteralType::TEXT:
-          raw.Fill<std::string>( l->Value());
-          break;
+        default:
+          raw.Fill<std::string>(l->Value());
       }
     }
     storage.Write(meta, raw.data(), raw.capacity());
-  }
-  else {
-    throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
+  } else {
+    throw std::logic_error("DriverError: Sorry, we don't working with this type of INSERT query yet");
   }
 
-  Record record({ std::make_shared<BoolField>(BoolField(true)) });
-  cmd::ColumnDefinition column("result", cmd::LiteralType::BOOL);
   cmd::TableDefinition definition("anonymous");
-
-  return new Table({definition}, { column }, { record });
+  return new Table({ definition }, { {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Update& instruction)
@@ -205,93 +208,129 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
   result.pop_back();
   result += ");";
 
-  Record record({ std::make_shared<TextField>(TextField(result)) });
-  cmd::ColumnDefinition column("result", cmd::LiteralType::TEXT);
   cmd::TableDefinition definition("anonymous");
-  return new Table({definition}, { column }, { record });
+  return new Table({ definition }, { {"result", cmd::LiteralType::TEXT} }, { {std::make_shared<TextField>(result)} });
 }
 
-Table* Driver::Execute(const cmd::Operation& instruction)
+Table* Driver::Execute(const cmd::Literal& instruction)
 {
-  return new Table();
+  switch (instruction.ValueType()) {
+    case cmd::LiteralType::BOOL:
+      return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(instruction.bval_)} });
+
+    case cmd::LiteralType::INTEGER:
+      return new Table({ {"result", cmd::LiteralType::INTEGER} }, { {std::make_shared<IntField>(instruction.ival_)} });
+
+    case cmd::LiteralType::DOUBLE:
+      return new Table({ {"result", cmd::LiteralType::DOUBLE} }, { {std::make_shared<DoubleField>(instruction.fval_)} });
+
+    case cmd::LiteralType::TEXT:
+      return new Table({ {"result", cmd::LiteralType::TEXT} }, { {std::make_shared<TextField>(instruction.sval_)} });
+  }
+  return new Table({ {"result", cmd::LiteralType::NONE} }, { {std::make_shared<Field>()} });
 }
 
-Table* Driver::Execute(const cmd::Column&)
+Table* Driver::Execute(const cmd::Column& instruction)
 {
-  return new Table();
+  auto data = capture.find(instruction.name_);
+  if (capture.find(instruction.name_) == capture.end()) {
+    return new Table({ sql::Table::Column() }, { sql::Table::Record() });
+  }
+  return new Table(
+      { {instruction.name_, cmd::LiteralType::NONE} },
+      { {std::make_shared<Field>()} }
+    );
+  // return new Table();
 }
 
-Table* Driver::Execute(const cmd::ColumnDefintion&)
+Table* Driver::Execute(const cmd::BinaryOperation& instruction)
 {
-  return new Table();
-}
+  auto operandA = std::shared_ptr<Table>(instruction.left_->Accept(*this));
+  auto operandB = std::shared_ptr<Table>(instruction.right_->Accept(*this));
 
-Table* Driver::Execute(const cmd::Expression &)
-{
+  switch (instruction.operation()) {
+    // case cmd::OperationType::PLUS:
+    //   return Table(operandA + operandB);
+
+    // case cmd::OperationType::MINUS:
+    //   return Table(operandA - operandB);
+
+    // case cmd::OperationType::MULTIPLY:
+    //   return Table(operandA * operandB);
+
+    // case cmd::OperationType::DIVIDE:
+    //   return Table(operandA / operandB);
+
+    // case cmd::OperationType::MOD:
+    //   return Table(operandA % operandB);
+
+    // case cmd::OperationType::LESS:
+    //   return Table(operandA < operandB);
+
+    // case cmd::OperationType::GREATER:
+    //   return Table(operandA > operandB);
+
+    // case cmd::OperationType::EQUAL:
+    //   return Table(operandA == operandB);
+
+    // case cmd::OperationType::LESS_EQUAL:
+    //   return Table(operandA <= operandB);
+
+    // case cmd::OperationType::GREATER_EQUAL:
+    //   return Table(operandA >= operandB);
+
+    // case cmd::OperationType::NOT:
+    //   return Table(!operandA);
+
+    // case cmd::OperationType::AND:
+    //   return Table(operandA && operandB);
+
+    // case cmd::OperationType::OR:
+    //   return Table(operandA || operandB);
+
+    // case cmd::OperationType::XOR:
+    //   return Table(operandA ^ operandB);
+
+    // case cmd::OperationType::FUNCTION:
+    //   throw std::logic_error("OperationError: Functions is not implemented yet");
+
+    default:
+      throw std::logic_error("DriverError: Unknown OperationType");
+  }
   return new Table();
 }
 
 // TODO: refactor this ...
-// Table Driver::Execute(const cmd::Operation& instruction)
-// {
-//     // auto& operandA = Execute(instruction.Dispatch());
-//     // auto& operandB = Execute(instruction.Dispatch());
+Table* Driver::Execute(const cmd::UnaryOperation& instruction)
+{
+  auto operand = std::shared_ptr<Table>(instruction.operator_->Accept(*this));
 
-//     // if (operandA.ValueType() != operandB.ValueType()) {
-//     //     throw std::logic_error("OperationError: Incompatible ValueType of operands");
-//     // }
+  switch (instruction.operation()) {
+    case cmd::OperationType::UNARY_MINUS:
+      return new Table();
+    
+    case cmd::OperationType::UNARY_PLUS:
+      return new Table();
+    
+    case cmd::OperationType::BIN_NOT:
+      return new Table();
+    
+    case cmd::OperationType::NOT:
+      return new Table();
+    
+    case cmd::OperationType::ISNULL:
+      return new Table();
 
-//     // switch (instruction.ValueType()) {
-//     //     case cmd::OperationType::PLUS:
-//     //         return Table(operandA + operandB);
+    default:
+      throw std::logic_error("DriverError: Unknown OperationType");
+  }
+  throw std::logic_error("DriverError: Nothing to return from UnaryOperation");
+  return new Table();
+}
 
-//     //     case cmd::OperationType::MINUS:
-//     //         return Table(operandA - operandB);
-
-//     //     case cmd::OperationType::MULTIPLY:
-//     //         return Table(operandA * operandB);
-
-//     //     case cmd::OperationType::DIVIDE:
-//     //         return Table(operandA / operandB);
-
-//     //     case cmd::OperationType::MOD:
-//     //         return Table(operandA % operandB);
-
-//     //     case cmd::OperationType::LESS:
-//     //         return Table(operandA < operandB);
-
-//     //     case cmd::OperationType::GREATER:
-//     //         return Table(operandA > operandB);
-
-//     //     case cmd::OperationType::EQUAL:
-//     //         return Table(operandA == operandB);
-
-//     //     case cmd::OperationType::LESS_EQUAL:
-//     //         return Table(operandA <= operandB);
-
-//     //     case cmd::OperationType::GREATER_EQUAL:
-//     //         return Table(operandA >= operandB);
-
-//     //     case cmd::OperationType::NOT:
-//     //         return Table(!operandA);
-
-//     //     case cmd::OperationType::AND:
-//     //         return Table(operandA && operandB);
-
-//     //     case cmd::OperationType::OR:
-//     //         return Table(operandA || operandB);
-
-//     //     case cmd::OperationType::XOR:
-//     //         return Table(operandA ^ operandB);
-
-//     //     case cmd::OperationType::FUNCTION:
-//     //         throw std::exception("OperationError: Functions is not implemented yet");
-
-//     //     default:
-//     //         throw std::exception("DriverError: Unknown OperationType");
-//     // }
-//     // throw std::exception("DriverError: Nothing to return from operation");
-//     return Table();
-// }
+Table* Driver::Execute(const cmd::ColumnDefintion& instruction)
+{
+  return new Table();
+}
 
 } // namespace sql

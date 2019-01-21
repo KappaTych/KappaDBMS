@@ -66,6 +66,8 @@ public:
   explicit UnaryOperation(OperationType type, ptr_Expression exp)
     : Operation(type), operator_(std::move(exp)) {}
 
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
+
 public:
   ptr_Expression operator_;
 };
@@ -76,6 +78,8 @@ public:
   BinaryOperation() = delete;
   explicit BinaryOperation(OperationType type, ptr_Expression left, ptr_Expression right)
     : Operation(type), left_(std::move(left)), right_(std::move(right)) {}
+
+  sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public:
   ptr_Expression left_, right_;

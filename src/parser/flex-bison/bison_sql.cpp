@@ -925,16 +925,46 @@ namespace yy {
 #line 926 "bison_sql.cpp" // lalr1.cc:906
     break;
 
+  case 5:
+#line 111 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::DropTable> > (); }
+#line 932 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
   case 6:
 #line 112 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Instruction> > (); }
-#line 932 "bison_sql.cpp" // lalr1.cc:906
+#line 938 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 7:
 #line 113 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Instruction> > (); }
-#line 938 "bison_sql.cpp" // lalr1.cc:906
+#line 944 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
+  case 8:
+#line 114 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Select> > (); }
+#line 950 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
+  case 9:
+#line 115 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Insert> > (); }
+#line 956 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
+  case 10:
+#line 116 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Update> > (); }
+#line 962 "bison_sql.cpp" // lalr1.cc:906
+    break;
+
+  case 11:
+#line 117 "bison_sql.ypp" // lalr1.cc:906
+    { yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = yystack_[0].value.as< std::shared_ptr<cmd::Delete> > (); }
+#line 968 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 12:
@@ -942,7 +972,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = std::make_shared<cmd::ShowCreateTable>(yystack_[0].value.as< cmd::TableDefinition > ());
         }
-#line 946 "bison_sql.cpp" // lalr1.cc:906
+#line 976 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 13:
@@ -950,7 +980,7 @@ namespace yy {
     {
             yylhs.value.as< std::shared_ptr<cmd::Instruction> > () = std::make_shared<cmd::CreateTable>(yystack_[3].value.as< cmd::TableDefinition > (), yystack_[1].value.as< std::list<cmd::ColumnDefinition> > ());
         }
-#line 954 "bison_sql.cpp" // lalr1.cc:906
+#line 984 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 14:
@@ -958,7 +988,7 @@ namespace yy {
     {
             yylhs.value.as< std::list<cmd::ColumnDefinition> > () = std::list<cmd::ColumnDefinition>({std::move(yystack_[0].value.as< cmd::ColumnDefinition > ())});
         }
-#line 962 "bison_sql.cpp" // lalr1.cc:906
+#line 992 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 15:
@@ -967,7 +997,7 @@ namespace yy {
             yystack_[2].value.as< std::list<cmd::ColumnDefinition> > ().push_back(yystack_[0].value.as< cmd::ColumnDefinition > ());
             yylhs.value.as< std::list<cmd::ColumnDefinition> > () = std::move(yystack_[2].value.as< std::list<cmd::ColumnDefinition> > ());
         }
-#line 971 "bison_sql.cpp" // lalr1.cc:906
+#line 1001 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 16:
@@ -975,25 +1005,25 @@ namespace yy {
     {
             yylhs.value.as< cmd::ColumnDefinition > () = cmd::ColumnDefinition(yystack_[1].value.as< std::string > (), yystack_[0].value.as< cmd::LiteralType > ());
         }
-#line 979 "bison_sql.cpp" // lalr1.cc:906
+#line 1009 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 17:
 #line 162 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< cmd::LiteralType > () = cmd::LiteralType::INTEGER; }
-#line 985 "bison_sql.cpp" // lalr1.cc:906
+#line 1015 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 18:
 #line 163 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< cmd::LiteralType > () = cmd::LiteralType::DOUBLE; }
-#line 991 "bison_sql.cpp" // lalr1.cc:906
+#line 1021 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 19:
 #line 164 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< cmd::LiteralType > () = cmd::LiteralType::TEXT; }
-#line 997 "bison_sql.cpp" // lalr1.cc:906
+#line 1027 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 20:
@@ -1001,7 +1031,7 @@ namespace yy {
     {
             yylhs.value.as< std::shared_ptr<cmd::DropTable> > () = std::make_shared<cmd::DropTable>(yystack_[0].value.as< cmd::TableDefinition > ());
         }
-#line 1005 "bison_sql.cpp" // lalr1.cc:906
+#line 1035 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 21:
@@ -1013,31 +1043,31 @@ namespace yy {
                 yylhs.value.as< std::shared_ptr<cmd::Select> > () = std::make_shared<cmd::Select>(yystack_[1].value.as< cmd::TableDefinition > (), *(yystack_[3].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ()), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
             }
         }
-#line 1017 "bison_sql.cpp" // lalr1.cc:906
+#line 1047 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 22:
 #line 191 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = nullptr; }
-#line 1023 "bison_sql.cpp" // lalr1.cc:906
+#line 1053 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 23:
 #line 192 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = yystack_[0].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > (); }
-#line 1029 "bison_sql.cpp" // lalr1.cc:906
+#line 1059 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 24:
 #line 198 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1035 "bison_sql.cpp" // lalr1.cc:906
+#line 1065 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 25:
 #line 199 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = nullptr; }
-#line 1041 "bison_sql.cpp" // lalr1.cc:906
+#line 1071 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 26:
@@ -1049,19 +1079,19 @@ namespace yy {
                 yylhs.value.as< std::shared_ptr<cmd::Insert> > () = std::make_shared<cmd::Insert>(yystack_[5].value.as< cmd::TableDefinition > (), *(yystack_[1].value.as< std::shared_ptr<std::list<cmd::Literal>> > ()), *(yystack_[4].value.as< std::shared_ptr<std::list<cmd::Column>> > ()));
             }
         }
-#line 1053 "bison_sql.cpp" // lalr1.cc:906
+#line 1083 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 27:
 #line 219 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = yystack_[0].value.as< std::shared_ptr<std::list<cmd::Column>> > (); }
-#line 1059 "bison_sql.cpp" // lalr1.cc:906
+#line 1089 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 28:
 #line 220 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = nullptr; }
-#line 1065 "bison_sql.cpp" // lalr1.cc:906
+#line 1095 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 29:
@@ -1069,7 +1099,7 @@ namespace yy {
     {
             yylhs.value.as< std::shared_ptr<cmd::Update> > () = std::make_shared<cmd::Update>(yystack_[3].value.as< cmd::TableDefinition > (), yystack_[1].value.as< std::list<cmd::update_clause> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
         }
-#line 1073 "bison_sql.cpp" // lalr1.cc:906
+#line 1103 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 30:
@@ -1077,7 +1107,7 @@ namespace yy {
     {
             yylhs.value.as< std::list<cmd::update_clause> > ().push_back(yystack_[0].value.as< cmd::update_clause > ());
         }
-#line 1081 "bison_sql.cpp" // lalr1.cc:906
+#line 1111 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 31:
@@ -1086,7 +1116,7 @@ namespace yy {
             yystack_[2].value.as< std::list<cmd::update_clause> > ().push_back(yystack_[0].value.as< cmd::update_clause > ());
             yylhs.value.as< std::list<cmd::update_clause> > () = std::move(yystack_[2].value.as< std::list<cmd::update_clause> > ());
         }
-#line 1090 "bison_sql.cpp" // lalr1.cc:906
+#line 1120 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 32:
@@ -1095,7 +1125,7 @@ namespace yy {
             yylhs.value.as< cmd::update_clause > ().first = cmd::Column(yystack_[2].value.as< std::string > ());
             yylhs.value.as< cmd::update_clause > ().second = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ();
         }
-#line 1099 "bison_sql.cpp" // lalr1.cc:906
+#line 1129 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 33:
@@ -1103,7 +1133,7 @@ namespace yy {
     {
             yylhs.value.as< std::shared_ptr<cmd::Delete> > () = std::make_shared<cmd::Delete>(yystack_[1].value.as< cmd::TableDefinition > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
         }
-#line 1107 "bison_sql.cpp" // lalr1.cc:906
+#line 1137 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 34:
@@ -1112,7 +1142,7 @@ namespace yy {
             yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = std::make_shared<std::list<std::shared_ptr<cmd::Expression>>>();
             yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ()->push_back(yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
         }
-#line 1116 "bison_sql.cpp" // lalr1.cc:906
+#line 1146 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 35:
@@ -1121,43 +1151,43 @@ namespace yy {
             yystack_[2].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ()->push_back(yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
             yylhs.value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > () = yystack_[2].value.as< std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>> > ();
         }
-#line 1125 "bison_sql.cpp" // lalr1.cc:906
+#line 1155 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 36:
 #line 279 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1131 "bison_sql.cpp" // lalr1.cc:906
+#line 1161 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 37:
 #line 280 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1137 "bison_sql.cpp" // lalr1.cc:906
+#line 1167 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 38:
 #line 285 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[1].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1143 "bison_sql.cpp" // lalr1.cc:906
+#line 1173 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 39:
 #line 286 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1149 "bison_sql.cpp" // lalr1.cc:906
+#line 1179 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 40:
 #line 287 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1155 "bison_sql.cpp" // lalr1.cc:906
+#line 1185 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 41:
 #line 288 "bison_sql.ypp" // lalr1.cc:906
     { yylhs.value.as< std::shared_ptr<cmd::Expression> > () = yystack_[0].value.as< std::shared_ptr<cmd::Expression> > (); }
-#line 1161 "bison_sql.cpp" // lalr1.cc:906
+#line 1191 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 42:
@@ -1165,7 +1195,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::UNARY_MINUS, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1169 "bison_sql.cpp" // lalr1.cc:906
+#line 1199 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 43:
@@ -1173,7 +1203,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::UNARY_PLUS, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1177 "bison_sql.cpp" // lalr1.cc:906
+#line 1207 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 44:
@@ -1181,7 +1211,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::BIN_NOT, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1185 "bison_sql.cpp" // lalr1.cc:906
+#line 1215 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 45:
@@ -1189,7 +1219,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1193 "bison_sql.cpp" // lalr1.cc:906
+#line 1223 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 46:
@@ -1197,7 +1227,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1201 "bison_sql.cpp" // lalr1.cc:906
+#line 1231 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 47:
@@ -1206,7 +1236,7 @@ namespace yy {
             auto nodeIsNull = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ());
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, nodeIsNull);
         }
-#line 1210 "bison_sql.cpp" // lalr1.cc:906
+#line 1240 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 48:
@@ -1214,7 +1244,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1218 "bison_sql.cpp" // lalr1.cc:906
+#line 1248 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 49:
@@ -1222,7 +1252,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1226 "bison_sql.cpp" // lalr1.cc:906
+#line 1256 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 50:
@@ -1230,7 +1260,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1234 "bison_sql.cpp" // lalr1.cc:906
+#line 1264 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 51:
@@ -1238,7 +1268,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::NOT_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1242 "bison_sql.cpp" // lalr1.cc:906
+#line 1272 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 52:
@@ -1246,7 +1276,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::LESS_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1250 "bison_sql.cpp" // lalr1.cc:906
+#line 1280 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 53:
@@ -1254,7 +1284,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::GREATER_EQUAL, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1258 "bison_sql.cpp" // lalr1.cc:906
+#line 1288 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 54:
@@ -1262,7 +1292,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::PLUS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1266 "bison_sql.cpp" // lalr1.cc:906
+#line 1296 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 55:
@@ -1270,7 +1300,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MINUS, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1274 "bison_sql.cpp" // lalr1.cc:906
+#line 1304 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 56:
@@ -1278,7 +1308,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MULTIPLY, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1282 "bison_sql.cpp" // lalr1.cc:906
+#line 1312 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 57:
@@ -1286,7 +1316,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::DIVISION, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1290 "bison_sql.cpp" // lalr1.cc:906
+#line 1320 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 58:
@@ -1294,7 +1324,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::MOD, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1298 "bison_sql.cpp" // lalr1.cc:906
+#line 1328 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 59:
@@ -1302,7 +1332,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::CONCATENATION, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1306 "bison_sql.cpp" // lalr1.cc:906
+#line 1336 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 60:
@@ -1310,7 +1340,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::AND, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1314 "bison_sql.cpp" // lalr1.cc:906
+#line 1344 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 61:
@@ -1318,7 +1348,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::BinaryOperation>(cmd::OperationType::OR, yystack_[2].value.as< std::shared_ptr<cmd::Expression> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
         }
-#line 1322 "bison_sql.cpp" // lalr1.cc:906
+#line 1352 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 64:
@@ -1326,7 +1356,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< long long > ()); 
         }
-#line 1330 "bison_sql.cpp" // lalr1.cc:906
+#line 1360 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 65:
@@ -1334,7 +1364,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< long double > ()); 
         }
-#line 1338 "bison_sql.cpp" // lalr1.cc:906
+#line 1368 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 66:
@@ -1342,7 +1372,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< std::string > ()); 
         }
-#line 1346 "bison_sql.cpp" // lalr1.cc:906
+#line 1376 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 67:
@@ -1350,7 +1380,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< std::string > ()); 
         }
-#line 1354 "bison_sql.cpp" // lalr1.cc:906
+#line 1384 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 68:
@@ -1358,7 +1388,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(); 
         }
-#line 1362 "bison_sql.cpp" // lalr1.cc:906
+#line 1392 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 69:
@@ -1366,7 +1396,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< bool > ()); 
         }
-#line 1370 "bison_sql.cpp" // lalr1.cc:906
+#line 1400 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 70:
@@ -1374,7 +1404,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Literal> > () = std::make_shared<cmd::Literal>(yystack_[0].value.as< bool > ()); 
         }
-#line 1378 "bison_sql.cpp" // lalr1.cc:906
+#line 1408 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 71:
@@ -1382,7 +1412,7 @@ namespace yy {
     {        
             yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > ()); 
         }
-#line 1386 "bison_sql.cpp" // lalr1.cc:906
+#line 1416 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 72:
@@ -1390,7 +1420,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > ()); 
         }
-#line 1394 "bison_sql.cpp" // lalr1.cc:906
+#line 1424 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 73:
@@ -1398,7 +1428,7 @@ namespace yy {
     { 
             yylhs.value.as< std::shared_ptr<cmd::Column> > () = std::make_shared<cmd::Column>(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > (), yystack_[4].value.as< std::string > ()); 
         }
-#line 1402 "bison_sql.cpp" // lalr1.cc:906
+#line 1432 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 74:
@@ -1406,7 +1436,7 @@ namespace yy {
     {
             yylhs.value.as< cmd::TableDefinition > () = cmd::TableDefinition(yystack_[0].value.as< std::string > ());
         }
-#line 1410 "bison_sql.cpp" // lalr1.cc:906
+#line 1440 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 75:
@@ -1414,7 +1444,7 @@ namespace yy {
     {
             yylhs.value.as< cmd::TableDefinition > () = cmd::TableDefinition(yystack_[0].value.as< std::string > (), yystack_[2].value.as< std::string > ());
         }
-#line 1418 "bison_sql.cpp" // lalr1.cc:906
+#line 1448 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 78:
@@ -1423,7 +1453,7 @@ namespace yy {
             yylhs.value.as< std::shared_ptr<std::list<cmd::Literal>> > () = std::make_shared<std::list<cmd::Literal>>();
             yylhs.value.as< std::shared_ptr<std::list<cmd::Literal>> > ()->push_back(*(yystack_[0].value.as< std::shared_ptr<cmd::Literal> > ()));
         }
-#line 1427 "bison_sql.cpp" // lalr1.cc:906
+#line 1457 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 79:
@@ -1432,7 +1462,7 @@ namespace yy {
             yystack_[2].value.as< std::shared_ptr<std::list<cmd::Literal>> > ()->push_back(*(yystack_[0].value.as< std::shared_ptr<cmd::Literal> > ()));
             yylhs.value.as< std::shared_ptr<std::list<cmd::Literal>> > () = yystack_[2].value.as< std::shared_ptr<std::list<cmd::Literal>> > ();
         }
-#line 1436 "bison_sql.cpp" // lalr1.cc:906
+#line 1466 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 80:
@@ -1441,7 +1471,7 @@ namespace yy {
             yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = std::make_shared<std::list<cmd::Column>>();
             yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > ()->push_back(cmd::Column(yystack_[0].value.as< std::string > ())); 
         }
-#line 1445 "bison_sql.cpp" // lalr1.cc:906
+#line 1475 "bison_sql.cpp" // lalr1.cc:906
     break;
 
   case 81:
@@ -1450,11 +1480,11 @@ namespace yy {
             yystack_[2].value.as< std::shared_ptr<std::list<cmd::Column>> > ()->push_back(cmd::Column(yystack_[0].value.as< std::string > ()));
             yylhs.value.as< std::shared_ptr<std::list<cmd::Column>> > () = yystack_[2].value.as< std::shared_ptr<std::list<cmd::Column>> > ();
         }
-#line 1454 "bison_sql.cpp" // lalr1.cc:906
+#line 1484 "bison_sql.cpp" // lalr1.cc:906
     break;
 
 
-#line 1458 "bison_sql.cpp" // lalr1.cc:906
+#line 1488 "bison_sql.cpp" // lalr1.cc:906
             default:
               break;
             }
@@ -1853,4 +1883,4 @@ namespace yy {
 
 
 } // yy
-#line 1857 "bison_sql.cpp" // lalr1.cc:1217
+#line 1887 "bison_sql.cpp" // lalr1.cc:1217

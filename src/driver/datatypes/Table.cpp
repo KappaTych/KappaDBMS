@@ -5,19 +5,19 @@ using json = nlohmann::json;
 
 namespace sql {
 
-std::string to_string(cmd::LiteralType t)
+std::string to_string(cmd::LiteralType type)
 {
-  switch (t) {
-    case cmd::LiteralType::INTEGER : {
+  switch (type) {
+    case cmd::LiteralType::INTEGER: {
       return "INTEGER";
     }
-    case cmd::LiteralType::DOUBLE : {
+    case cmd::LiteralType::DOUBLE: {
       return "DOUBLE";
     }
-    case cmd::LiteralType::TEXT : {
+    case cmd::LiteralType::TEXT: {
       return "TEXT";
     }
-    case cmd::LiteralType::BOOL : {
+    case cmd::LiteralType::BOOL: {
       return "BOOL";
     }
     default: {
@@ -33,10 +33,10 @@ void to_json(json& j, const Table& t)
   j["schema"] = t.name_.schema_;
 
   std::vector<json> columns;
-  for (auto &column : t.GetColumns()) {
+  for (auto& column : t.GetColumns()) {
     json c;
-    c["name"] = column.name_;
-    c["type"] = to_string(column.type_);
+    c["name"] = column.first;
+    c["type"] = to_string(column.second);
     columns.push_back(c);
   }
   j["columns"] = json(columns);
@@ -44,7 +44,7 @@ void to_json(json& j, const Table& t)
   std::vector<json> records;
   for (auto &record: t.GetRecords()) {
     std::vector<std::string> r;
-    for (auto field : record.GetFields()) {
+    for (auto& field : record) {
       r.push_back(field->ToString());
     }
     records.push_back(r);
@@ -57,16 +57,14 @@ void from_json(const json& j, Table& t)
   j.at("name").get_to(t.name_.name_);
   j.at("database").get_to(t.name_.database_);
   j.at("schema").get_to(t.name_.schema_);
-
-
 }
 
-void Table::AddColumn(cmd::ColumnDefinition column)
+void Table::AddColumn(Table::Column column)
 {
   columns_.push_back(column);
 }
 
-void Table::InsertRecord(Record record)
+void Table::InsertRecord(Table::Record record)
 {
   records_.push_back(record);
 }
