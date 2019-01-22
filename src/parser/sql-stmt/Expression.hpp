@@ -13,6 +13,8 @@ public:
 
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
+  virtual std::string ToString() { return "expr"; }
+
   ~Expression() = default;
 };
 

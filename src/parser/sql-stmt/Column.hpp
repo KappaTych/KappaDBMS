@@ -14,6 +14,8 @@ class Column : public Expression {
   Column(const std::string& name)
     : Expression(), name_(name) { }
 
+  std::string ToString() override { return name_; }
+
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
  public:

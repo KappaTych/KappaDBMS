@@ -26,7 +26,8 @@ using json = nlohmann::json;
 class Driver : public DriverBase
 {
 public:
-  static thread_local std::unordered_map<std::string, std::pair<sql::Table::Column, sql::Table::Record>> capture;
+  using CapturedData = std::pair<sql::Table::Column, std::shared_ptr<sql::Field>>;
+  static thread_local std::unordered_map<std::string, CapturedData> capture;
 
 public:
   static Driver& Instance()
@@ -61,6 +62,9 @@ public:
   Table* Execute(const cmd::Delete&) override;
   Table* Execute(const cmd::Column&) override;
   Table* Execute(const cmd::ColumnDefintion&) override;
+
+private:
+  void CaptureRawData(my_json, const se::RawData&);
 
 private:
   Driver() = default;

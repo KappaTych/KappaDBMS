@@ -31,6 +31,8 @@ public:
 
   const LiteralType ValueType() const { return valueType_; }
 
+  std::string ToString() override { return Value(); }
+
   std::string Value() const
   {
     switch (valueType_) {

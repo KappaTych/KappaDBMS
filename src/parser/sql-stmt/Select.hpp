@@ -15,21 +15,23 @@ class Select : public Instruction {
   explicit Select(TableDefinition table,
                   std::shared_ptr<cmd::Expression> whereExpr = nullptr)
     : Instruction(InstructionType::SELECT_ALL),
-      table_(std::move(table)), whereExpr_(std::move(whereExpr)) {}
+      table_(std::move(table)),
+      where_(std::move(whereExpr)) { }
 
   explicit Select(TableDefinition table,
                   std::list<std::shared_ptr<cmd::Expression>> columnDef,
                   std::shared_ptr<cmd::Expression> whereExpr = nullptr)
     : Instruction(InstructionType::SELECT),
-      table_(std::move(table)), columnDef_(std::move(columnDef)),
-      whereExpr_(std::move(whereExpr)) { }
+      table_(std::move(table)),
+      columnDef_(std::move(columnDef)),
+      where_(std::move(whereExpr)) { }
 
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
  public:
   cmd::TableDefinition table_;
   std::list<std::shared_ptr<cmd::Expression>> columnDef_;
-  std::shared_ptr<cmd::Expression> whereExpr_;
+  std::shared_ptr<cmd::Expression> where_;
 };
 
 } // namespace cmd

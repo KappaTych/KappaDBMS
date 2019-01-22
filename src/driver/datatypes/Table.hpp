@@ -60,6 +60,27 @@ public:
 // TODO: Make its implementation working normal:
   std::string ToString() const;
 
+public:
+  Table operator+() const;
+  Table operator-() const;
+  Table operator+(const Table& operand) const;
+  Table operator-(const Table& operand) const;
+  Table operator*(const Table& operand) const;
+  Table operator/(const Table& operand) const;
+  Table operator%(const Table& operand) const;
+
+  bool operator^(const Table& operand) const;
+  bool operator&&(const Table& operand) const;
+  bool operator||(const Table& operand) const;
+  bool operator!() const;
+
+  bool operator==(const Table& operand) const;
+  bool operator!=(const Table& operand) const;
+  bool operator>(const Table& operand) const;
+  bool operator<(const Table& operand) const;
+  bool operator>=(const Table& operand) const;
+  bool operator<=(const Table& operand) const;
+
   cmd::TableDefinition name_;
 
 private:

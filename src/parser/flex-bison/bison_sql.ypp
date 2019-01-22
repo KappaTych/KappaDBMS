@@ -264,7 +264,7 @@ update_statement:
         UPDATE table_name SET update_list optional_where {
             $$ = std::make_shared<cmd::Update>($2, $4, $5);
             
-            std::string raw = $1 + " " + $2.GetRaw() + " " + $3;
+            std::string raw = $1 + " " + $2.GetRaw() + " " + $3 + " ";
             for (auto& e : $4) {
                 raw += e.raw + ", ";
             }
@@ -355,23 +355,23 @@ unary_operator:
     |   BINNOT  operand 
         { 
             $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::BIN_NOT, $2); 
-            $$->SetRaw($1 + $2->GetRaw());
+            $$->SetRaw($1 + " " + $2->GetRaw());
         }
     |   NOT operand 
         { 
             $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, $2); 
-            $$->SetRaw($1 + $2->GetRaw());
+            $$->SetRaw($1 + " " + $2->GetRaw());
         }
     |   operand ISNULL 
         { 
             $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, $1); 
-            $$->SetRaw($1->GetRaw() + $2);
+            $$->SetRaw($1->GetRaw() + " " + $2);
         }
     |   operand NOTNULL 
         {
             auto nodeIsNull = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, $1);
             $$ = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, nodeIsNull);
-            $$->SetRaw($1->GetRaw() + $2);
+            $$->SetRaw($1->GetRaw() + " " + $2);
         }
     ;
 

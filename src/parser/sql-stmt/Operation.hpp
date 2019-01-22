@@ -33,6 +33,7 @@ enum class OperationType
   GREATER_EQUAL,
   EQUAL,
   NOT_EQUAL,
+  XOR,
   AND,
   OR,
   IS,
@@ -78,6 +79,8 @@ public:
   explicit UnaryOperation(OperationType type, ptr_Expression exp)
     : Operation(type), operator_(std::move(exp)) {}
 
+  std::string ToString() { return operator_->ToString(); }
+
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 
 public:
@@ -90,6 +93,8 @@ public:
   BinaryOperation() = delete;
   explicit BinaryOperation(OperationType type, ptr_Expression left, ptr_Expression right)
     : Operation(type), left_(std::move(left)), right_(std::move(right)) {}
+
+  std::string ToString() { return "(" + left_->ToString() + ", " +  right_->ToString() + ")"; }
 
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
 

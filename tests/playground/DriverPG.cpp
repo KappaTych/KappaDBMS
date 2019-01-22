@@ -11,42 +11,40 @@ int main(int argc, char *argv[])
   auto& instance = sql::Driver::Instance();
 
   try {
-    std::string create_query = "CREATE TABLE goods (id INTEGER, price DOUBLE, description TEXT)";
-    std::cout << instance.RunQuery(create_query) << std::endl;
+    std::cout << std::endl << instance.RunQuery("CREATE TABLE goods (id INTEGER, price DOUBLE, description TEXT)") << std::endl;
   } catch (std::exception& ex) {
     std::cout << ex.what() << std::endl;
   }
 
-  std::string show_query = "SHOW TABLE goods";
-  std::cout << instance.RunQuery(show_query) << std::endl;
+  std::cout << std::endl << instance.RunQuery("SHOW TABLE goods") << std::endl;
 
-  std::string insert_query( "INSERT INTO goods VALUES (123, 12.1, 'asd')");
-  std::cout << instance.RunQuery(insert_query) << std::endl;
-
-  std::string insert2_query( "INSERT INTO goods VALUES (777, 134.14, 'kek')");
-  std::cout << instance.RunQuery(insert2_query) << std::endl;
+  std::cout << std::endl << instance.RunQuery("INSERT INTO goods VALUES (123, 12.1, 'asd')") << std::endl;
+  std::cout << std::endl << instance.RunQuery("INSERT INTO goods VALUES (777, 134.14, 'kek')") << std::endl;
 
   std::mutex m_printf;
-  std::cout << std::endl << "Thread safe " << std::endl;
+  std::cout << std::endl << std::endl << "Thread-safety" << std::endl;
   auto task = [&m_printf](std::string path, int i) {
     auto& instance = sql::Driver::Instance();
-    auto s = instance.RunQuery("INSERT INTO goods VALUES (" + std::to_string(i) + ", 12.1, 'asd')");
+    auto index = std::to_string(i);
+    auto result = instance.RunQuery("INSERT INTO goods VALUES (" + index + ", 12.1, '" + index + "')");
     std::lock_guard<std::mutex> lock(m_printf);
-    std::cout << s << std::endl;
+    std::cout << std::endl << result << std::endl;
   };
   auto t1 = std::async(std::launch::async, task, argv[0], 12);
   auto t2 = std::async(std::launch::async, task, argv[0], 13);
   t1.wait(); t2.wait();
 
-  std::string select_query1 = "SELECT * FROM goods";
-  std::cout << instance.RunQuery(select_query1) << std::endl;
+  std::cout << std::endl << instance.RunQuery(
+      std::string("UPDATE goods SET description='Updated!' WHERE id > 130;")
+      +
+      std::string("DELETE from goods where id < 100;")
+    ) << std::endl;
 
-  std::string select_query2 = "SELECT id FROM goods";
-  std::cout << instance.RunQuery(select_query2) << std::endl;
+  std::cout << std::endl << instance.RunQuery("SELECT * FROM goods") << std::endl;
+  std::cout << std::endl << instance.RunQuery("SELECT id, description FROM goods") << std::endl;
+  std::cout << std::endl << instance.RunQuery("SELECT 322, -id, +id, price * 10, NOT description FROM goods") << std::endl;
+  std::cout << std::endl << instance.RunQuery("SELECT description FROM goods WHERE id < 200") << std::endl;
 
-  std::string drop_query = "DROP TABLE goods";
-  std::cout << instance.RunQuery(drop_query) << std::endl;
+  std::cout << std::endl << instance.RunQuery("DROP TABLE goods") << std::endl;
   return 0;
 }
-//database/data.meta
-//"{\"code\":1,\"result\":[{\"name\":\"temp\"}]}"

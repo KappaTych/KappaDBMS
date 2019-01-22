@@ -1347,7 +1347,7 @@ namespace yy {
     {
             yylhs.value.as< std::shared_ptr<cmd::Update> > () = std::make_shared<cmd::Update>(yystack_[3].value.as< cmd::TableDefinition > (), yystack_[1].value.as< std::list<cmd::UpdateClause> > (), yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ());
             
-            std::string raw = yystack_[4].value.as< std::string > () + " " + yystack_[3].value.as< cmd::TableDefinition > ().GetRaw() + " " + yystack_[2].value.as< std::string > ();
+            std::string raw = yystack_[4].value.as< std::string > () + " " + yystack_[3].value.as< cmd::TableDefinition > ().GetRaw() + " " + yystack_[2].value.as< std::string > () + " ";
             for (auto& e : yystack_[1].value.as< std::list<cmd::UpdateClause> > ()) {
                 raw += e.raw + ", ";
             }
@@ -1474,7 +1474,7 @@ namespace yy {
 #line 356 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::BIN_NOT, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
 #line 1480 "bison_sql.cpp" // lalr1.cc:906
     break;
@@ -1483,7 +1483,7 @@ namespace yy {
 #line 361 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()); 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::string > () + " " + yystack_[0].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw());
         }
 #line 1489 "bison_sql.cpp" // lalr1.cc:906
     break;
@@ -1492,7 +1492,7 @@ namespace yy {
 #line 366 "bison_sql.ypp" // lalr1.cc:906
     { 
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()); 
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + yystack_[0].value.as< std::string > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[0].value.as< std::string > ());
         }
 #line 1498 "bison_sql.cpp" // lalr1.cc:906
     break;
@@ -1502,7 +1502,7 @@ namespace yy {
     {
             auto nodeIsNull = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::ISNULL, yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ());
             yylhs.value.as< std::shared_ptr<cmd::Expression> > () = std::make_shared<cmd::UnaryOperation>(cmd::OperationType::NOT, nodeIsNull);
-            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + yystack_[0].value.as< std::string > ());
+            yylhs.value.as< std::shared_ptr<cmd::Expression> > ()->SetRaw(yystack_[1].value.as< std::shared_ptr<cmd::Expression> > ()->GetRaw() + " " + yystack_[0].value.as< std::string > ());
         }
 #line 1508 "bison_sql.cpp" // lalr1.cc:906
     break;
