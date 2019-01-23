@@ -48,10 +48,8 @@ TEST_F(ParserTestsFixture, CREATE_TABLE_TEST) {
     //check got instructions data and expected data
     for (int i = 0; i < instructions.size(); ++i) {
         ASSERT_EQ(expected_instruction_types[i], instructions[i].get()->type());
-
         ASSERT_EQ(expected_definitions[i][0], std::dynamic_pointer_cast<cmd::CreateTable>(instructions[0])->table_.database_);
         ASSERT_EQ(expected_definitions[i][1], std::dynamic_pointer_cast<cmd::CreateTable>(instructions[0])->table_.schema_);
         ASSERT_EQ(expected_definitions[i][2], std::dynamic_pointer_cast<cmd::CreateTable>(instructions[0])->table_.name_);
-
     }
 }
