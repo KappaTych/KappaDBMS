@@ -18,7 +18,7 @@ class Update;
 class Delete;
 class Expression;
 class Column;
-class ColumnDefintion;
+class ColumnDefinition;
 class CreateTable;
 
 } // namespace cmd
@@ -39,7 +39,7 @@ public:
   virtual Table* Execute(const cmd::BinaryOperation&) = 0;
   virtual Table* Execute(const cmd::ShowCreateTable&) = 0;
   virtual Table* Execute(const cmd::TableDefinition&) = 0;
-  virtual Table* Execute(const cmd::ColumnDefintion&) = 0;
+  virtual Table* Execute(const cmd::ColumnDefinition&) = 0;
   virtual Table* Execute(const cmd::CreateTable&) = 0;
   virtual Table* Execute(const cmd::DropTable&) = 0;
   virtual Table* Execute(const cmd::Select&) = 0;
