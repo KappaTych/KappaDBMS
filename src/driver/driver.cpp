@@ -103,7 +103,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
   auto& storage = se::StorageEngine::Instance();
   std::string name = instruction.table_.ToString();
   if (storage.HasMetaData(name)) {
-      throw std::logic_error("DriverError: Table already exist");
+      throw std::logic_error("DriverError: Table is already exist");
   }
   se::MetaData& meta = storage.CreateData(name);
   for (auto& col : instruction.columns_) {
