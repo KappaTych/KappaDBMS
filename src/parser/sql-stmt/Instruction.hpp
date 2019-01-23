@@ -45,6 +45,7 @@ enum InstructionType
   SELECT,
   EXPRESSION,
   LITERAL,
+  COLUMN,
   OPERATION,
 };
 

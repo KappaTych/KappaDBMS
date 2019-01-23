@@ -61,7 +61,7 @@ class Operation : public Expression
 {
 public:
   Operation() = default;
-  explicit Operation(OperationType t) : operation_(t) {}
+  explicit Operation(OperationType t) : Expression(OPERATION), operation_(t) {}
   ~Operation() = default;
 
   sql::Table* Accept(sql::DriverBase& d) override { return d.Execute(*this); }
