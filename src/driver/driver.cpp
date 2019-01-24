@@ -475,7 +475,7 @@ Table* Driver::Execute(const cmd::UnaryOperation& instruction)
   return new Table();
 }
 
-Table* Driver::Execute(const cmd::ColumnDefintion& instruction)
+Table* Driver::Execute(const cmd::ColumnDefinition& instruction)
 {
   return new Table();
 }
