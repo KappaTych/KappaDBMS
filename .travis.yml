@@ -8,8 +8,8 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-7
-      - g++-7
+      - gcc
+      - g++
       - cmake
       - flex
       - bison
@@ -30,12 +30,13 @@ before_install:
   - pip install --user cpp-coveralls
 
 script:
-  - export CC=gcc-7
-  - export CXX=g++-7
-  - export GCOV=gcov-7
-  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-  - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
+  # - export CC=gcc-7
+  # - export CXX=g++-7
+  # - export GCOV=gcov-7
+  # - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+  # - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
+  # - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
+  - flex --version && bison --version
   - g++ -v && cmake --version
   - gcov -v
   # generate flex-bison
