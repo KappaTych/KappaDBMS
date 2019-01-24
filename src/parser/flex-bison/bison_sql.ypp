@@ -197,13 +197,13 @@ select_statement:
                 raw.pop_back();
                 raw.pop_back();
             }
-            raw += " " + $3 + " " + $4.GetRaw() + " ";
+            raw += " " + $3 + " " + $4.GetRaw();
             if ($2 == nullptr) {
                 $$ = std::make_shared<cmd::Select>($4, $5);
             } else {
                 $$ = std::make_shared<cmd::Select>($4, *($2), $5);
             }
-            if ($5 != nullptr) { raw += " where " + $5->GetRaw(); }
+            if ($5 != nullptr) { raw += " WHERE " + $5->GetRaw(); }
             $$->SetRaw(raw);
         }
     ;
@@ -271,7 +271,7 @@ update_statement:
             raw.pop_back();
             raw.pop_back();
             if ($5 != nullptr) {
-                raw += " where " +  $5->GetRaw();
+                raw += " WHERE " +  $5->GetRaw();
             }
             $$->SetRaw(raw);
         }
@@ -304,7 +304,7 @@ delete_statement:
         DELETE FROM table_name optional_where
         {
             $$ = std::make_shared<cmd::Delete>($3, $4);
-            $$->SetRaw($1 + " " + $2 + " " + $3.GetRaw() + ($4 == nullptr ? "" : " where " + $4->GetRaw()));
+            $$->SetRaw($1 + " " + $2 + " " + $3.GetRaw() + ($4 == nullptr ? "" : " WHERE " + $4->GetRaw()));
         }
     ;    
  

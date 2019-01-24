@@ -436,6 +436,14 @@ Table Table::operator+(const Table& operand) const
       ivalB = bvalB;
       dvalB = bvalB;
       break;
+
+    case cmd::LiteralType::TEXT:
+      return Table(
+          {{ GetColumns().back().first, cmd::LiteralType::TEXT }},
+          {{std::make_shared<TextField>(
+            GetRecords().back().back()->ToString() + operand.GetRecords().back().back()->ToString()
+          )}}
+        );
   }
 
   switch (GetColumns().back().second) {
@@ -447,14 +455,14 @@ Table Table::operator+(const Table& operand) const
       GetRecords().back().back()->Value(&dvalA);
       return Table({GetColumns().back()}, {{std::make_shared<DoubleField>(dvalA + dvalB)}});
 
+    case cmd::LiteralType::BOOL:
+      GetRecords().back().back()->Value(&bvalA);
+      return Table({GetColumns().back()}, {{std::make_shared<BoolField>(bvalA || bvalB)}});
+
     case cmd::LiteralType::TEXT:
       return Table({GetColumns().back()}, {{std::make_shared<TextField>(
           GetRecords().back().back()->ToString() + operand.GetRecords().back().back()->ToString()
         )}});
-
-    case cmd::LiteralType::BOOL:
-      GetRecords().back().back()->Value(&bvalA);
-      return Table({GetColumns().back()}, {{std::make_shared<BoolField>(bvalA || bvalB)}});
   }
   return *this;
 }

@@ -11,17 +11,15 @@
 namespace {
     class ParserTestsFixture : public ::testing::Test {
     public:
-        ParserTestsFixture() {}
-
         sql::Parser &parser = sql::Parser::Instance();
 
-        virtual void SetUp() {}
+        virtual void SetUp() { }
 
-        static void SetUpTestCase() {}
+        virtual void TearDown() { }
 
-        virtual void TearDown() {};
+        static void SetUpTestCase() { }
 
-        static void TearDownTestCase() {};
+        static void TearDownTestCase() { }
     };
 
     void assert_table_def(cmd::TableDefinition& exp_table_def, cmd::TableDefinition& table_def) {

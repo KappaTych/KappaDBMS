@@ -431,6 +431,9 @@ Table* Driver::Execute(const cmd::BinaryOperation& instruction)
     case cmd::OperationType::EQUAL:
       return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( *operandA == *operandB )}});
 
+    case cmd::OperationType::NOT_EQUAL:
+      return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( *operandA != *operandB )}});
+
     case cmd::OperationType::LESS_EQUAL:
       return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( *operandA <= *operandB )}});
 
