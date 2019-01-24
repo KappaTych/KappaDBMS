@@ -3,6 +3,12 @@ dist: xenial
 language: cpp
 compiler: gcc
 
+env:
+  - secure: "r37WzFlT/Rnl24SuPzflKeSV3Fm5xxlpB5YOzBhKj5QzhG7+/4qw3Jg2LtaNaCD0gYfwX6SYDS46bngpvW6Qbg2OvmUYEnmJ2Z14bbPijNVQk1pUmvd9NUXC8AT5QKON1bO+WhqQ5l2W28L1W3bhkazUSIqTFBk49YziCuDchIM9N0fj4PgL7l/k6MOsa2fVNN9R6HUhy0/AZvkNWxLXBt+buap3iGfAVjh/fXgDq0KplKQ5wKGYaPSwYN6PhLzQWNLTQySUO9a8RBwnur+Pk4m0efn91ZbLC8+wk6gWAHwh92/XIuwm2Pm3TxA/bduRMgloUn7dyIsN5HRe2lAvRfjvKupxKQqaL1lpz/Za0Or3tc8XWevNLxftctrVsRArmdKMay2IYVfGxFIBv8aCz7VETlb6MKGewq9m3DQT8+xN7Px3NZN27g2jemPBMzboxyqoMf7BDbNZAK4soz+LIYgKrdCJJaHOxhfyTuBroe7nYNAmW9tqHnGQye+lmAgdk8svGjRFEEDK76ulmkNrQLgux3abghvpA2lweaK5dTNJEuES13VrHbWasDf5qFAwEYuC3HIUcE3yCH6nx05BGiqHBD+dMJmjDg2aFtYCkSGzV3BeZF5l1m17hsFr0Gl3REs+FT8Uw80YAP66s7EuPteXBHZ8l1czbF+qdigdt1k="
+
+matrix:
+  fast_finish: true
+
 addons:
   apt:
     sources:
@@ -58,6 +64,7 @@ script:
 after_success:
   - ls
   #  - coveralls -h
+  - echo $GITHUB_SECRET_TOKEN
   - cd ..
   - |
     coveralls --build-root build --gcov gcov-7 --gcov-options '\-lp' \
