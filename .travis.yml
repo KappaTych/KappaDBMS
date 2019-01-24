@@ -77,3 +77,6 @@ after_success:
      -e tests
      -E ".*CMakeFiles.*" \
      -E ".*lib.*"
+  - curl -o /tmp/travis-automerge https://raw.githubusercontent.com/kappatych/travis-automerge/master/travis-automerge
+  - chmod a+x /tmp/travis-automerge
+  - BRANCHES_TO_MERGE_REGEX='^f.*' BRANCH_TO_MERGE_INTO=develop GITHUB_REPO=KappaTych/KappaDBMS /tmp/travis-automerge
