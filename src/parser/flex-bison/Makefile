@@ -13,4 +13,4 @@ flex_sql.cpp: flex_sql.lpp
 	flex $(FLEX_OPTIONS) flex_sql.lpp
 
 clean:
-	rm *.cpp bison_sql.h* *.o*
+	rm *.cpp bison_sql.h* *.o* location.hh

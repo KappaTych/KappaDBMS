@@ -8,11 +8,11 @@ class Column : public Expression {
  public:
   Column() = default;
   Column(const std::string& name, const std::string& table, const std::string& s)
-    : Expression(), name_(name), table_(table), schema_(s) { }
+    : Expression(COLUMN), name_(name), table_(table), schema_(s) { }
   Column(const std::string& name, const std::string& table)
-    : Expression(), name_(name), table_(table) { }
+    : Expression(COLUMN), name_(name), table_(table) { }
   Column(const std::string& name)
-    : Expression(), name_(name) { }
+    : Expression(COLUMN), name_(name) { }
 
   std::string ToString() override { return name_; }
 

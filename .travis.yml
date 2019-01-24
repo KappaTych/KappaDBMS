@@ -12,10 +12,6 @@ addons:
       - g++-7
       - cmake
 
-# env:
-#   global:
-#     - CXX=g++-7 CC=gcc-7 GCOV=gcov-7 GSL_CXX_STANDARD=14
-
 # Handle git submodules yourself
 git:
   submodules: false
@@ -27,6 +23,16 @@ before_install:
   #  installation coveralls used to send gcov to coveralls.io
   - pip install --user cpp-coveralls
 
+install:
+  # install flex 2.6.4
+  - wget https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+  - tar -xzvf flex-2.6.4.tar.gz
+  - pushd flex-2.6.4 && ./configure --prefix=/usr && make && sudo make install && popd
+  # install bison 3.2
+  - wget https://ftp.gnu.org/gnu/bison/bison-3.2.tar.gz
+  - tar -xzvf bison-3.2.tar.gz
+  - pushd bison-3.2 && ./configure --prefix=/usr && make && sudo make install && popd
+
 script:
   - export CC=gcc-7
   - export CXX=g++-7
@@ -34,8 +40,11 @@ script:
   - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
   - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
   - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
+  - flex --version && bison --version
   - g++ -v && cmake --version
   - gcov -v
+  # generate flex-bison
+  - make -C src/parser/flex-bison
   # create a build folder for the out-of-source build
   - mkdir build
   # switch to build directory
@@ -43,7 +52,7 @@ script:
   # run cmake; here we assume that the project's top-level CMakeLists.txt is located at '..'
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DOPTION_BUILD_TESTS=OFF -DTARGET_CPU=$TARGET_CPU -DCOVERALLS=ON
   - cmake --build .
-  #execute tests_run
+  # execute tests_run
   - ./bin/tests_run [implemented]
 
 after_success:

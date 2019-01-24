@@ -35,7 +35,7 @@ unset(BUILD_ALL_TESTS CACHE)
 
 enable_testing()
 
-add_executable(tests_run ${SRC_TESTS} ../src/ClassToTestCodeCoverage.h)
+add_executable(tests_run ${SRC_TESTS})
 target_link_libraries(tests_run PRIVATE gtest gtest_main ${LINK_LIBS})
 target_include_directories(tests_run PRIVATE
         ../src

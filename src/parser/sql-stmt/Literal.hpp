@@ -31,7 +31,14 @@ public:
 
   const LiteralType ValueType() const { return valueType_; }
 
-  std::string ToString() override { return Value(); }
+  std::string ToString() override
+  {
+    if (valueType_ == LiteralType::TEXT) {
+      return "'" + Value() + "'";
+    } else {
+      return Value();
+    }
+  }
 
   std::string Value() const
   {

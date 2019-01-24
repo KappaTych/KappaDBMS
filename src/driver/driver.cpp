@@ -103,7 +103,7 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
   auto& storage = se::StorageEngine::Instance();
   std::string name = instruction.table_.ToString();
   if (storage.HasMetaData(name)) {
-      throw std::logic_error("DriverError: Table is already exist");
+      throw std::logic_error("DriverError: Table already exists");
   }
   se::MetaData& meta = storage.CreateData(name);
   for (auto& col : instruction.columns_) {
@@ -183,19 +183,27 @@ Table* Driver::Execute(const cmd::Select& instruction)
       records.push_back(record);
     }
   } else if (!instruction.columnDef_.empty()) {
-    for (auto& expr : instruction.columnDef_) {
-      columns.emplace_back(expr->ToString(), cmd::LiteralType::TEXT);
+    if (data.empty()) {
+      for (auto& expr : instruction.columnDef_) {
+        columns.emplace_back(expr->ToString(), cmd::LiteralType::NONE);
+      }
     }
 
+    bool fillColumns = columns.empty();
     for (auto& x : data) {
       CaptureRawData(columns_meta, x);
 
       sql::Table::Record record;
-      for (auto& column : instruction.columnDef_) {
-        auto result = std::shared_ptr<Table>(column->Accept(*this));
+      for (auto& expr : instruction.columnDef_) {
+        auto result = std::shared_ptr<Table>(expr->Accept(*this));
         record.emplace_back( result->GetRecords().back().back() );
+
+        if (fillColumns) {
+          columns.emplace_back(expr->ToString(), result->GetColumns().back().second);
+        }
       }
       records.push_back(record);
+      fillColumns = false;
     }
   } else {
     throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
@@ -423,6 +431,9 @@ Table* Driver::Execute(const cmd::BinaryOperation& instruction)
     case cmd::OperationType::EQUAL:
       return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( *operandA == *operandB )}});
 
+    case cmd::OperationType::NOT_EQUAL:
+      return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( *operandA != *operandB )}});
+
     case cmd::OperationType::LESS_EQUAL:
       return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( *operandA <= *operandB )}});
 
@@ -467,7 +478,7 @@ Table* Driver::Execute(const cmd::UnaryOperation& instruction)
   return new Table();
 }
 
-Table* Driver::Execute(const cmd::ColumnDefintion& instruction)
+Table* Driver::Execute(const cmd::ColumnDefinition& instruction)
 {
   return new Table();
 }

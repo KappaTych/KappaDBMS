@@ -95,33 +95,102 @@ std::string Table::ToString() const
 // Shit:
 bool Table::operator==(const Table& operand) const
 {
-  auto type = GetColumns().back().second;
-  if (type != operand.GetColumns().back().second) {
-    return false;
-  }
-
   bool bvalA, bvalB;
   int32_t ivalA, ivalB;
   double dvalA, dvalB;
 
-  switch (type) {
+  auto typeA = GetColumns().back().second;
+  auto typeB = operand.GetColumns().back().second;
+
+  switch (typeA) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
+      dvalA = ivalA;
+      bvalA = ivalA;
+      break;
+
+    case cmd::LiteralType::DOUBLE:
+      GetRecords().back().back()->Value(&dvalA);
+      ivalA = dvalA;
+      bvalA = dvalA;
+      break;
+
+    case cmd::LiteralType::BOOL:
+      GetRecords().back().back()->Value(&bvalA);
+      ivalA = bvalA;
+      dvalA = bvalA;
+      break;
+
+    case cmd::LiteralType::TEXT:
+      return (GetRecords().back().back()->ToString() == operand.GetRecords().back().back()->ToString());
+  }
+
+  switch (typeB) {
+    case cmd::LiteralType::INTEGER:
       operand.GetRecords().back().back()->Value(&ivalB);
       return (ivalA == ivalB);
 
     case cmd::LiteralType::DOUBLE:
-      GetRecords().back().back()->Value(&dvalA);
       operand.GetRecords().back().back()->Value(&dvalB);
       return (dvalA == dvalB);
 
+    case cmd::LiteralType::BOOL:
+      operand.GetRecords().back().back()->Value(&bvalB);
+      return (bvalA == bvalB);
+
     case cmd::LiteralType::TEXT:
       return (GetRecords().back().back()->ToString() == operand.GetRecords().back().back()->ToString());
+  }
+  return false;
+}
+
+bool Table::operator>(const Table& operand) const
+{
+  bool bvalA, bvalB;
+  int32_t ivalA, ivalB;
+  double dvalA, dvalB;
+
+  auto typeA = GetColumns().back().second;
+  auto typeB = operand.GetColumns().back().second;
+
+  switch (typeA) {
+    case cmd::LiteralType::INTEGER:
+      GetRecords().back().back()->Value(&ivalA);
+      dvalA = ivalA;
+      bvalA = ivalA;
+      break;
+
+    case cmd::LiteralType::DOUBLE:
+      GetRecords().back().back()->Value(&dvalA);
+      ivalA = dvalA;
+      bvalA = dvalA;
+      break;
 
     case cmd::LiteralType::BOOL:
       GetRecords().back().back()->Value(&bvalA);
+      ivalA = bvalA;
+      dvalA = bvalA;
+      break;
+
+    case cmd::LiteralType::TEXT:
+      return (GetRecords().back().back()->ToString() > operand.GetRecords().back().back()->ToString());
+  }
+
+  switch (typeB) {
+    case cmd::LiteralType::INTEGER:
+      operand.GetRecords().back().back()->Value(&ivalB);
+      return (ivalA > ivalB);
+
+    case cmd::LiteralType::DOUBLE:
+      operand.GetRecords().back().back()->Value(&dvalB);
+      return (dvalA > dvalB);
+
+    case cmd::LiteralType::BOOL:
       operand.GetRecords().back().back()->Value(&bvalB);
-      return (bvalA == bvalB);
+      return (bvalA > bvalB);
+
+    case cmd::LiteralType::TEXT:
+      return (GetRecords().back().back()->ToString() > operand.GetRecords().back().back()->ToString());
   }
   return false;
 }
@@ -129,39 +198,6 @@ bool Table::operator==(const Table& operand) const
 bool Table::operator!=(const Table& operand) const
 {
   return !(*this == operand);
-}
-
-bool Table::operator>(const Table& operand) const
-{
-  auto type = GetColumns().back().second;
-  if (type != operand.GetColumns().back().second) {
-    return false;
-  }
-
-  bool bvalA, bvalB;
-  int32_t ivalA, ivalB;
-  double dvalA, dvalB;
-
-  switch (type) {
-    case cmd::LiteralType::INTEGER:
-      GetRecords().back().back()->Value(&ivalA);
-      operand.GetRecords().back().back()->Value(&ivalB);
-      return (ivalA > ivalB);
-
-    case cmd::LiteralType::DOUBLE:
-      GetRecords().back().back()->Value(&dvalA);
-      operand.GetRecords().back().back()->Value(&dvalB);
-      return (dvalA > dvalB);
-
-    case cmd::LiteralType::TEXT:
-      return (GetRecords().back().back()->ToString() > operand.GetRecords().back().back()->ToString());
-
-    case cmd::LiteralType::BOOL:
-      GetRecords().back().back()->Value(&bvalA);
-      operand.GetRecords().back().back()->Value(&bvalB);
-      return (bvalA > bvalB);
-  }
-  return false;
 }
 
 bool Table::operator<(const Table& operand) const
@@ -189,16 +225,20 @@ bool Table::operator!() const
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ival);
       bval = ival;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dval);
       bval = dval;
+      break;
 
     case cmd::LiteralType::BOOL:
       GetRecords().back().back()->Value(&bval);
+      break;
 
     case cmd::LiteralType::TEXT:
       bval = !GetRecords().back().back()->ToString().empty();
+      break;
   }
   return !bval;
 }
@@ -213,32 +253,40 @@ bool Table::operator^(const Table& operand) const
     case cmd::LiteralType::INTEGER:
       operand.GetRecords().back().back()->Value(&ivalB);
       bvalB = ivalB;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       operand.GetRecords().back().back()->Value(&dvalB);
       bvalB = dvalB;
+      break;
 
     case cmd::LiteralType::BOOL:
       operand.GetRecords().back().back()->Value(&bvalB);
+      break;
 
     case cmd::LiteralType::TEXT:
       bvalB = !operand.GetRecords().back().back()->ToString().empty();
+      break;
   }
 
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
       bvalA = ivalA;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dvalA);
       bvalA = dvalA;
+      break;
 
     case cmd::LiteralType::BOOL:
       GetRecords().back().back()->Value(&bvalA);
+      break;
 
     case cmd::LiteralType::TEXT:
       bvalA = !GetRecords().back().back()->ToString().empty();
+      break;
   }
 
   return bvalA ^ bvalB;
@@ -254,32 +302,40 @@ bool Table::operator&&(const Table& operand) const
     case cmd::LiteralType::INTEGER:
       operand.GetRecords().back().back()->Value(&ivalB);
       bvalB = ivalB;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       operand.GetRecords().back().back()->Value(&dvalB);
       bvalB = dvalB;
+      break;
 
     case cmd::LiteralType::BOOL:
       operand.GetRecords().back().back()->Value(&bvalB);
+      break;
 
     case cmd::LiteralType::TEXT:
       bvalB = !operand.GetRecords().back().back()->ToString().empty();
+      break;
   }
 
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
       bvalA = ivalA;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dvalA);
       bvalA = dvalA;
+      break;
 
     case cmd::LiteralType::BOOL:
       GetRecords().back().back()->Value(&bvalA);
+      break;
 
     case cmd::LiteralType::TEXT:
       bvalA = !GetRecords().back().back()->ToString().empty();
+      break;
   }
 
   return bvalA && bvalB;
@@ -295,32 +351,40 @@ bool Table::operator||(const Table& operand) const
     case cmd::LiteralType::INTEGER:
       operand.GetRecords().back().back()->Value(&ivalB);
       bvalB = ivalB;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       operand.GetRecords().back().back()->Value(&dvalB);
       bvalB = dvalB;
+      break;
 
     case cmd::LiteralType::BOOL:
       operand.GetRecords().back().back()->Value(&bvalB);
+      break;
 
     case cmd::LiteralType::TEXT:
       bvalB = !operand.GetRecords().back().back()->ToString().empty();
+      break;
   }
 
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
       bvalA = ivalA;
+      break;
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dvalA);
       bvalA = dvalA;
+      break;
 
     case cmd::LiteralType::BOOL:
       GetRecords().back().back()->Value(&bvalA);
+      break;
 
     case cmd::LiteralType::TEXT:
       bvalA = !GetRecords().back().back()->ToString().empty();
+      break;
   }
 
   return bvalA || bvalB;
@@ -372,28 +436,33 @@ Table Table::operator+(const Table& operand) const
       ivalB = bvalB;
       dvalB = bvalB;
       break;
+
+    case cmd::LiteralType::TEXT:
+      return Table(
+          {{ GetColumns().back().first, cmd::LiteralType::TEXT }},
+          {{std::make_shared<TextField>(
+            GetRecords().back().back()->ToString() + operand.GetRecords().back().back()->ToString()
+          )}}
+        );
   }
 
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
-      operand.GetRecords().back().back()->Value(&ivalB);
       return Table({GetColumns().back()}, {{std::make_shared<IntField>(ivalA + ivalB)}});
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dvalA);
-      operand.GetRecords().back().back()->Value(&dvalB);
       return Table({GetColumns().back()}, {{std::make_shared<DoubleField>(dvalA + dvalB)}});
+
+    case cmd::LiteralType::BOOL:
+      GetRecords().back().back()->Value(&bvalA);
+      return Table({GetColumns().back()}, {{std::make_shared<BoolField>(bvalA || bvalB)}});
 
     case cmd::LiteralType::TEXT:
       return Table({GetColumns().back()}, {{std::make_shared<TextField>(
           GetRecords().back().back()->ToString() + operand.GetRecords().back().back()->ToString()
         )}});
-
-    case cmd::LiteralType::BOOL:
-      GetRecords().back().back()->Value(&bvalA);
-      operand.GetRecords().back().back()->Value(&bvalB);
-      return Table({GetColumns().back()}, {{std::make_shared<BoolField>(bvalA || bvalB)}});
   }
   return *this;
 }
@@ -432,17 +501,14 @@ Table Table::operator*(const Table& operand) const
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
-      operand.GetRecords().back().back()->Value(&ivalB);
       return Table({GetColumns().back()}, {{std::make_shared<IntField>(ivalA * ivalB)}});
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dvalA);
-      operand.GetRecords().back().back()->Value(&dvalB);
       return Table({GetColumns().back()}, {{std::make_shared<DoubleField>(dvalA * dvalB)}});
 
     case cmd::LiteralType::BOOL:
       GetRecords().back().back()->Value(&bvalA);
-      operand.GetRecords().back().back()->Value(&bvalB);
       return Table({GetColumns().back()}, {{std::make_shared<BoolField>(bvalA && bvalB)}});
   }
   return *this;
@@ -450,43 +516,97 @@ Table Table::operator*(const Table& operand) const
 
 Table Table::operator/(const Table& operand) const
 {
-  int32_t ivalA, ivalB;
+  int32_t ivalA = 1;
+  int32_t ivalB = 1;
   double dvalA, dvalB;
+  bool bvalA, bvalB;
 
   switch (operand.GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       operand.GetRecords().back().back()->Value(&ivalB);
       dvalB = ivalB;
+      bvalB = ivalB;
       break;
 
     case cmd::LiteralType::DOUBLE:
       operand.GetRecords().back().back()->Value(&dvalB);
       ivalB = dvalB;
+      bvalB = dvalB;
       break;
+
+    case cmd::LiteralType::BOOL:
+      operand.GetRecords().back().back()->Value(&bvalB);
+      ivalB = bvalB;
+      dvalB = bvalB;
+      break;
+
+    case cmd::LiteralType::TEXT:
+      ivalB = operand.GetRecords().back().back()->ToString().size();
+      dvalB = ivalB;
+      bvalB = ivalB;
+      break;
+  }
+
+  if (ivalB == 0 || bvalB == false) {
+    throw std::domain_error("DriverError: division by zero");
   }
 
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
-      operand.GetRecords().back().back()->Value(&ivalB);
       return Table({GetColumns().back()}, {{std::make_shared<IntField>(ivalA / ivalB)}});
 
     case cmd::LiteralType::DOUBLE:
       GetRecords().back().back()->Value(&dvalA);
-      operand.GetRecords().back().back()->Value(&dvalB);
       return Table({GetColumns().back()}, {{std::make_shared<DoubleField>(dvalA / dvalB)}});
+
+    case cmd::LiteralType::BOOL:
+      GetRecords().back().back()->Value(&bvalA);
+      return Table({GetColumns().back()}, {{std::make_shared<DoubleField>(bvalA / bvalB)}});
   }
   return *this;
 }
 
 Table Table::operator%(const Table& operand) const
 {
-  int32_t ivalA, ivalB;
+  int32_t ivalA = 1;
+  int32_t ivalB = 1;
+  double dvalA, dvalB;
+  bool bvalA, bvalB;
+
+  switch (operand.GetColumns().back().second) {
+    case cmd::LiteralType::INTEGER:
+      operand.GetRecords().back().back()->Value(&ivalB);
+      dvalB = ivalB;
+      bvalB = ivalB;
+      break;
+
+    case cmd::LiteralType::DOUBLE:
+      operand.GetRecords().back().back()->Value(&dvalB);
+      ivalB = dvalB;
+      bvalB = dvalB;
+      break;
+
+    case cmd::LiteralType::BOOL:
+      operand.GetRecords().back().back()->Value(&bvalB);
+      ivalB = bvalB;
+      dvalB = bvalB;
+      break;
+
+    case cmd::LiteralType::TEXT:
+      ivalB = operand.GetRecords().back().back()->ToString().size();
+      dvalB = ivalB;
+      bvalB = ivalB;
+      break;
+  }
+
+  if (ivalB == 0 || bvalB == false) {
+    throw std::domain_error("DriverError: division by zero");
+  }
 
   switch (GetColumns().back().second) {
     case cmd::LiteralType::INTEGER:
       GetRecords().back().back()->Value(&ivalA);
-      operand.GetRecords().back().back()->Value(&ivalB);
       return Table({GetColumns().back()}, {{std::make_shared<IntField>(ivalA % ivalB)}});
   }
   return *this;
