@@ -449,7 +449,7 @@ Table* Driver::Execute(const cmd::UnaryOperation& instruction)
       return new Table(-(*operand));
     
     case cmd::OperationType::UNARY_PLUS:
-      return new Table(*operand);
+    return new Table(*operand);
     
     case cmd::OperationType::NOT:
       return new Table({{"bool", cmd::LiteralType::BOOL}}, {{std::make_shared<BoolField>( !(*operand) )}});
