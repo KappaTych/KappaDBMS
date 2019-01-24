@@ -1,5 +1,5 @@
 sudo: true
-dist: disco
+dist: xenial
 language: cpp
 compiler: gcc
 
@@ -8,11 +8,10 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc
-      - g++
+      - gcc-7
+      - g++-7
       - cmake
       - flex
-      - bison
 
 # env:
 #   global:
@@ -29,13 +28,18 @@ before_install:
   #  installation coveralls used to send gcov to coveralls.io
   - pip install --user cpp-coveralls
 
+install:
+  - wget https://ftp.gnu.org/gnu/bison/bison-3.2.tar.gz
+  - tar -xzvf bison-3.2.tar.gz
+  - pushd bison-3.2 && ./configure --prefix=/usr && make && sudo make install && popd
+
 script:
-  # - export CC=gcc-7
-  # - export CXX=g++-7
-  # - export GCOV=gcov-7
-  # - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
-  # - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
-  # - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
+  - export CC=gcc-7
+  - export CXX=g++-7
+  - export GCOV=gcov-7
+  - sudo ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+  - sudo ln -s /usr/bin/g++-7 /usr/local/bin/g++
+  - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
   - flex --version && bison --version
   - g++ -v && cmake --version
   - gcov -v
