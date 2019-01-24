@@ -40,18 +40,24 @@ $ cd build && make kappa
 $ ./bin/kappa --help
 Server Application for Kappa Database Management System
 Usage:
-  bin/kappa [OPTION...]
+  ./bin/kappa [OPTION...]
 
   -h, --help       Show help
   -s, --size INT   Set size of buffer per client (default: 4096)
   -p, --port PORT  Set server port (default: 12564)
 ```
 
+Requirements
+------------
+
+* C++14
+* CMake v2.8.0+
+* bison v3.2
+* flex v2.6.4
+
 Dependencies
 ------------
 
-* bison v3.2
-* flex v2.6.4
 * [nlohmann/json](https://github.com/nlohmann/json)
 * [nlohmann/fifo_map](https://github.com/nlohmann/fifo_map)
 * [jarro2783/cxxopts](https://github.com/jarro2783/cxxopts)
