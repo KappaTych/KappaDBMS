@@ -12,7 +12,7 @@ addons:
       - g++-7
       - cmake
       - flex
-      - bison-3.2
+      - bison
 
 # env:
 #   global:
