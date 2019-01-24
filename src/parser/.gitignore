@@ -1,6 +1,6 @@
-#flex-bison/*
+flex-bison/*
 
-#!flex-bison/bison_sql.ypp
-#!flex-bison/flex_sql.hpp
-#!flex-bison/flex_sql.lpp
-#!flex-bison/Makefile
+!flex-bison/bison_sql.ypp
+!flex-bison/flex_sql.hpp
+!flex-bison/flex_sql.lpp
+!flex-bison/Makefile
