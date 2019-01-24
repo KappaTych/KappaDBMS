@@ -11,6 +11,8 @@ addons:
       - gcc-7
       - g++-7
       - cmake
+      - flex
+      - bison
 
 # env:
 #   global:
@@ -36,6 +38,8 @@ script:
   - sudo ln -s /usr/bin/gcov-7 /usr/local/bin/gcov
   - g++ -v && cmake --version
   - gcov -v
+  # generate flex-bison
+  - make -C src/parser/flex-bison
   # create a build folder for the out-of-source build
   - mkdir build
   # switch to build directory
