@@ -31,6 +31,7 @@ public:
 
 public:
   my_json& data() { return data_; }
+  std::string getName() { return data_["private"]["path"]; }
 
 private:
   my_json data_;
