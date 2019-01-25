@@ -1,5 +1,6 @@
 #include "StorageEngine.hpp"
 
+#include "TransactionManager.hpp"
 
 namespace se {
 
@@ -11,6 +12,19 @@ void StorageEngine::SetRootPath(const std::string& path)
 const std::string& StorageEngine::GetRootPath()
 {
   return se::ROOT;
+}
+
+void StorageEngine::checkKey(const std::string &key)
+{
+  std::string path = GetRootPath() + key;
+  std::ifstream fin(path);
+  if (!fin.is_open()) {
+    std::ofstream fout(path);
+    if (!fout.is_open())
+      throw std::invalid_argument("StorageError: Not allowed to create file " + path);
+    fout.close();
+  }
+  fin.close();
 }
 
 StorageEngine::StorageEngine() : meta_()
@@ -45,27 +59,19 @@ StorageEngine::StorageEngine() : meta_()
 BlockList& StorageEngine::LoadBlockList(MetaData& metaData)
 {
   auto j = metaData.data();
-  std::string key = j["private"]["path"];
-  auto it = data_.find(key);
+  std::string name = j["private"]["path"];
+  auto it = data_.find(name);
   if (it != data_.end()) {
-    return *data_[key];
+    return *data_[name];
   }
 
-  std::string path = GetRootPath() + key;
-  std::ifstream fin(path);
-  if (!fin.is_open()) {
-    std::ofstream fout(path);
-    if (!fout.is_open())
-      throw std::invalid_argument("StorageError: Not allowed to create file " + path);
-    fout.close();
-  }
-  fin.close();
+  checkKey(name);
 
-  data_.insert( std::make_pair(std::string(key), std::make_shared<BlockList>(path)) );
-  return *data_[key];
+  data_.insert( std::make_pair(std::string(name), std::make_shared<BlockList>(GetRootPath() + name)) );
+  return *data_[name];
 }
 
-bool StorageEngine::Flush()
+bool StorageEngine::FlushMeta()
 {
   // TODO: flush all loaded blocklists
 
@@ -82,53 +88,109 @@ bool StorageEngine::Flush()
   return true;
 }
 
-MetaData& StorageEngine::CreateData(const std::string& key)
+MetaData& StorageEngine::CreateData(uint64_t id, const std::string& key)
 {
-  if (meta_.find(key) != meta_.end()) {
-    throw std::invalid_argument("StorageError: Data already exists " + key);
+  if (TransactionManager::NO_TRANSACTION) {
+    if (meta_.find(key) != meta_.end()) {
+      throw std::invalid_argument("StorageError: Data already exists " + key);
+    }
+    auto md = MetaData(key);
+    LoadBlockList(md);
+    meta_.insert({key, md});
+    FlushMeta();
+    return meta_.at(key);
+  } else {
+    if (uncommittedMeta_.count(id) == 0) {
+      throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+    }
+    if (uncommittedMeta_.at(id).count(key) > 0) {
+      throw std::invalid_argument("StorageError: Data already exists " + key);
+    }
+    auto md = MetaData(key);
+    auto name = md.getName();
+
+    checkKey(name);
+
+    uncommittedData_.at(id).emplace(name, std::make_shared<BlockList>(GetRootPath() + name));
+    uncommittedMeta_.at(id).emplace(key, std::move(md));
+
+    return uncommittedMeta_.at(id).at(key);
   }
-  auto md = MetaData(key);
-  LoadBlockList(md);
-  meta_.insert({key, md});
-  Flush();
-  return meta_.at(key);
 }
 
-void StorageEngine::RemoveData(const std::string& key)
+void StorageEngine::UpdateMetaData(uint64_t  id, const std::string& key)
 {
-  auto it = meta_.find(key);
-  if (it == meta_.end()) {
-    throw std::invalid_argument("StorageError: Data does not exists " + key);
+  if (TransactionManager::NO_TRANSACTION) {
+    if (meta_.find(key) == meta_.end()) {
+      throw std::invalid_argument("StorageError: Data doesn't exists " + key);
+    }
+    FlushMeta();
   }
-  std::string path = it->second.data()["private"]["path"];
-  auto dataIter = data_.find(path);
-  if (dataIter != data_.end()) {
-    data_.erase(dataIter);
-  }
-  if (!cppfs::fs::open(GetRootPath() + path).remove()) {
-    throw std::invalid_argument("StorageError: Couldn't remove data " + key);
-  }
-  meta_.erase(it);
-  Flush();
 }
 
-MetaData& StorageEngine::GetMetaData(const std::string& key)
+void StorageEngine::RemoveData(uint64_t id, const std::string& key)
 {
-  if (meta_.find(key) == meta_.end()) {
-    throw std::range_error("StorageError: No such metadata " + key);
+  if (TransactionManager::NO_TRANSACTION) {
+    auto it = meta_.find(key);
+    if (it == meta_.end()) {
+      throw std::invalid_argument("StorageError: Data does not exists " + key);
+    }
+    std::string path = it->second.data()["private"]["path"];
+    auto dataIter = data_.find(path);
+    if (dataIter != data_.end()) {
+      data_.erase(dataIter);
+    }
+    if (!cppfs::fs::open(GetRootPath() + path).remove()) {
+      throw std::invalid_argument("StorageError: Couldn't remove data " + key);
+    }
+    meta_.erase(it);
+    FlushMeta();
+  } else {
+    if (uncommittedMeta_.count(id) == 0) {
+      throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+    }
+    if (uncommittedMeta_.at(id).count(key) == 0) {
+      throw std::invalid_argument("StorageError: Data does not exists " + key);
+    }
+    auto name = uncommittedMeta_.at(id).at(key).getName();
+
+    uncommittedMeta_.at(id).erase(key);
+    uncommittedData_.at(id).erase(name);
   }
-  return meta_.at(key);
 }
 
-bool StorageEngine::HasMetaData(const std::string& key) const
+MetaData& StorageEngine::GetMetaData(uint64_t id, const std::string& key)
 {
-  return meta_.find(key) != meta_.end();
+  if (TransactionManager::NO_TRANSACTION) {
+    if (meta_.find(key) == meta_.end()) {
+      throw std::range_error("StorageError: No such metadata " + key);
+    }
+    return meta_.at(key);
+  } else {
+    if (uncommittedMeta_.count(id) == 0) {
+      throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+    }
+    if (uncommittedMeta_.at(id).count(key) == 0) {
+      throw std::range_error("StorageError: No such metadata " + key);
+    }
+    return uncommittedMeta_.at(id).at(key);
+  }
 }
 
-std::list<RawData> StorageEngine::Read(MetaData& metaData, size_t size, const compare_t& func)
+bool StorageEngine::HasMetaData(uint64_t id, const std::string& key) const
 {
-  // TODO: existence checking
-  auto& blockList = LoadBlockList(metaData);
+  if (TransactionManager::NO_TRANSACTION) {
+    return meta_.find(key) != meta_.end();
+  } else {
+    if (uncommittedMeta_.count(id) == 0) {
+      throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+    }
+    return uncommittedMeta_.at(id).count(key) != 0;
+  }
+}
+
+std::list<RawData> StorageEngine::Read(BlockList& blockList, size_t size, const compare_t& func)
+{
   std::list<RawData> result;
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
     auto& block = it.get();
@@ -142,19 +204,39 @@ std::list<RawData> StorageEngine::Read(MetaData& metaData, size_t size, const co
   return std::move(result);
 }
 
-void StorageEngine::Write(MetaData& metaData, const char* row, size_t size)
+std::list<RawData> StorageEngine::Read(uint64_t id, MetaData& metaData, size_t size, const compare_t& func)
 {
-  m_writer.lock();
-  auto& blockList = LoadBlockList(metaData);
-  blockList.WriteData(row, size);
-  blockList.Flush();
-  m_writer.unlock();
+  if (TransactionManager::NO_TRANSACTION) {
+    auto& blockList = LoadBlockList(metaData);
+    return Read(blockList, size, func);
+  } else {
+    auto& blockList = getUncommittedBlockList(id, metaData);
+    return Read(blockList, size, func);
+  }
 }
 
-void StorageEngine::Update(MetaData& metaData, const size_t size, const update_t& func)
+void StorageEngine::Write(BlockList& blockList, const char* row, size_t size)
 {
-  m_writer.lock();
-  auto& blockList = LoadBlockList(metaData);
+  blockList.WriteData(row, size);
+}
+
+void StorageEngine::Write(uint64_t id, MetaData& metaData, const char* row, size_t size)
+{
+  if (TransactionManager::NO_TRANSACTION) {
+    std::lock_guard<std::mutex> lock(m_writer);
+    auto& blockList = LoadBlockList(metaData);
+    Write(blockList, row, size);
+    blockList.Flush();
+    return;
+  } else {
+    auto& blockList = getUncommittedBlockList(id, metaData);
+    Write(blockList, row, size);
+    return;
+  }
+}
+
+void StorageEngine::Update(BlockList& blockList, const size_t size, const update_t& func)
+{
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
     auto& block = it.get();
     auto& blockData = block.data();
@@ -166,14 +248,25 @@ void StorageEngine::Update(MetaData& metaData, const size_t size, const update_t
       blockList << block;
     }
   }
-  blockList.Flush();
-  m_writer.unlock();
 }
 
-void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& func)
+void StorageEngine::Update(uint64_t id, MetaData& metaData, const size_t size, const update_t& func)
 {
-  m_writer.lock();
-  auto& blockList = LoadBlockList(metaData);
+  if (TransactionManager::NO_TRANSACTION) {
+    std::lock_guard<std::mutex> lock(m_writer);
+    auto& blockList = LoadBlockList(metaData);
+    Update(blockList, size, func);
+    blockList.Flush();
+    return;
+  } else {
+    auto& blockList = getUncommittedBlockList(id, metaData);
+    Update(blockList, size, func);
+    return;
+  }
+}
+
+void StorageEngine::Delete(BlockList& blockList, size_t size, const compare_t& func)
+{
   RawData raw(MemoryBlock::DEFAULT_CAPACITY);
   std::vector<std::reference_wrapper<se::MemoryBlock>> block_delete;
   for (auto it = blockList.begin(); it != blockList.end(); ++it) {
@@ -190,13 +283,109 @@ void StorageEngine::Delete(MetaData& metaData, size_t size, const compare_t& fun
     } else if (blockData.size() != raw.size()) {
       block.data().FullReset();
       block << raw;
+      blockList << block;
     }
     raw.FullReset();
   }
   for (auto block : block_delete) {
     blockList.FreeBlock(block);
   }
-  m_writer.unlock();
+}
+
+void StorageEngine::Delete(uint64_t id, MetaData& metaData, size_t size, const compare_t& func)
+{
+  if (TransactionManager::NO_TRANSACTION) {
+    std::lock_guard<std::mutex> lock(m_writer);
+    auto& blockList = LoadBlockList(metaData);
+    Delete(blockList, size, func);
+    return;
+  } else {
+    auto& blockList = getUncommittedBlockList(id, metaData);
+    Delete(blockList, size, func);
+    return;
+  }
+}
+
+// For transaction
+
+BlockList& StorageEngine::getUncommittedBlockList(uint64_t id, MetaData& metaData) {
+  std::string name = metaData.getName();
+  if (uncommittedMeta_.count(id) == 0) {
+    throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+  }
+  if (uncommittedData_.at(id).count(name) == 0) {
+    throw std::range_error("StorageError: No such metadata " + name);
+  }
+  return *(uncommittedData_.at(id).at(name));
+}
+
+uint64_t StorageEngine::StartTransaction()
+{
+  if (TransactionManager::NO_TRANSACTION) {
+    return 0;
+  }
+  uint64_t newId = TransactionManager::Instance().NewTransaction();
+
+  if (uncommittedMeta_.count(newId) > 0) {
+    throw std::logic_error("Transaction " + std::to_string(newId) + " already exists");
+  }
+
+  std::unordered_map<std::string, MetaData> snapshotMeta;
+  std::unordered_map<std::string, std::shared_ptr<BlockList>> snapshotData;
+  for (auto& data : meta_) {
+    std::string name = data.second.getName();
+    checkKey(name);
+    snapshotData.emplace(name, std::make_shared<BlockList>(GetRootPath() + name));
+    snapshotMeta.emplace(data.first, data.second);
+  }
+  uncommittedMeta_.emplace(newId, std::move(snapshotMeta));
+  uncommittedData_.emplace(newId, std::move(snapshotData));
+
+  return newId;
+}
+
+void StorageEngine::RollBack(uint64_t id)
+{
+  if (TransactionManager::NO_TRANSACTION) {
+    return;
+  }
+  if (uncommittedMeta_.count(id) == 0) {
+    throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+  }
+  uncommittedMeta_.erase(id);
+  uncommittedData_.erase(id);
+}
+
+void StorageEngine::Commit(uint64_t id)
+{
+  if (TransactionManager::NO_TRANSACTION) {
+    return;
+  }
+  if (uncommittedMeta_.count(id) == 0) {
+    throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
+  }
+
+  std::lock_guard<std::mutex> lock(m_writer);
+
+
+  // Flush
+  my_json j;
+  std::ofstream fout( GetRootPath() + META_DATA_PATH );
+  for (auto& data : uncommittedMeta_.at(id)) {
+    j[data.first] = data.first.data();
+  }
+  fout << j.dump();
+  fout.close();
+
+  for (auto& data : uncommittedData_.at(id)) {
+    data.second->Flush();
+  }
+
+  meta_ = std::move(uncommittedMeta_.at(id));
+  data_ = std::move(uncommittedData_.at(id));
+
+  uncommittedMeta_.erase(id);
+  uncommittedData_.erase(id);
 }
 
 } // namespace se

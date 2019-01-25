@@ -72,6 +72,10 @@ std::string Driver::RunQuery(const std::string query)
     tables.push_back(*t);
     delete(t);
   }
+  if (isTransactionBegin) {
+    se::StorageEngine::Instance().Commit(transactionId);
+    isTransactionBegin = false;
+  }
   json result;
   result["code"] = 1;
   result["result"] = tables;
@@ -100,12 +104,13 @@ Table* Driver::Execute(const cmd::TableDefinition& instruction)
 
 Table* Driver::Execute(const cmd::CreateTable& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
   std::string name = instruction.table_.ToString();
-  if (storage.HasMetaData(name)) {
+  if (storage.HasMetaData(transactionId, name)) {
       throw std::logic_error("DriverError: Table already exists");
   }
-  se::MetaData& meta = storage.CreateData(name);
+  se::MetaData& meta = storage.CreateData(transactionId, name);
   for (auto& col : instruction.columns_) {
       meta.Add(col.name_, to_string(col.type_));
   }
@@ -115,30 +120,34 @@ Table* Driver::Execute(const cmd::CreateTable& instruction)
       size += mapping[row.value()];
   }
   meta.Add("size", size, "private");
-  storage.Flush();
+  storage.UpdateMetaData(transactionId, name);
+  TransactionEnd();
 
   return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::DropTable& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
   std::string name = instruction.table_.ToString();
-  if (!storage.HasMetaData(name)) {
+  if (!storage.HasMetaData(transactionId, name)) {
     throw std::logic_error("DriverError: Table doesn't exist");
   }
-  storage.RemoveData(name);
+  storage.RemoveData(transactionId, name);
+  TransactionEnd();
 
   return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Select& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
-  if (!storage.HasMetaData(instruction.table_.name_)) {
+  if (!storage.HasMetaData(transactionId, instruction.table_.name_)) {
     throw std::logic_error("DriverError: Table doesn't exist");
   }
-  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  se::MetaData& meta = storage.GetMetaData(transactionId, instruction.table_.ToString());
   auto& columns_meta = meta.data().at("public");
   size_t size = meta.data()["private"]["size"];
   
@@ -147,13 +156,13 @@ Table* Driver::Execute(const cmd::Select& instruction)
   std::list<se::RawData> data;
 
   if (instruction.where_ != nullptr) {
-    data = storage.Read(meta, size, [&, this](const se::RawData& raw) {
+    data = storage.Read(transactionId, meta, size, [&, this](const se::RawData& raw) {
       CaptureRawData(columns_meta, raw);
       auto result = std::shared_ptr<Table>(instruction.where_->Accept(*this));
       return (result->GetRecords().back().back()->ToString() == "true");
     });
   } else {
-    data = storage.Read(meta, size);
+    data = storage.Read(transactionId, meta, size);
   }
 
   if (instruction.type() == cmd::InstructionType::SELECT_ALL) {
@@ -208,17 +217,19 @@ Table* Driver::Execute(const cmd::Select& instruction)
   } else {
     throw std::logic_error("DriverError: Sorry, we don't working with this type of SELECT query yet");
   }
+  TransactionEnd();
 
   return new Table(instruction.table_, std::move(columns), std::move(records));
 }
 
 Table* Driver::Execute(const cmd::Insert& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
-  if (!storage.HasMetaData(instruction.table_.name_)) {
+  if (!storage.HasMetaData(transactionId, instruction.table_.name_)) {
     throw std::logic_error("DriverError: Table doesn't exist");
   }
-  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  se::MetaData& meta = storage.GetMetaData(transactionId, instruction.table_.ToString());
   if (instruction.into_.empty()) {
     auto &data = meta.data().at("public");
     if (data.size() != instruction.values_.size()) {
@@ -248,21 +259,23 @@ Table* Driver::Execute(const cmd::Insert& instruction)
           raw.Fill<std::string>(l->Value());
       }
     }
-    storage.Write(meta, raw.data(), raw.capacity());
+    storage.Write(transactionId, meta, raw.data(), raw.capacity());
   } else {
     throw std::logic_error("DriverError: Sorry, we don't working with this type of INSERT query yet");
   }
+  TransactionEnd();
 
   return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Update& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
-  if (!storage.HasMetaData(instruction.table_.ToString())) {
+  if (!storage.HasMetaData(transactionId, instruction.table_.ToString())) {
     throw std::logic_error("DriverError: Table doesn't exist");
   }
-  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  se::MetaData& meta = storage.GetMetaData(transactionId, instruction.table_.ToString());
   auto& columns_meta = meta.data().at("public");
   size_t size = meta.data()["private"]["size"];
 
@@ -273,7 +286,7 @@ Table* Driver::Execute(const cmd::Update& instruction)
     temp += mapping[d.value()];
   }
 
-  storage.Update(meta, size, [&, this](se::RawData&& raw) {
+  storage.Update(transactionId, meta, size, [&, this](se::RawData&& raw) {
       CaptureRawData(columns_meta, raw);
       bool updated = (instruction.where_ == nullptr);
       if (!updated) {
@@ -319,20 +332,22 @@ Table* Driver::Execute(const cmd::Update& instruction)
       }
       return updated;
     });
+  TransactionEnd();
   return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::Delete& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
-  if (!storage.HasMetaData(instruction.table_.ToString())) {
+  if (!storage.HasMetaData(transactionId, instruction.table_.ToString())) {
     throw std::logic_error("DriverError: Table doesn't exist");
   }
-  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  se::MetaData& meta = storage.GetMetaData(transactionId, instruction.table_.ToString());
   auto& columns_meta = meta.data().at("public");
   size_t size = meta.data()["private"]["size"];
 
-  storage.Delete(meta, size, [&, this](const se::RawData& raw) {
+  storage.Delete(transactionId, meta, size, [&, this](const se::RawData& raw) {
       if (instruction.where_ == nullptr) {
         return true;
       }
@@ -340,16 +355,18 @@ Table* Driver::Execute(const cmd::Delete& instruction)
       auto result = std::shared_ptr<Table>(instruction.where_->Accept(*this));
       return (result->GetRecords().back().back()->ToString() == "true");
     });
+  TransactionEnd();
   return new Table({ {"result", cmd::LiteralType::BOOL} }, { {std::make_shared<BoolField>(true)} });
 }
 
 Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
 {
+  TransactionBegin();
   auto& storage = se::StorageEngine::Instance();
-  if (!storage.HasMetaData(instruction.table_.ToString())) {
+  if (!storage.HasMetaData(transactionId, instruction.table_.ToString())) {
     throw std::logic_error("DriverError: Table doesn't exist");
   }
-  se::MetaData& meta = storage.GetMetaData(instruction.table_.ToString());
+  se::MetaData& meta = storage.GetMetaData(transactionId, instruction.table_.ToString());
 
   std::string result =  "CREATE TABLE " + instruction.table_.ToString() + " (";
   for (auto& j : meta.data().at("public").items()) {
@@ -358,7 +375,7 @@ Table* Driver::Execute(const cmd::ShowCreateTable& instruction)
   result.pop_back();
   result.pop_back();
   result += ");";
-
+  TransactionEnd();
   return new Table({ {"result", cmd::LiteralType::TEXT} }, { {std::make_shared<TextField>(result)} });
 }
 
@@ -483,18 +500,47 @@ Table* Driver::Execute(const cmd::ColumnDefinition& instruction)
   return new Table();
 }
 
+void Driver::TransactionBegin()
+{
+  if (!isTransactionBegin) {
+    transactionId = se::StorageEngine::Instance().StartTransaction();
+  }
+}
+
+void Driver::TransactionEnd()
+{
+  if (!isTransactionBegin) {
+    se::StorageEngine::Instance().Commit(transactionId);
+  }
+}
+
 Table* Driver::Execute(const cmd::BeginTransaction&)
 {
+  if (isTransactionBegin) {
+    throw std::logic_error("DriverError: Transaction already start");
+  }
+  isTransactionBegin = true;
+  transactionId = se::StorageEngine::Instance().StartTransaction();
   return new Table();
 }
 
 Table* Driver::Execute(const cmd::Commit&)
 {
+  if (!isTransactionBegin) {
+    throw std::logic_error("DriverError: Transaction doesn't start");
+  }
+  isTransactionBegin = false;
+  se::StorageEngine::Instance().Commit(transactionId);
   return new Table();
 }
 
 Table* Driver::Execute(const cmd::Rollback&)
 {
+  if (!isTransactionBegin) {
+    throw std::logic_error("DriverError: Transaction doesn't start");
+  }
+  isTransactionBegin = false;
+  se::StorageEngine::Instance().RollBack(transactionId);
   return new Table();
 }
 

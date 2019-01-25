@@ -48,30 +48,49 @@ public:
 
   static const std::string& GetRootPath();
 
-  MetaData& CreateData(const std::string& key);
-  void RemoveData(const std::string& key);
-  MetaData& GetMetaData(const std::string& key);
-  bool HasMetaData(const std::string& key) const;
+  MetaData& CreateData(uint64_t id, const std::string& key);
+  void RemoveData(uint64_t id, const std::string& key);
+  MetaData& GetMetaData(uint64_t id, const std::string& key);
+  bool HasMetaData(uint64_t id, const std::string& key) const;
+  void UpdateMetaData(uint64_t id, const std::string& key);
+
+  // for transaction
+  uint64_t StartTransaction();
+  void Commit(uint64_t id);
+  void RollBack(uint64_t id);
 
 //  void CreateIndex(std::string tableName, uint32_t columnIndex);
-  BlockList& LoadBlockList(MetaData& metaData);
 
-  std::list<RawData> Read(MetaData& metaData, size_t size, const compare_t& func = [](const RawData& x){ return true; });
-  void Write(MetaData& metaData, const char* row, size_t size);
-  void Update(MetaData& metaData, size_t size, const update_t& func = [](RawData&& x){ return true; });
-  void Delete(MetaData& metaData, size_t size, const compare_t& func);
-
-  bool Flush();
+  std::list<RawData> Read(uint64_t id, MetaData& metaData, size_t size, const compare_t& func = [](const RawData& x){ return true; });
+  void Write(uint64_t id, MetaData& metaData, const char* row, size_t size);
+  void Update(uint64_t id, MetaData& metaData, size_t size, const update_t& func = [](RawData&& x){ return true; });
+  void Delete(uint64_t id, MetaData& metaData, size_t size, const compare_t& func);
 
 private:
   StorageEngine();
   ~StorageEngine() = default;
 
+  void checkKey(const std::string& key);
+  BlockList& LoadBlockList(MetaData& metaData);
+  bool FlushMeta();
+
+  std::list<RawData> Read(BlockList& block, size_t size, const compare_t& func);
+  void Write(BlockList& block, const char* row, size_t size);
+  void Update(BlockList& block, size_t size, const update_t& func);
+  void Delete(BlockList& block, size_t size, const compare_t& func);
+
+
   const std::string META_DATA_PATH = "database/data.meta";
+  // committed data
   std::unordered_map<std::string, MetaData> meta_;
   std::unordered_map<std::string, std::shared_ptr<BlockList>> data_;
   // std::map< std::string, btree::btree_map<uint32_t, se::RawData> > indexes_;
   std::mutex m_writer;
+
+  std::unordered_map<uint64_t, std::unordered_map<std::string, MetaData>> uncommittedMeta_;
+  std::unordered_map<uint64_t, std::unordered_map<std::string, std::shared_ptr<BlockList>>> uncommittedData_;
+
+  BlockList& getUncommittedBlockList(uint64_t id, MetaData& metaData);
 };
 
 } // namespace se

@@ -70,6 +70,12 @@ private:
   void CaptureRawData(my_json, const se::RawData&);
 
 private:
+  void TransactionBegin();
+  void TransactionEnd();
+  bool isTransactionBegin = false;
+  uint64_t transactionId;
+
+private:
   Driver() = default;
   ~Driver() = default;
   Driver(Driver const &) = delete;
