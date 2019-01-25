@@ -23,10 +23,10 @@ int main(int argc, char *argv[])
   };
 
   std::string tableName = "some_table";
-
-  if (!storage.HasMetaData(tableName)) {
+  auto id = storage.StartTransaction();
+  if (!storage.HasMetaData(id, tableName)) {
     // CREATE TABLE
-    auto& meta = storage.CreateData(tableName);
+    auto& meta = storage.CreateData(id, tableName);
     meta.Add("id", "INTEGER");
     meta.Add("name", "TEXT");
     meta.Add("count", "INTEGER");
@@ -37,34 +37,34 @@ int main(int argc, char *argv[])
     }
     meta.Add("size", size, "private");
 
-    storage.Flush();
+    storage.UpdateMetaData(id, tableName);
   }
 
   // INSERT INTO
-  auto& meta = storage.GetMetaData(tableName);
+  auto& meta = storage.GetMetaData(id, tableName);
   se::size_t size = meta.data()["private"]["size"];
   se::RawData raw(size);
 
   raw.Fill<int32_t>(1)
      .Fill<std::string>("First Line")
      .Fill<int32_t>(64);
-  storage.Write(meta, raw.data(), raw.capacity());
+  storage.Write(id, meta, raw.data(), raw.capacity());
 
   raw.FullReset()
      .Fill<int32_t>(2)
      .Fill<std::string>("Second line!")
      .Fill<int32_t>(16);
-  storage.Write(meta, raw.data(), raw.capacity());
+  storage.Write(id, meta, raw.data(), raw.capacity());
 
   raw.FullReset()
      .Fill<int32_t>(3)
      .Fill<std::string>("Third line!")
      .Fill<int32_t>(16);
-  storage.Write(meta, raw.data(), raw.capacity());
+  storage.Write(id, meta, raw.data(), raw.capacity());
 
   // SELECT *
   std::cout << "SELECT ALL" << std::endl;
-  auto dataAll1 = storage.Read(meta, size);
+  auto dataAll1 = storage.Read(id, meta, size);
   for (auto& x : dataAll1) {
     std::cout << x.Get<int32_t>() << std::endl;
     std::cout << x.Get<std::string>() << std::endl;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
   // SELECT * WHERE id = 2
   std::cout << "SELECT WHERE id = 2" << std::endl;
-  auto dataWhere = storage.Read(meta, size, [](const se::RawData& raw) {
+  auto dataWhere = storage.Read(id, meta, size, [](const se::RawData& raw) {
       return (raw.Get<int>() == 2);
     });
   for (auto& x : dataWhere) {
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
   // UPDATE WHERE id = 1
   std::cout << "UPDATE WHERE id = 1" << std::endl << "-----------------------" << std::endl;
-  storage.Update(meta, size, [](se::RawData&& raw) {
+  storage.Update(id, meta, size, [](se::RawData&& raw) {
       if (raw.Get<int>() == 1) {
         raw.Fill<std::string>("Updated first line!", true);
         return true;
@@ -96,13 +96,13 @@ int main(int argc, char *argv[])
 
   // DELETE WHERE count < 64
   std::cout << "DELETE WHERE count < 64" << std::endl << "-----------------------" << std::endl;
-  storage.Delete(meta, size, [](const se::RawData& raw) {
+  storage.Delete(id, meta, size, [](const se::RawData& raw) {
       return (raw.Skip<int>().Skip<std::string>(se::STRING_LEN).Get<int>() < 64);
     });
 
   // SELECT *
   std::cout << "SELECT ALL" << std::endl;
-  auto dataAll2 = storage.Read(meta, size);
+  auto dataAll2 = storage.Read(id, meta, size);
   for (auto& x : dataAll2) {
     std::cout << x.Get<int32_t>() << std::endl;
     std::cout << x.Get<std::string>() << std::endl;
@@ -111,7 +111,8 @@ int main(int argc, char *argv[])
   }
 
   // DROP TABLE
-  storage.RemoveData(tableName);
+  storage.RemoveData(id, tableName);
+  storage.Commit(id);
 
 
 //  storage.create("test", {
