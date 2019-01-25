@@ -37,7 +37,7 @@ public:
 // TODO: add offset field for overloading MemoryBlock::OFFSET_CAPACITY
 
 public:
-  BlockList(std::string path);
+  BlockList(const std::string& path);
 
   void WriteData(const data_t* row, size_t size);
 

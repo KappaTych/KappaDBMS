@@ -2,7 +2,7 @@
 
 namespace se {
 
-BlockList::BlockList(std::string path)
+BlockList::BlockList(const std::string& path)
   : file(path, std::fstream::in | std::fstream::out | std::fstream::ate | std::fstream::binary),
     blocks_()
 {
@@ -49,6 +49,7 @@ void BlockList::Flush() {
   for (auto& block : updateBlocks_) {
     file << block;
   }
+  updateBlocks_.clear();
 }
 
 MemoryBlock& BlockList::LoadBlock(size_t offset)
@@ -95,6 +96,7 @@ MemoryBlock& BlockList::GetFreeBlock(size_t size)
 void BlockList::FreeBlock(MemoryBlock& block)
 {
   block.data().FullReset();
+  updateBlocks_.push_back(block);
   for (auto it = takenBlocks_.begin(); it != takenBlocks_.end();) {
     if (*it == block.offset()) {
       it = takenBlocks_.erase(it);
