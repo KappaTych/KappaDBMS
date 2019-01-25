@@ -483,37 +483,40 @@ TEST_F (DriverTestsFixture, MULTITHREAD)
       auto& instance = sql::Driver::Instance();
       for (int i = start; i <= end; ++i) {
         auto index = std::to_string(i);
-        auto result = instance.RunQuery("INSERT INTO users VALUES (" + index + ", " + index + " + 'login');");
+        auto result = instance.RunQuery("INSERT INTO users VALUES (" + index + ", '" + index + "login');");
         std::lock_guard<std::mutex> lock(m);
       }
   };
   std::vector<std::future<void>> thread_pull;
   for (int i = 0; i < 10; ++i) {
-    std::cout << "push: " << i << std::endl;
     thread_pull.push_back(std::async(std::launch::async, task, 10 * i + 1, 10 * (i + 1)));
   }
   for (auto& thread : thread_pull) {
-    std::cout << "wait" << std::endl;
     thread.wait();
   }
 
-  std::list<Record> records;
   for (int i = 1; i <= 100; ++i) {
-    records.push_back({std::make_shared<sql::IntField>(i),
-                       std::make_shared<sql::TextField>(std::to_string(i) + "login")});
+    expected_result.push_back(sql::Table(
+            { "SELECT * FROM users WHERE id = " + std::to_string(i) },
+            {
+              { "id", cmd::LiteralType::INTEGER },
+              { "login", cmd::LiteralType::TEXT },
+            },
+            {
+              {
+                std::make_shared<sql::IntField>(i),
+                std::make_shared<sql::TextField>(std::to_string(i) + "login")
+              }
+            })
+    );
   }
-  expected_table = sql::Table(
-          { "SELECT * FROM users" },
-          {
-            { "id", cmd::LiteralType::INTEGER },
-            { "login", cmd::LiteralType::TEXT },
-          },
-          records
-  );
-  expected_result.push_back(expected_table);
   expected_json["code"] = 1;
   expected_json["result"] = expected_result;
-  result = driver.RunQuery("SELECT * FROM users;");
+  std::string query = "";
+  for (int i = 1; i <= 100; ++i) {
+    query += "SELECT * FROM users WHERE id = " + std::to_string(i) + ";";
+  }
+  result = driver.RunQuery(query);
   ASSERT_EQ(expected_json.dump(), result);
 }
 
