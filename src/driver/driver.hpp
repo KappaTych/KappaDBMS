@@ -62,6 +62,9 @@ public:
   Table* Execute(const cmd::Delete&) override;
   Table* Execute(const cmd::Column&) override;
   Table* Execute(const cmd::ColumnDefinition&) override;
+  Table* Execute(const cmd::BeginTransaction&) override;
+  Table* Execute(const cmd::Commit&) override;
+  Table* Execute(const cmd::Rollback&) override;
 
 private:
   void CaptureRawData(my_json, const se::RawData&);

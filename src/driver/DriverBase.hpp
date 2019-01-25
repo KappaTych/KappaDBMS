@@ -20,6 +20,9 @@ class Expression;
 class Column;
 class ColumnDefinition;
 class CreateTable;
+class BeginTransaction;
+class Commit;
+class Rollback;
 
 } // namespace cmd
 
@@ -47,6 +50,9 @@ public:
   virtual Table* Execute(const cmd::Update&) = 0;
   virtual Table* Execute(const cmd::Delete&) = 0;
   virtual Table* Execute(const cmd::Column&) = 0;
+  virtual Table* Execute(const cmd::BeginTransaction&) = 0;
+  virtual Table* Execute(const cmd::Commit&) = 0;
+  virtual Table* Execute(const cmd::Rollback&) = 0;
 };
 
 } // namespace sql

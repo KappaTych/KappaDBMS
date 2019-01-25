@@ -458,3 +458,25 @@ TEST_F(ParserTestsFixture, UPDATE_WHERE)
         assert_literal(cmd::LiteralType::INTEGER, "0", node->right_);
     }
 }
+
+TEST_F(ParserTestsFixture, TRANSACTION)
+{
+    std::string commit_sql (
+        "Begin transaction;"
+        "commit;"
+        "begin transaction;"
+        "rollback;"
+        "begin transaction;");
+    int exp_size_tree = 5;
+
+    std::vector<cmd::InstructionType> exp_types {
+        cmd::BEGIN_, cmd::COMMIT,
+        cmd::BEGIN_, cmd::ROLLBACK,
+        cmd::BEGIN_};
+    auto tree = parser.Process(commit_sql);
+
+    ASSERT_EQ(exp_size_tree, tree.size());
+    for (int i = 0; i < tree.size(); ++i) {
+        ASSERT_EQ(exp_types[i], tree[i]->type());
+    }
+}

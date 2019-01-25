@@ -56,6 +56,7 @@
 %token<std::string> CONCATENATION LEFTSHIFT RIGHTSHIFT BINNOT BINAND BINOR
 %token<std::string> PLUS MINUS MULTIPLY DIVISION MOD
 %token<std::string> SEMICOLON DOT COMMA OPENBRACKET CLOSEBRACKET
+%token<std::string> BEGIN_ TRANSACTION COMMIT ROLLBACK
 %token UMINUS UPLUS
 %token END_FILE 0
 
@@ -113,6 +114,7 @@ statement:
     |   insert_statement { $$ = $1; }
     |   update_statement { $$ = $1; }
     |   delete_statement { $$ = $1; }
+    |   transaction_statement { $$ = $1; }
     ;
 
 
@@ -307,7 +309,27 @@ delete_statement:
             $$->SetRaw($1 + " " + $2 + " " + $3.GetRaw() + ($4 == nullptr ? "" : " WHERE " + $4->GetRaw()));
         }
     ;    
- 
+
+// Transaction statement
+%type <std::shared_ptr<cmd::Instruction>> transaction_statement;
+transaction_statement:
+        BEGIN_ TRANSACTION
+        {
+            $$ = std::make_shared<cmd::BeginTransaction>();
+            $$->SetRaw($1 + " " + $2);
+        }
+    |   COMMIT
+        {
+            $$ = std::make_shared<cmd::Commit>();
+            $$->SetRaw($1);
+        }
+    |   ROLLBACK
+        {
+            $$ = std::make_shared<cmd::Rollback>();
+            $$->SetRaw($1);
+        }
+    ;
+        
 // Expression
 %type <std::shared_ptr<std::list<std::shared_ptr<cmd::Expression>>>> expr_list;
 expr_list:

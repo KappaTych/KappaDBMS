@@ -65,6 +65,10 @@ WHEN        return yy::BisonParser::make_WHEN(std::string(yytext), loc);
 THEN        return yy::BisonParser::make_THEN(std::string(yytext), loc);
 ELSE        return yy::BisonParser::make_ELSE(std::string(yytext), loc);
 DELETE      return yy::BisonParser::make_DELETE(std::string(yytext), loc);
+BEGIN       return yy::BisonParser::make_BEGIN_(std::string(yytext), loc);
+TRANSACTION return yy::BisonParser::make_TRANSACTION(std::string(yytext), loc);
+COMMIT      return yy::BisonParser::make_COMMIT(std::string(yytext), loc);
+ROLLBACK    return yy::BisonParser::make_ROLLBACK(std::string(yytext), loc);
 
 NOT         return yy::BisonParser::make_NOT(std::string(yytext), loc);
 COLLATE     return yy::BisonParser::make_COLLATE(std::string(yytext), loc);

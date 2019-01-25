@@ -483,4 +483,19 @@ Table* Driver::Execute(const cmd::ColumnDefinition& instruction)
   return new Table();
 }
 
+Table* Driver::Execute(const cmd::BeginTransaction&)
+{
+  return new Table();
+}
+
+Table* Driver::Execute(const cmd::Commit&)
+{
+  return new Table();
+}
+
+Table* Driver::Execute(const cmd::Rollback&)
+{
+  return new Table();
+}
+
 } // namespace sql
