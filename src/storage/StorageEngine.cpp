@@ -314,7 +314,7 @@ BlockList& StorageEngine::getUncommittedBlockList(uint64_t id, MetaData& metaDat
     throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
   }
   if (uncommittedData_.at(id).count(name) == 0) {
-    throw std::range_error("StorageError: No such metadata " + name);
+    throw std::invalid_argument("StorageError: No such metadata " + name);
   }
   return *(uncommittedData_.at(id).at(name));
 }
@@ -327,7 +327,7 @@ uint64_t StorageEngine::StartTransaction()
   uint64_t newId = TransactionManager::Instance().NewTransaction();
 
   if (uncommittedMeta_.count(newId) > 0) {
-    throw std::logic_error("Transaction " + std::to_string(newId) + " already exists");
+    throw std::invalid_argument("Transaction " + std::to_string(newId) + " already exists");
   }
 
   std::unordered_map<std::string, MetaData> snapshotMeta;

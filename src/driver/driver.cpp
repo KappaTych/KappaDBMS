@@ -66,11 +66,19 @@ std::string Driver::RunQuery(const std::string query)
   auto& parser = Parser::Instance();
   auto instructions = parser.Process(query);
   std::vector<Table> tables;
-  for (auto& instruction : instructions) {
-    Table* t = instruction->Accept(*this);
-    t->name_ = cmd::TableDefinition(instruction->GetRaw());
-    tables.push_back(*t);
-    delete(t);
+  try {
+    for (auto& instruction : instructions) {
+      Table* t = instruction->Accept(*this);
+      t->name_ = cmd::TableDefinition(instruction->GetRaw());
+      tables.push_back(*t);
+      delete(t);
+    }
+  } catch (std::logic_error& e) {
+    se::StorageEngine::Instance().RollBack(transactionId);
+    throw e;
+  } catch (std::invalid_argument& e) {
+    se::StorageEngine::Instance().RollBack(transactionId);
+    throw e;
   }
   if (isTransactionBegin) {
     se::StorageEngine::Instance().Commit(transactionId);
