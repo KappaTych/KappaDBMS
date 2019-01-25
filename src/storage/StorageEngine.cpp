@@ -147,6 +147,7 @@ void StorageEngine::Write(MetaData& metaData, const char* row, size_t size)
   m_writer.lock();
   auto& blockList = LoadBlockList(metaData);
   blockList.WriteData(row, size);
+  blockList.Flush();
   m_writer.unlock();
 }
 
@@ -165,6 +166,7 @@ void StorageEngine::Update(MetaData& metaData, const size_t size, const update_t
       blockList << block;
     }
   }
+  blockList.Flush();
   m_writer.unlock();
 }
 

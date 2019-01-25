@@ -31,6 +31,7 @@ public:
   container_t blocks_;
   std::vector<size_t> freeBlocks_;
   std::vector<size_t> takenBlocks_;
+  std::vector<MemoryBlock> updateBlocks_;
   std::fstream file;
 
 // TODO: add offset field for overloading MemoryBlock::OFFSET_CAPACITY
@@ -45,11 +46,16 @@ public:
 
   void FreeBlock(MemoryBlock& block);
   MemoryBlock& GetFreeBlock(size_t size = 0);
+
+private:
   MemoryBlock& LoadBlock(size_t offset = 0);
 
+public:
   BlockList& operator<<(const MemoryBlock& block);
 
   BlockList::size_t Count();
+
+  void Flush();
 
   // void ReadData(std::ifstream& fin);
 

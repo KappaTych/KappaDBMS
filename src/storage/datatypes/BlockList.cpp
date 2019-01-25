@@ -32,7 +32,7 @@ BlockList& BlockList::operator<<(const MemoryBlock& block)
   if (blocks_.find(block.offset()) == blocks_.end()) {
     throw std::runtime_error("StorageError: Illegal block-write");
   }
-  file << block;
+  updateBlocks_.push_back(block);
   return *this;
 }
 
@@ -42,7 +42,13 @@ void BlockList::WriteData(const data_t* row, size_t size)
   // TODO: copy-on-write
   auto& block = GetFreeBlock(size);
   block << RawData(const_cast<data_t*>(row), size, false);
-  file << block;
+  updateBlocks_.push_back(block);
+}
+
+void BlockList::Flush() {
+  for (auto& block : updateBlocks_) {
+    file << block;
+  }
 }
 
 MemoryBlock& BlockList::LoadBlock(size_t offset)
