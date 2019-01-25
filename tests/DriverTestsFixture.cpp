@@ -332,6 +332,81 @@ TEST_F (DriverTestsFixture, UPDATE_WHERE)
   ASSERT_EQ(expected_json.dump(), result);
 }
 
+TEST_F (DriverTestsFixture, TYPE_CONVERSION)
+{
+  std::string result;
+  std::vector<sql::Table> expected_result;
+  sql::Table expected_table;
+  json expected_json;
+
+  driver.RunQuery("UPDATE products SET description = 'kek' + 1");
+
+  expected_table = sql::Table(
+          { "SELECT description FROM products WHERE price > 555.555 + 5" },
+          {
+                  { "description", cmd::LiteralType::TEXT },
+          },
+          {
+                  {
+                          std::make_shared<sql::TextField>("kek1")
+                  },
+          }
+  );
+  expected_result.push_back(expected_table);
+  expected_json["code"] = 1;
+  expected_json["result"] = expected_result;
+  result = driver.RunQuery("SELECT description FROM products WHERE price > 555.555 + 5");
+
+  ASSERT_EQ(json::parse(result)["result"][0]["records"].size(), 1);
+  ASSERT_EQ(expected_json.dump(), result);
+}
+
+TEST_F (DriverTestsFixture, TYPE_CONVERSION2)
+{
+  std::string result;
+  std::vector<sql::Table> expected_result;
+  sql::Table expected_table;
+  json expected_json;
+
+  driver.RunQuery("UPDATE products SET description = 99.5 + 'kek', price = 560.555 WHERE id = 1");
+
+  expected_table = sql::Table(
+          { "SELECT * FROM products WHERE price = 5 + 555.555" },
+          {
+                  { "id", cmd::LiteralType::INTEGER },
+                  { "count", cmd::LiteralType::INTEGER },
+                  { "price", cmd::LiteralType::DOUBLE },
+                  { "description", cmd::LiteralType::TEXT },
+          },
+          {
+                  {
+                    std::make_shared<sql::IntField>(1),
+                    std::make_shared<sql::IntField>(0),
+                    std::make_shared<sql::DoubleField>(560.555),
+                    std::make_shared<sql::TextField>("99.500000kek")
+                  },
+          }
+  );
+  expected_result.push_back(expected_table);
+  expected_json["code"] = 1;
+  expected_json["result"] = expected_result;
+  result = driver.RunQuery("SELECT * FROM products WHERE price = 5 + 555.555;");
+
+  ASSERT_EQ(json::parse(result)["result"][0]["records"].size(), 1);
+  ASSERT_EQ(expected_json.dump(), result);
+}
+
+TEST_F (DriverTestsFixture, MULTITHREAD)
+{
+  std::string result;
+  std::vector<sql::Table> expected_result;
+  sql::Table expected_table;
+  json expected_json;
+
+
+}
+
+
 TEST_F (DriverTestsFixture, DELETE_WHERE)
 {
   std::string result;
@@ -360,6 +435,8 @@ TEST_F (DriverTestsFixture, DELETE_WHERE)
   ASSERT_EQ(json::parse(result)["result"][0]["records"].size(), 1);
   ASSERT_EQ(expected_json.dump(), result);
 }
+
+
 
 TEST_F (DriverTestsFixture, CLEAR_TABLE)
 {

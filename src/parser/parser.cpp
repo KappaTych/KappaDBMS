@@ -3,7 +3,7 @@
 #include <exception>
 
 #include "flex-bison/flex_sql.hpp"
-#include "flex-bison/bison_sql.hpp"
+#include "parser/flex-bison/bison_sql.hpp"
 
 
 namespace sql {
