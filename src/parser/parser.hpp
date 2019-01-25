@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "parser/flex-bison/bison_sql.hpp"
+#include "flex-bison/bison_sql.hpp"
 #include "flex-bison/flex_sql.hpp"
 #include "flex-bison/location.hh"
 
