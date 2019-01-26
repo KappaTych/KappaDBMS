@@ -112,6 +112,7 @@ MetaData& StorageEngine::CreateData(uint64_t id, const std::string& key)
     checkKey(name);
 
     uncommittedData_.at(id).emplace(name, std::make_shared<BlockList>(GetRootPath() + name));
+    uncommittedData_.at(id).at(name)->Clear(); // EmptyTable
     uncommittedMeta_.at(id).emplace(key, std::move(md));
 
     return uncommittedMeta_.at(id).at(key);
@@ -154,6 +155,7 @@ void StorageEngine::RemoveData(uint64_t id, const std::string& key)
     }
     auto name = uncommittedMeta_.at(id).at(key).getName();
 
+    uncommittedDropTable_.at(id)[name] = std::move(uncommittedData_.at(id).at(name)); // SaveBlock
     uncommittedMeta_.at(id).erase(key);
     uncommittedData_.at(id).erase(name);
   }
@@ -332,6 +334,9 @@ uint64_t StorageEngine::StartTransaction()
 
   std::unordered_map<std::string, MetaData> snapshotMeta;
   std::unordered_map<std::string, std::shared_ptr<BlockList>> snapshotData;
+
+  std::lock_guard<std::mutex> lock(m_writer);
+
   for (auto& data : meta_) {
     std::string name = data.second.getName();
     checkKey(name);
@@ -340,6 +345,7 @@ uint64_t StorageEngine::StartTransaction()
   }
   uncommittedMeta_.emplace(newId, std::move(snapshotMeta));
   uncommittedData_.emplace(newId, std::move(snapshotData));
+  uncommittedDropTable_.emplace(newId, std::unordered_map<std::string, std::shared_ptr<BlockList>>()); // empty on default
 
   return newId;
 }
@@ -354,6 +360,7 @@ void StorageEngine::RollBack(uint64_t id)
   }
   uncommittedMeta_.erase(id);
   uncommittedData_.erase(id);
+  uncommittedDropTable_.erase(id);
 }
 
 void StorageEngine::Commit(uint64_t id)
@@ -369,10 +376,18 @@ void StorageEngine::Commit(uint64_t id)
 
 
   // Flush
+  for (auto& data : uncommittedDropTable_.at(id)) {
+    if (uncommittedData_.at(id).count(data.first) == 0) {
+      if (!cppfs::fs::open(GetRootPath() + data.first).remove()) {
+        throw std::invalid_argument("StorageError: Couldn't remove data " + data.first);
+      }
+    }
+  }
+
   my_json j;
-  std::ofstream fout( GetRootPath() + META_DATA_PATH );
+  std::ofstream fout(GetRootPath() + META_DATA_PATH, std::ofstream::out | std::ofstream::trunc);
   for (auto& data : uncommittedMeta_.at(id)) {
-    j[data.first] = data.first.data();
+    j[data.first] = data.second.data();
   }
   fout << j.dump();
   fout.close();
@@ -386,6 +401,7 @@ void StorageEngine::Commit(uint64_t id)
 
   uncommittedMeta_.erase(id);
   uncommittedData_.erase(id);
+  uncommittedDropTable_.erase(id);
 }
 
 } // namespace se

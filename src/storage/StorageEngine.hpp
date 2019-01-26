@@ -89,6 +89,7 @@ private:
 
   std::unordered_map<uint64_t, std::unordered_map<std::string, MetaData>> uncommittedMeta_;
   std::unordered_map<uint64_t, std::unordered_map<std::string, std::shared_ptr<BlockList>>> uncommittedData_;
+  std::unordered_map<uint64_t, std::unordered_map<std::string, std::shared_ptr<BlockList>>> uncommittedDropTable_;
 
   BlockList& getUncommittedBlockList(uint64_t id, MetaData& metaData);
 };
