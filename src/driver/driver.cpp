@@ -73,10 +73,10 @@ std::string Driver::RunQuery(const std::string query)
       tables.push_back(*t);
       delete(t);
     }
-  } catch (std::logic_error& e) {
+  } catch (std::invalid_argument& e) {
     se::StorageEngine::Instance().RollBack(transactionId);
     throw e;
-  } catch (std::invalid_argument& e) {
+  } catch (std::logic_error& e) {
     se::StorageEngine::Instance().RollBack(transactionId);
     throw e;
   }
