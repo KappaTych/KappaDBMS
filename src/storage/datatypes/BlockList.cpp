@@ -47,8 +47,15 @@ void BlockList::WriteData(const data_t* row, size_t size)
 
 void BlockList::Flush() {
   for (auto& block : updateBlocks_) {
+    if (block.size() == 0) {
+      file.seekp(block.offset());
+      se::size_t size = block.size();
+      file.write((const char*) &size, sizeof(se::size_t));
+      continue;
+    }
     file << block;
   }
+  file.flush();
   updateBlocks_.clear();
 }
 
