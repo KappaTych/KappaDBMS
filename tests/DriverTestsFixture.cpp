@@ -395,4 +395,178 @@ TEST_F(DriverTestsFixture, DROP_TABLE)
   ASSERT_THROW(driver.RunQuery("DROP TABLE products"), std::logic_error);
 }
 
+TEST_F(DriverTestsFixture, ROLLBACK_CREATE)
+{
+  std::string query(
+      "BEGIN TRANSACTION;"
+      "CREATE TABLE table_name (id INTEGER, count INTEGER, price DOUBLE, description TEXT);"
+      "INSERT INTO table_name VALUES (1, 1, 12.24, 'Book');"
+      "INSERT INTO table_name VALUES (1, 1, 12.24, 'Book');"
+      "UPDATE table_name SET count = 0;"
+      "ROLLBACK;");
+  driver.RunQuery(query);
+  ASSERT_THROW(driver.RunQuery("DROP TABLE table_name"), std::logic_error);
+}
+
+TEST_F(DriverTestsFixture, ROLLBACK_DML)
+{
+  std::string query(
+      "CREATE TABLE table_name (id INTEGER, count INTEGER, price DOUBLE, description TEXT);"
+      "BEGIN TRANSACTION;"
+      "INSERT INTO table_name VALUES (1, 1, 12.24, 'Book');"
+      "UPDATE table_name SET count = 0;"
+      "INSERT INTO table_name VALUES (1, 1, 12.24, 'Book');"
+      "INSERT INTO table_name VALUES (2, 2, 13.36, 'Axe');"
+      "UPDATE table_name SET price = price * 10 + id * 12;"
+      "INSERT INTO table_name VALUES (2, 2, 13.36, 'Axe');"
+      "INSERT INTO table_name VALUES (2, 2, 13.36, 'Axe');"
+      "DELETE FROM table_name WHERE count < 1;"
+      "Select * from table_name;"
+      "ROLLBACK;");
+  driver.RunQuery(query);
+
+  std::vector<sql::Table> expected_result;
+  json expected_json;
+
+  auto expected_table = sql::Table(
+      {"SELECT * FROM table_name"},
+      {
+          { "id", cmd::LiteralType::INTEGER },
+          { "count", cmd::LiteralType::INTEGER },
+          { "price", cmd::LiteralType::DOUBLE },
+          { "description", cmd::LiteralType::TEXT },
+      });
+  expected_result.push_back(expected_table);
+  expected_json["code"] = 1;
+  expected_json["result"] = expected_result;
+
+  auto result = driver.RunQuery("SELECT * FROM table_name;");
+
+  ASSERT_EQ(expected_json.dump(), result);
+  driver.RunQuery("DROP TABLE table_name");
+}
+
+TEST_F(DriverTestsFixture, ROLLBACK_DROP)
+{
+  std::string query (
+          "CREATE TABLE table_name (id INTEGER, count INTEGER, price DOUBLE, description TEXT);"
+          "BEGIN TRANSACTION;"
+          "DROP TABLE table_name;"
+          "ROLLBACK;");
+  driver.RunQuery(query);
+
+
+  std::vector<sql::Table> expected_result;
+  json expected_json;
+
+  auto expected_table = sql::Table(
+      {"SELECT * FROM table_name"},
+      {
+          { "id", cmd::LiteralType::INTEGER },
+          { "count", cmd::LiteralType::INTEGER },
+          { "price", cmd::LiteralType::DOUBLE },
+          { "description", cmd::LiteralType::TEXT },
+      });
+  expected_result.push_back(expected_table);
+  expected_json["code"] = 1;
+  expected_json["result"] = expected_result;
+
+  auto result = driver.RunQuery("SELECT * FROM table_name;");
+
+  ASSERT_EQ(expected_json.dump(), result);
+
+  driver.RunQuery("DROP TABLE table_name");
+}
+
+TEST_F(DriverTestsFixture, COMMIT_DML)
+{
+  std::string query(
+      "CREATE TABLE table_name (id INTEGER, count INTEGER, price DOUBLE, description TEXT);"
+      "BEGIN TRANSACTION;"
+      "INSERT INTO table_name VALUES (1, 1, 12.24, 'Book');"
+      "UPDATE table_name SET count = 0;"
+      "INSERT INTO table_name VALUES (1, 1, 12.24, 'Book');"
+      "INSERT INTO table_name VALUES (2, 2, 13.36, 'Axe');"
+      "UPDATE table_name SET price = price * 10 + id * 12;"
+      "INSERT INTO table_name VALUES (4, 2, 13.36, 'Axe');"
+      "INSERT INTO table_name VALUES (3, 2, 13.36, 'Axe');"
+      "DELETE FROM table_name WHERE id > 2;"
+      "SELECT * FROM table_name;");
+  driver.RunQuery(query);
+
+  std::vector<sql::Table> expected_result;
+  json expected_json;
+
+  auto expected_table = sql::Table(
+      {"SELECT * FROM table_name"},
+      {
+          { "id", cmd::LiteralType::INTEGER },
+          { "count", cmd::LiteralType::INTEGER },
+          { "price", cmd::LiteralType::DOUBLE },
+          { "description", cmd::LiteralType::TEXT },
+      },
+      {
+        {
+          std::make_shared<sql::IntField>(1),
+          std::make_shared<sql::IntField>(0),
+          std::make_shared<sql::DoubleField>(134.4),
+          std::make_shared<sql::TextField>("Book")
+        },
+        {
+          std::make_shared<sql::IntField>(1),
+          std::make_shared<sql::IntField>(1),
+          std::make_shared<sql::DoubleField>(134.4),
+          std::make_shared<sql::TextField>("Book")
+        },
+        {
+          std::make_shared<sql::IntField>(2),
+          std::make_shared<sql::IntField>(2),
+          std::make_shared<sql::DoubleField>(157.6),
+          std::make_shared<sql::TextField>("Axe")
+        },
+      });
+  expected_result.push_back(expected_table);
+  expected_json["code"] = 1;
+  expected_json["result"] = expected_result;
+
+  auto result = driver.RunQuery("SELECT * FROM table_name;");
+
+  ASSERT_EQ(expected_json.dump(), result);
+  driver.RunQuery("DROP TABLE table_name");
+}
+
+TEST_F(DriverTestsFixture, COMMIT_DDL)
+{
+  std::string query(
+      "BEGIN TRANSACTION;"
+      "CREATE TABLE table_name (id INTEGER, count INTEGER, price DOUBLE, description TEXT);");
+  driver.RunQuery(query);
+
+  std::vector<sql::Table> expected_result;
+  json expected_json;
+
+  auto expected_table = sql::Table(
+      {"SELECT * FROM table_name"},
+      {
+          { "id", cmd::LiteralType::INTEGER },
+          { "count", cmd::LiteralType::INTEGER },
+          { "price", cmd::LiteralType::DOUBLE },
+          { "description", cmd::LiteralType::TEXT },
+      });
+  expected_result.push_back(expected_table);
+  expected_json["code"] = 1;
+  expected_json["result"] = expected_result;
+
+  auto result = driver.RunQuery("SELECT * FROM table_name;");
+  ASSERT_EQ(expected_json.dump(), result);
+
+  query =
+      "BEGIN TRANSACTION;"
+      "DROP TABLE table_name;";
+
+  driver.RunQuery(query);
+
+  ASSERT_THROW(driver.RunQuery("DROP TABLE table_name"), std::logic_error);
+}
+
 // TODO: tests for multiple queries
