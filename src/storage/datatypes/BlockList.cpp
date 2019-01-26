@@ -22,6 +22,13 @@ BlockList::BlockList(const std::string& path)
   }
 }
 
+void BlockList::Clear()
+{
+  for (auto offset : takenBlocks_) {
+    FreeBlock(blocks_.at(offset));
+  }
+}
+
 BlockList::size_t BlockList::Count()
 {
   return freeBlocks_.size() + takenBlocks_.size();
@@ -103,11 +110,11 @@ MemoryBlock& BlockList::GetFreeBlock(size_t size)
 void BlockList::FreeBlock(MemoryBlock& block)
 {
   block.data().FullReset();
-  updateBlocks_.push_back(block);
   for (auto it = takenBlocks_.begin(); it != takenBlocks_.end();) {
     if (*it == block.offset()) {
       it = takenBlocks_.erase(it);
       freeBlocks_.push_back(block.offset());
+      updateBlocks_.push_back(block);
     } else {
       ++it;
     }

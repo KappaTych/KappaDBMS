@@ -46,6 +46,7 @@ public:
 
   void FreeBlock(MemoryBlock& block);
   MemoryBlock& GetFreeBlock(size_t size = 0);
+  void Clear();
 
 private:
   MemoryBlock& LoadBlock(size_t offset = 0);
