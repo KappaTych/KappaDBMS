@@ -616,10 +616,10 @@ TEST_F(DriverTestsFixture, COMMIT_DDL)
   auto expected_table = sql::Table(
       {"SELECT * FROM table_name"},
       {
-          { "id", cmd::LiteralType::INTEGER },
-          { "count", cmd::LiteralType::INTEGER },
-          { "price", cmd::LiteralType::DOUBLE },
-          { "description", cmd::LiteralType::TEXT },
+          {"id", cmd::LiteralType::INTEGER},
+          {"count", cmd::LiteralType::INTEGER},
+          {"price",  cmd::LiteralType::DOUBLE},
+          {"description", cmd::LiteralType::TEXT},
       });
   expected_result.push_back(expected_table);
   expected_json["code"] = 1;
@@ -635,6 +635,7 @@ TEST_F(DriverTestsFixture, COMMIT_DDL)
   driver.RunQuery(query);
 
   ASSERT_THROW(driver.RunQuery("DROP TABLE table_name"), std::logic_error);
+}
 
 TEST_F (DriverTestsFixture, MULTITHREAD)
 {
