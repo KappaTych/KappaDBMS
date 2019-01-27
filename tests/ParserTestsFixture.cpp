@@ -83,9 +83,11 @@ TEST_F(ParserTestsFixture, CREATE_TABLE)
             "CREATE TABLE students (id INTEGER);"
             "CREATE TABLE text_table (title Text, co TEXT, add TEXT);"
             "CREATE TABLE double_id (scalar DOUBLE);"
-            "CREATE TABLE integer_id (s INTEGER);"
+            "CREATE TaBlE integer_id (s INTEGER);"
+            "creAte tAbLe III_III_____ (_add double, d23444 text, ddd_1___ text); "
+            "create table CaSe (literalO Integer)"
     );
-    int exp_size_tree = 4;
+    int exp_size_tree = 6;
     auto exp_type = cmd::InstructionType::CREATE_TABLE;
 
     std::vector<cmd::TableDefinition> exp_table_def {
@@ -93,13 +95,19 @@ TEST_F(ParserTestsFixture, CREATE_TABLE)
             {"text_table"},
             {"double_id"},
             {"integer_id"},
+            {"III_III_____"},
+            {"CaSe"}
     };
 
      std::vector<std::list<cmd::ColumnDefinition>> exp_column_def {
              {{"id", cmd::LiteralType::INTEGER}},
-             {{"title", cmd::LiteralType::TEXT}, {"co", cmd::LiteralType::TEXT}, {"add", cmd::LiteralType::TEXT}},
+             {{"title", cmd::LiteralType::TEXT}, {"co", cmd::LiteralType::TEXT},
+              {"add", cmd::LiteralType::TEXT}},
              {{"scalar", cmd::LiteralType::DOUBLE}},
-             {{"s", cmd::LiteralType::INTEGER}}
+             {{"s", cmd::LiteralType::INTEGER}},
+             {{"_add", cmd::LiteralType::DOUBLE}, {"d23444", cmd::LiteralType::TEXT},
+              {"ddd_1___", cmd::LiteralType::TEXT}},
+             {{"literalO", cmd::LiteralType::INTEGER}}
      };
 
     auto tree = parser.Process(create_sql);
@@ -124,12 +132,21 @@ TEST_F(ParserTestsFixture, DROP_TABLE)
 {
     std::string drop_table(
             "Drop table t;"
-            "drop table leee");
-    int exp_tree_size = 2;
+            "drop table leee;"
+            "drop table table_name2122;"
+            "drop table w12222;"
+            "drop table tt33;"
+            "drop table one_love;");
+    int exp_tree_size = 6;
     cmd::InstructionType exp_type = cmd::DROP_TABLE;
 
     std::vector<cmd::TableDefinition> exp_table_def {
-            {"t"}, {"leee"}
+            {"t"},
+            {"leee"},
+            {"table_name2122"},
+            {"w12222"},
+            {"tt33"},
+            {"one_love"}
     };
 
     auto tree = parser.Process(drop_table);

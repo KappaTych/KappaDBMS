@@ -126,7 +126,7 @@ FALSE       return yy::BisonParser::make_FALSE(std::string(yytext), loc);
     return yy::BisonParser::make_DOUBLE_CONST(std::string(yytext), loc);
 }
 
-\"[^\"\n]+\" {
+\`[^\`\n]+\` {
     return yy::BisonParser::make_IDENTIFIER(std::string(yytext + 1, yyleng - 2), loc);
 }
 
@@ -134,7 +134,7 @@ FALSE       return yy::BisonParser::make_FALSE(std::string(yytext), loc);
     return yy::BisonParser::make_IDENTIFIER(std::string(yytext), loc);
 }
 
-\'([^'\n]|\'\')*\' {
+(\'[^'\\]*(?s:\\.[^'\\]*)*\'|\"[^"\\]*(?s:\\.[^"\\]*)*\") {
     return yy::BisonParser::make_STRING(std::string(yytext + 1, yyleng - 2), loc);
 }
 
