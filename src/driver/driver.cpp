@@ -66,6 +66,7 @@ std::string Driver::RunQuery(const std::string query)
   auto& parser = Parser::Instance();
   auto instructions = parser.Process(query);
   std::vector<Table> tables;
+  isTransactionBegin = false;
   try {
     for (auto& instruction : instructions) {
       Table* t = instruction->Accept(*this);
@@ -82,7 +83,6 @@ std::string Driver::RunQuery(const std::string query)
   }
   if (isTransactionBegin) {
     se::StorageEngine::Instance().Commit(transactionId);
-    isTransactionBegin = false;
   }
   json result;
   result["code"] = 1;
