@@ -300,6 +300,7 @@ void StorageEngine::Delete(uint64_t id, MetaData& metaData, size_t size, const c
     std::lock_guard<std::mutex> lock(m_writer);
     auto& blockList = LoadBlockList(metaData);
     Delete(blockList, size, func);
+    blockList.Flush();
     return;
   } else {
     auto& blockList = getUncommittedBlockList(id, metaData);
@@ -328,14 +329,13 @@ uint64_t StorageEngine::StartTransaction()
   }
   uint64_t newId = TransactionManager::Instance().NewTransaction();
 
+  std::lock_guard<std::mutex> lock(m_writer);
   if (uncommittedMeta_.count(newId) > 0) {
     throw std::invalid_argument("Transaction " + std::to_string(newId) + " already exists");
   }
 
   std::unordered_map<std::string, MetaData> snapshotMeta;
   std::unordered_map<std::string, std::shared_ptr<BlockList>> snapshotData;
-
-  std::lock_guard<std::mutex> lock(m_writer);
 
   for (auto& data : meta_) {
     std::string name = data.second.getName();
@@ -368,12 +368,10 @@ void StorageEngine::Commit(uint64_t id)
   if (TransactionManager::NO_TRANSACTION) {
     return;
   }
+  std::lock_guard<std::mutex> lock(m_writer);
   if (uncommittedMeta_.count(id) == 0) {
     throw std::invalid_argument("Transaction " + std::to_string(id) + " doesn't exists");
   }
-
-  std::lock_guard<std::mutex> lock(m_writer);
-
 
   // Flush
   for (auto& data : uncommittedDropTable_.at(id)) {
