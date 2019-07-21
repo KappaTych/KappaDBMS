@@ -28,7 +28,7 @@ $ make -C src/parser/flex-bison
 After that you can build whole project via cmake:
 ```sh
 $ mkdir build && cd build
-$ cmake ..
+$ cmake .. -DOPTION_BUILD_TESTS=OFF
 $ cmake --build .
 ```
 
